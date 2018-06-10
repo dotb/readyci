@@ -12,11 +12,6 @@ public class BuildFolderClean extends Task {
     }
 
     @Override
-    public String description() {
-        return "Clean the build folder to ensure the build starts from scratch.";
-    }
-
-    @Override
     public void performTask(BuildEnvironment buildEnvironment) {
         String buildPath = buildEnvironment.buildPath;
 

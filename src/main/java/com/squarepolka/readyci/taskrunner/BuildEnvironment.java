@@ -6,10 +6,12 @@ public class BuildEnvironment {
 
     public String buildUUID;
     public String buildPath;
+    public String gitPath;
 
-    public BuildEnvironment() {
+    public BuildEnvironment(String gitPath) {
         this.buildUUID = UUID.randomUUID().toString();
         this.buildPath = String.format("/tmp/readyci/%s", buildUUID);
+        this.gitPath = gitPath;
     }
 
 }

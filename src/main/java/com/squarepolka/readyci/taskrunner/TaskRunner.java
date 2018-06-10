@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class TaskRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskRunner.class);
@@ -16,9 +15,9 @@ public class TaskRunner {
     protected List<Task> tasks;
     protected BuildEnvironment buildEnvironment;
 
-    public TaskRunner() {
+    public TaskRunner(BuildEnvironment buildEnvironment) {
         this.tasks = new ArrayList<Task>();
-        this.buildEnvironment = new BuildEnvironment();
+        this.buildEnvironment = buildEnvironment;
     }
 
     public void addTask(Task task) {
@@ -50,7 +49,7 @@ public class TaskRunner {
     }
 
     private void runTask(Task task) {
-        LOGGER.info(String.format("STARTING TASK %s | %s", task.taskIdentifier(), task.description()));
+        LOGGER.info(String.format("STARTING TASK %s | %s", task.taskIdentifier(), task.description));
         task.performTask(buildEnvironment);
     }
 

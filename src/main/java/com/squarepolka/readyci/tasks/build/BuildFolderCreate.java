@@ -12,11 +12,6 @@ public class BuildFolderCreate extends Task {
     }
 
     @Override
-    public String description() {
-        return "Create a temporary build path to do the rest of our work.";
-    }
-
-    @Override
     public void performTask(BuildEnvironment buildEnvironment) {
         String buildPath = buildEnvironment.buildPath;
 

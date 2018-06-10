@@ -17,8 +17,8 @@ public class TaskRunnerFactory {
         this.allTasks = allTasks;
     }
 
-    public TaskRunner createTaskRunner(List<TaskConfiguration> taskConfigurations) {
-        TaskRunner taskRunner = new TaskRunner();
+    public TaskRunner createTaskRunner(BuildEnvironment buildEnvironment, List<TaskConfiguration> taskConfigurations) {
+        TaskRunner taskRunner = new TaskRunner(buildEnvironment);
         addDefaultTasks(taskRunner);
         addConfiguredTasks(taskRunner, taskConfigurations);
         return taskRunner;
@@ -27,6 +27,7 @@ public class TaskRunnerFactory {
     private void addConfiguredTasks(TaskRunner taskRunner, List<TaskConfiguration> taskConfigurations) {
         for (TaskConfiguration taskConfiguration : taskConfigurations) {
             Task task = findTaskForIdentifier(taskConfiguration.type);
+            task.configure(taskConfiguration);
             taskRunner.addTask(task);
         }
     }
