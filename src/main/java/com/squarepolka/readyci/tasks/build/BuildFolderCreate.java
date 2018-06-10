@@ -4,6 +4,8 @@ import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+
 @Component
 public class BuildFolderCreate extends Task {
     @Override
@@ -15,12 +17,25 @@ public class BuildFolderCreate extends Task {
     public void performTask(BuildEnvironment buildEnvironment) {
         String buildPath = buildEnvironment.buildPath;
 
-        StringBuilder mkdirCommandStringBuilder = new StringBuilder("/bin/mkdir ");
+        StringBuilder pathStrBuilder = new StringBuilder();
         String[] pathFolders = buildPath.split("/");
         for (String folder : pathFolders) {
-            mkdirCommandStringBuilder.append("/");
-            mkdirCommandStringBuilder.append(folder);
-            executeCommand(mkdirCommandStringBuilder.toString());
+            pathStrBuilder.append("/");
+            pathStrBuilder.append(folder);
+
+            if (!folderExists(pathStrBuilder.toString())) {
+                createFolder(pathStrBuilder.toString());
+            }
         }
+    }
+
+    public boolean folderExists(String path) {
+        File folder = new File(path);
+        return folder.exists();
+    }
+
+    public void createFolder(String path) {
+        String command = String.format("/bin/mkdir %s", path);
+        executeCommand(command);
     }
 }

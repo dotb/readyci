@@ -43,7 +43,7 @@ public class TaskRunner {
                 runTask(task);
                 handleTaskSuccess(task);
             } catch (RuntimeException e) {
-                handleTaskFailure(task);
+                handleTaskFailure(task, e);
             }
         }
     }
@@ -57,10 +57,11 @@ public class TaskRunner {
         LOGGER.info(String.format("COMPLETED TASK %s", task.taskIdentifier()));
     }
 
-    private void handleTaskFailure(Task task) {
-        LOGGER.info(String.format("FAILED TASK %s", task.taskIdentifier()));
+    private void handleTaskFailure(Task task, Exception e) {
+        String errorMessage = String.format("FAILED TASK %s with exception: %s", task.taskIdentifier(), e);
+        LOGGER.info(errorMessage);
         if (task.shouldStopOnFailure()) {
-            throw new TaskFailedException(task);
+            throw new TaskFailedException(errorMessage);
         }
     }
 

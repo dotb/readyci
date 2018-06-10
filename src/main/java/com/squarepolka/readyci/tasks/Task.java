@@ -37,6 +37,7 @@ public abstract class Task {
         try {
             Process process = Runtime.getRuntime().exec(command);
             printProcessOutput(process);
+            checkProcessSuccess(process);
         } catch (Exception e) {
             throw new TaskExecuteException(String.format("Exception while executing task %s. %s", taskIdentifier(), e.getLocalizedMessage()));
         }
@@ -50,6 +51,13 @@ public abstract class Task {
         String processOutputLine = "";
         while (process.isAlive() && (processOutputLine = processBufferedStream.readLine()) != null) {
             System.out.println(processOutputLine);
+        }
+    }
+
+    protected void checkProcessSuccess(Process process) throws InterruptedException {
+        int exitValue = process.waitFor();
+        if (exitValue != 0) {
+            throw new TaskExecuteException(String.format("Task %s failed with exit value %d", taskIdentifier(), exitValue));
         }
     }
 
