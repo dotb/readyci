@@ -17,11 +17,6 @@ public class BuildFolderClean extends Task {
     }
 
     @Override
-    public boolean shouldStopOnFailure() {
-        return true;
-    }
-
-    @Override
     public void performTask(BuildEnvironment buildEnvironment) {
         String buildPath = buildEnvironment.buildPath;
 

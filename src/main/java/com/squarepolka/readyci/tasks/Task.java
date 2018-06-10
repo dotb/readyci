@@ -15,8 +15,11 @@ public abstract class Task {
 
     public abstract String taskIdentifier();
     public abstract String description();
-    public abstract boolean shouldStopOnFailure();
     public abstract void performTask(BuildEnvironment buildEnvironment);
+
+    public boolean shouldStopOnFailure() {
+        return true;
+    }
 
     protected void executeCommand(String command) {
         LOGGER.debug(String.format("Executing command: %s", command));

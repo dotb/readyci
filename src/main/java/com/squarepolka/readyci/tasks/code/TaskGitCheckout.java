@@ -15,10 +15,6 @@ public class TaskGitCheckout extends Task {
         return "fetching code from ....";
     }
 
-    public boolean shouldStopOnFailure() {
-        return false;
-    }
-
     public void performTask(BuildEnvironment buildEnvironment) {
         String command = String.format("/usr/bin/git clone /Users/bclayton/Documents/Sause/DeloitteAus/telstrasuper/telstrasuper-ios/ %s/", buildEnvironment.buildPath);
         executeCommand(command);
