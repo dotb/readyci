@@ -19,15 +19,25 @@ public class TaskRunnerFactory {
 
     public TaskRunner createTaskRunner(List<TaskConfiguration> taskConfigurations) {
         TaskRunner taskRunner = new TaskRunner();
+        addDefaultTasks(taskRunner);
+        addConfiguredTasks(taskRunner, taskConfigurations);
+        return taskRunner;
+    }
 
+    private void addConfiguredTasks(TaskRunner taskRunner, List<TaskConfiguration> taskConfigurations) {
         for (TaskConfiguration taskConfiguration : taskConfigurations) {
             Task task = findTaskForIdentifier(taskConfiguration.type);
             taskRunner.addTask(task);
         }
-        return taskRunner;
     }
 
-    protected Task findTaskForIdentifier(String taskIdentifer) {
+    private void addDefaultTasks(TaskRunner taskRunner) {
+        taskRunner.addTask(findTaskForIdentifier("build_path_clean"));
+        taskRunner.addTask(findTaskForIdentifier("build_path_create"));
+        taskRunner.addTask(findTaskForIdentifier("checkout_git"));
+    }
+
+    private Task findTaskForIdentifier(String taskIdentifer) {
         for (Task task : allTasks) {
             if (task.taskIdentifier().equalsIgnoreCase(taskIdentifer)) {
                 return task;

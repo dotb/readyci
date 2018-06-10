@@ -14,9 +14,11 @@ public class TaskRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskRunner.class);
 
     protected List<Task> tasks;
+    protected BuildEnvironment buildEnvironment;
 
     public TaskRunner() {
         this.tasks = new ArrayList<Task>();
+        this.buildEnvironment = new BuildEnvironment();
     }
 
     public void addTask(Task task) {
@@ -24,8 +26,10 @@ public class TaskRunner {
     }
 
     public void runTasks() {
+        LOGGER.info(String.format("RUNNING BUILD %s ", buildEnvironment.buildUUID));
         checkThatTasksExist();
         runEachTask();
+        LOGGER.info(String.format("FINISHED BUILD %s ", buildEnvironment.buildUUID));
     }
 
     private void checkThatTasksExist() {
@@ -36,24 +40,28 @@ public class TaskRunner {
 
     private void runEachTask() {
         for (Task task : tasks) {
-            boolean success = runTask(task);
-            handleTaskSuccess(task, success);
+            try {
+                runTask(task);
+                handleTaskSuccess(task);
+            } catch (RuntimeException e) {
+                handleTaskFailure(task);
+            }
         }
     }
 
-    private boolean runTask(Task task) {
+    private void runTask(Task task) {
         LOGGER.info(String.format("STARTING TASK %s | %s", task.taskIdentifier(), task.description()));
-        return task.performTask();
+        task.performTask(buildEnvironment);
     }
 
-    private void handleTaskSuccess(Task task, boolean success) {
-        if (success) {
-            LOGGER.info(String.format("COMPLETED TASK %s | %s", task.taskIdentifier(), task.description()));
-        } else {
-            LOGGER.info(String.format("FAILED TASK %s | %s", task.taskIdentifier(), task.description()));
-            if (task.shouldStopOnFailure()) {
-                throw new TaskFailedException(task);
-            }
+    private void handleTaskSuccess(Task task) {
+        LOGGER.info(String.format("COMPLETED TASK %s", task.taskIdentifier()));
+    }
+
+    private void handleTaskFailure(Task task) {
+        LOGGER.info(String.format("FAILED TASK %s", task.taskIdentifier()));
+        if (task.shouldStopOnFailure()) {
+            throw new TaskFailedException(task);
         }
     }
 
