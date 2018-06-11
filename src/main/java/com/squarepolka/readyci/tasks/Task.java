@@ -2,14 +2,10 @@ package com.squarepolka.readyci.tasks;
 
 import com.squarepolka.readyci.configuration.TaskConfiguration;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
-import jdk.internal.util.xml.impl.Input;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.HashMap;
 
 public abstract class Task {
@@ -33,41 +29,42 @@ public abstract class Task {
         return true;
     }
 
-    protected void executeCommand(String command) {
-        InputStream inputStream = executeCommandWithOutput(command);
-        try {
-            printProcessOutput(inputStream);
-        } catch (IOException e) {
-            LOGGER.error(e.getLocalizedMessage());
-        }
+    protected InputStream executeCommand(String command) {
+        return executeCommand(command, "/tmp/");
     }
 
-    protected InputStream executeCommandWithOutput(String command) {
+    protected InputStream executeCommand(String command, String workingDirectory) {
         LOGGER.debug(String.format("Executing command: %s", command));
         try {
-            Process process = Runtime.getRuntime().exec(command);
+            File workingDirectoryFile = new File(workingDirectory);
+            Process process = Runtime.getRuntime().exec(command, null, workingDirectoryFile);
+            InputStream processInputStream = process.getInputStream();
+            processInputStream.mark(5120);
+            printProcessOutput(process);
             checkProcessSuccess(process);
-            return process.getInputStream();
+            processInputStream.reset();
+            return processInputStream;
         } catch (Exception e) {
-            throw new TaskExecuteException(String.format("Exception while executing task %s: %s. Tried to run %s", taskIdentifier(), e.getLocalizedMessage(), command));
+            TaskExecuteException taskExecuteException = new TaskExecuteException(String.format("Exception while executing task %s: %s. Tried to run %s", taskIdentifier(), e.toString(), command));
+            taskExecuteException.setStackTrace(e.getStackTrace());
+            throw taskExecuteException;
         }
     }
 
-    protected void printProcessOutput(InputStream processInputStream) throws IOException {
-        BufferedReader processOutputStream = getProcessOutputStream(processInputStream);
-//        BufferedReader processErrorStream = getProcessOutputStream(process.getErrorStream());
+    protected void printProcessOutput(Process process) throws IOException {
+        BufferedReader processOutputStream = getProcessOutputStream(process.getInputStream());
+        BufferedReader processErrorStream = getProcessOutputStream(process.getErrorStream());
 
         String processOutputLine = "";
-//        String processErrorLine = "";
-//        while (process.isAlive()) {
-
+        String processErrorLine = "";
+        while (process.isAlive()) {
             while ((processOutputLine = processOutputStream.readLine()) != null) {
                     System.out.println(processOutputLine);
             }
-//            while ((processErrorLine = processErrorStream.readLine()) != null) {
-//                    System.out.println(processErrorLine);
-//            }
-//        }
+            while ((processErrorLine = processErrorStream.readLine()) != null) {
+                    System.out.println(processErrorLine);
+            }
+        }
     }
 
     protected BufferedReader getProcessOutputStream(InputStream processInputStream) {
