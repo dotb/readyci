@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -29,13 +30,24 @@ public class CompileIOSApp extends Task {
 
     public void performTask(BuildEnvironment buildEnvironment) {
         try {
-            IOSProvisioningProperties profileProperties = readProvisioningProfile(buildEnvironment);
+            String relativeProfilePath = parameters.get("profilePath");
+            String profilePath = String.format("%s/%s", buildEnvironment.buildPath, relativeProfilePath);
+            String exportOptionsPath = String.format("%s/exportOptions.plist", buildEnvironment.buildPath);
 
-            LOGGER.info(String.format("BUILDING %s for %s in team %s with identifier %s",
+            IOSProvisioningProperties profileProperties = readProvisioningProfile(buildEnvironment, profilePath);
+            LOGGER.info(String.format("BUILDING %s for %s in team %s with identifier %s and profile %s",
                     profileProperties.appName,
                     profileProperties.organisationName,
                     profileProperties.devTeam,
-                    profileProperties.bundleId));
+                    profileProperties.bundleId,
+                    relativeProfilePath));
+
+
+            LOGGER.info(String.format("Installing the provisioning profile %s", profilePath));
+            executeCommand(String.format("/usr/bin/open %s", profilePath));
+
+            createExportOptionsFile(profileProperties.devTeam, profileProperties.bundleId, profileProperties.appName, exportOptionsPath);
+
         } catch (Exception e) {
             TaskExecuteException taskExecuteException = new TaskExecuteException(String.format("Exception while performing task %s %s", taskIdentifier(), e.toString()));
             taskExecuteException.setStackTrace(e.getStackTrace());
@@ -43,9 +55,7 @@ public class CompileIOSApp extends Task {
         }
     }
 
-    private IOSProvisioningProperties readProvisioningProfile(BuildEnvironment buildEnvironment) throws Exception {
-        String relativeProfilePath = parameters.get("profilePath");
-        String profilePath = String.format("%s/%s", buildEnvironment.buildPath, relativeProfilePath);
+    private IOSProvisioningProperties readProvisioningProfile(BuildEnvironment buildEnvironment, String profilePath) throws Exception {
         InputStream provisioningFileInputStream = decryptProvisioningFile(profilePath);
         return readProvisioningInputStream(provisioningFileInputStream);
     }
@@ -73,4 +83,19 @@ public class CompileIOSApp extends Task {
         return bundleId.replace(String.format("%s.", teamId), "");
     }
 
+    private void createExportOptionsFile(String devTeam, String bundleId, String appName, String exportOptionsPath) throws IOException {
+        NSDictionary rootDict = new NSDictionary();
+        rootDict.put("compileBitcode", true);
+        rootDict.put("stripSwiftSymbols", true);
+        rootDict.put("method","ad-hoc");
+        rootDict.put("signingCertificate","manual");
+        rootDict.put("thinning","<none>");
+        rootDict.put("teamID",devTeam);
+        NSDictionary provisioningProfilesDict = new NSDictionary();
+        provisioningProfilesDict.put(bundleId, appName);
+        rootDict.put("provisioningProfiles", provisioningProfilesDict);
+
+        File exportOptionsFile = new File(exportOptionsPath);
+        PropertyListParser.saveAsXML(rootDict, exportOptionsFile);
+    }
 }
