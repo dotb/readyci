@@ -1,11 +1,13 @@
 package com.squarepolka.readyci.taskrunner;
 
+import com.squarepolka.readyci.configuration.ReadyCIConfiguration;
 import com.squarepolka.readyci.configuration.TaskConfiguration;
 import com.squarepolka.readyci.tasks.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class TaskRunnerFactory {
@@ -17,11 +19,18 @@ public class TaskRunnerFactory {
         this.allTasks = allTasks;
     }
 
-    public TaskRunner createTaskRunner(BuildEnvironment buildEnvironment, List<TaskConfiguration> taskConfigurations) {
+    public TaskRunner createTaskRunner(ReadyCIConfiguration configuration) {
+        BuildEnvironment buildEnvironment = createBuildEnvironment(configuration);
         TaskRunner taskRunner = new TaskRunner(buildEnvironment);
         addDefaultTasks(taskRunner);
-        addConfiguredTasks(taskRunner, taskConfigurations);
+        addConfiguredTasks(taskRunner, configuration.tasks);
         return taskRunner;
+    }
+
+    private BuildEnvironment createBuildEnvironment(ReadyCIConfiguration configuration) {
+        BuildEnvironment buildEnvironment = new BuildEnvironment(configuration.gitpath);
+        buildEnvironment.buildParameters.putAll(configuration.parameters);
+        return buildEnvironment;
     }
 
     private void addConfiguredTasks(TaskRunner taskRunner, List<TaskConfiguration> taskConfigurations) {

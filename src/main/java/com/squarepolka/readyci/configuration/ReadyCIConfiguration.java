@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ReadyCIConfiguration {
 
@@ -17,6 +18,7 @@ public class ReadyCIConfiguration {
     public String name;
     public boolean server;
     public String gitpath;
+    public Map<String, String> parameters;
     public List<TaskConfiguration> tasks;
 
     public static ReadyCIConfiguration instance() {

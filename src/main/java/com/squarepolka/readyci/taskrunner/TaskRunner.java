@@ -1,9 +1,9 @@
 package com.squarepolka.readyci.taskrunner;
 
 import com.squarepolka.readyci.tasks.Task;
+import com.squarepolka.readyci.tasks.TaskExecuteException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +42,13 @@ public class TaskRunner {
             try {
                 runTask(task);
                 handleTaskSuccess(task);
-            } catch (RuntimeException e) {
+            } catch (Exception e) {
                 handleTaskFailure(task, e);
             }
         }
     }
 
-    private void runTask(Task task) {
+    private void runTask(Task task) throws Exception {
         LOGGER.info(String.format("STARTING TASK %s | %s", task.taskIdentifier(), task.description));
         task.performTask(buildEnvironment);
     }
@@ -57,11 +57,13 @@ public class TaskRunner {
         LOGGER.info(String.format("COMPLETED TASK %s", task.taskIdentifier()));
     }
 
-    private void handleTaskFailure(Task task, RuntimeException e) {
+    private void handleTaskFailure(Task task, Exception e) {
         String errorMessage = String.format("FAILED TASK %s with exception: %s", task.taskIdentifier(), e.toString());
         LOGGER.error(errorMessage);
         if (task.shouldStopOnFailure()) {
-            throw e;
+            TaskExecuteException taskExecuteException = new TaskExecuteException(errorMessage);
+            taskExecuteException.setStackTrace(e.getStackTrace());
+            throw taskExecuteException;
         }
     }
 

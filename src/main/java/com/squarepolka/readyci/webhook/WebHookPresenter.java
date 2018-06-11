@@ -27,8 +27,7 @@ public class WebHookPresenter {
     @Async
     public void handleWebHook() {
         ReadyCIConfiguration configuration = ReadyCIConfiguration.instance();
-        BuildEnvironment buildEnvironment = new BuildEnvironment(configuration.gitpath);
-        TaskRunner taskRunner = taskRunnerFactory.createTaskRunner(buildEnvironment, configuration.tasks);
+        TaskRunner taskRunner = taskRunnerFactory.createTaskRunner(configuration);
         taskRunner.runTasks();
     }
 }

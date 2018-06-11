@@ -6,23 +6,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.HashMap;
 
 public abstract class Task {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Task.class);
 
     public String description;
-    public HashMap<String, String > parameters;
 
     public Task() {
         this.description = "";
-        this.parameters = new HashMap<String, String>();
     }
 
     public void configure(TaskConfiguration taskConfiguration) {
         this.description = taskConfiguration.description;
-        this.parameters = taskConfiguration.parameters;
     }
 
     public boolean shouldStopOnFailure() {
@@ -81,6 +77,6 @@ public abstract class Task {
 
     // Methods that must be implemented by subclasses
     public abstract String taskIdentifier();
-    public abstract void performTask(BuildEnvironment buildEnvironment);
+    public abstract void performTask(BuildEnvironment buildEnvironment) throws Exception;
 
 }
