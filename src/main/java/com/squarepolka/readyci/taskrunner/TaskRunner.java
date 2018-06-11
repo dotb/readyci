@@ -57,11 +57,11 @@ public class TaskRunner {
         LOGGER.info(String.format("COMPLETED TASK %s", task.taskIdentifier()));
     }
 
-    private void handleTaskFailure(Task task, Exception e) {
-        String errorMessage = String.format("FAILED TASK %s with exception: %s", task.taskIdentifier(), e);
-        LOGGER.info(errorMessage);
+    private void handleTaskFailure(Task task, RuntimeException e) {
+        String errorMessage = String.format("FAILED TASK %s with exception: %s", task.taskIdentifier(), e.toString());
+        LOGGER.error(errorMessage);
         if (task.shouldStopOnFailure()) {
-            throw new TaskFailedException(errorMessage);
+            throw e;
         }
     }
 

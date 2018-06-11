@@ -2,6 +2,7 @@ package com.squarepolka.readyci.tasks;
 
 import com.squarepolka.readyci.configuration.TaskConfiguration;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
+import jdk.internal.util.xml.impl.Input;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,31 +34,51 @@ public abstract class Task {
     }
 
     protected void executeCommand(String command) {
-        LOGGER.debug(String.format("Executing command: %s", command));
+        InputStream inputStream = executeCommandWithOutput(command);
         try {
-            Process process = Runtime.getRuntime().exec(command);
-            printProcessOutput(process);
-            checkProcessSuccess(process);
-        } catch (Exception e) {
-            throw new TaskExecuteException(String.format("Exception while executing task %s. %s", taskIdentifier(), e.getLocalizedMessage()));
+            printProcessOutput(inputStream);
+        } catch (IOException e) {
+            LOGGER.error(e.getLocalizedMessage());
         }
     }
 
-    protected void printProcessOutput(Process process) throws IOException {
-        InputStream processInputStream = process.getInputStream();
-        InputStreamReader processStreamReader = new InputStreamReader(processInputStream);
-        BufferedReader processBufferedStream = new BufferedReader(processStreamReader);
+    protected InputStream executeCommandWithOutput(String command) {
+        LOGGER.debug(String.format("Executing command: %s", command));
+        try {
+            Process process = Runtime.getRuntime().exec(command);
+            checkProcessSuccess(process);
+            return process.getInputStream();
+        } catch (Exception e) {
+            throw new TaskExecuteException(String.format("Exception while executing task %s: %s. Tried to run %s", taskIdentifier(), e.getLocalizedMessage(), command));
+        }
+    }
+
+    protected void printProcessOutput(InputStream processInputStream) throws IOException {
+        BufferedReader processOutputStream = getProcessOutputStream(processInputStream);
+//        BufferedReader processErrorStream = getProcessOutputStream(process.getErrorStream());
 
         String processOutputLine = "";
-        while (process.isAlive() && (processOutputLine = processBufferedStream.readLine()) != null) {
-            System.out.println(processOutputLine);
-        }
+//        String processErrorLine = "";
+//        while (process.isAlive()) {
+
+            while ((processOutputLine = processOutputStream.readLine()) != null) {
+                    System.out.println(processOutputLine);
+            }
+//            while ((processErrorLine = processErrorStream.readLine()) != null) {
+//                    System.out.println(processErrorLine);
+//            }
+//        }
+    }
+
+    protected BufferedReader getProcessOutputStream(InputStream processInputStream) {
+        InputStreamReader processStreamReader = new InputStreamReader(processInputStream);
+        return new BufferedReader(processStreamReader);
     }
 
     protected void checkProcessSuccess(Process process) throws InterruptedException {
         int exitValue = process.waitFor();
         if (exitValue != 0) {
-            throw new TaskExecuteException(String.format("Task %s failed with exit value %d", taskIdentifier(), exitValue));
+            throw new TaskExecuteException(String.format("Exited with %d", exitValue));
         }
     }
 

@@ -51,6 +51,13 @@
         <artifactId>spring-boot-starter-freemarker</artifactId>
         <version>1.5.7.RELEASE</version>
         </dependency>
+
+        <!-- plist reading and writing -->
+        <dependency>
+            <groupId>com.googlecode.plist</groupId>
+            <artifactId>dd-plist</artifactId>
+            <version>1.20</version>
+        </dependency>
     </dependencies>
 
     <repositories>
