@@ -1,0 +1,34 @@
+
+  name: An iOS app
+  gitpath: <git url>
+  server: false
+  parameters:
+    workspace: <workspace>
+    target: <target>
+    configuration: Release
+    profilePath: <relative path to a .mobileprovision file>
+
+  tasks:
+  - description: Carthage update
+    type: ios_carthage_update
+
+  - description: Read the provisioning profile and add parameters to the build environment
+    type: ios_provisioning_profile_read
+
+  - description: Create a exportOptions.plist file
+    type: ios_export_options_create
+
+  - description: Install the provisioning profile in XCode
+    type: ios_install_provisioning_profile
+
+  - description: Increment the build number using todays date
+    type: ios_increment_build_number
+
+  - description: Generate an iOS archive
+    type: ios_archive
+
+  - description: Sign and export the iOS app
+    type: ios_export
+
+  - description: Finish up by cleaning the build folder
+    type: build_path_clean
