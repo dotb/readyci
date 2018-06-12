@@ -17,7 +17,8 @@ public class ReadyCIConfiguration {
 
     public String name;
     public boolean server;
-    public String gitpath;
+    public String gitPath;
+    public String projectPath;
     public Map<String, String> parameters;
     public List<TaskConfiguration> tasks;
 

@@ -35,7 +35,6 @@ public class BuildFolderCreate extends Task {
     }
 
     public void createFolder(String path) {
-        String command = String.format("/bin/mkdir %s", path);
-        executeCommand(command);
+        executeCommand(new String[] {"/bin/mkdir", path});
     }
 }

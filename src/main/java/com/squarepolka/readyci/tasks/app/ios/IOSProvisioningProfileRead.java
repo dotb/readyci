@@ -29,7 +29,7 @@ public class IOSProvisioningProfileRead extends Task {
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
 
         String relativeProfilePath = buildEnvironment.buildParameters.get("profilePath");
-        String profilePath = String.format("%s/%s", buildEnvironment.buildPath, relativeProfilePath);
+        String profilePath = String.format("%s/%s", buildEnvironment.projectPath, relativeProfilePath);
 
         InputStream provisioningFileInputStream = decryptProvisioningFile(profilePath);
         readProvisioningInputStream(provisioningFileInputStream, buildEnvironment);
@@ -43,10 +43,9 @@ public class IOSProvisioningProfileRead extends Task {
     }
 
 
-
     private InputStream decryptProvisioningFile(String profilePath) {
         LOGGER.debug(String.format("Parsing the provisioning profile %s", profilePath));
-        return executeCommand(String.format("/usr/bin/security cms -D -i %s", profilePath));
+        return executeCommand(new String[] {"/usr/bin/security", "cms", "-D", "-i", profilePath});
     }
 
     private void readProvisioningInputStream(InputStream processInputSteam, BuildEnvironment buildEnvironment) throws Exception {
@@ -70,6 +69,5 @@ public class IOSProvisioningProfileRead extends Task {
     private String removeTeamFromBundleId(String bundleId, String teamId) {
         return bundleId.replace(String.format("%s.", teamId), "");
     }
-
 
 }

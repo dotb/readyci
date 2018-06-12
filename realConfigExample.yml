@@ -1,6 +1,6 @@
 
   name: An iOS app
-  gitpath: <git url>
+  gitPath: <git url>
   server: false
   parameters:
     workspace: <workspace>

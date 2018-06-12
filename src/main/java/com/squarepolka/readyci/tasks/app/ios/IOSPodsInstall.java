@@ -18,6 +18,6 @@ public class IOSPodsInstall extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) {
-        executeCommand("/usr/local/bin/pod install", buildEnvironment.buildPath);
+        executeCommand(new String[]{"pod", "install"}, buildEnvironment.projectPath);
     }
 }

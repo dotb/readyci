@@ -16,7 +16,6 @@ public class TaskGitCheckout extends Task {
     }
 
     public void performTask(BuildEnvironment buildEnvironment) {
-        String command = String.format("/usr/bin/git clone %s %s/", buildEnvironment.gitPath, buildEnvironment.buildPath);
-        executeCommand(command);
+        executeCommand(new String[] {"/usr/bin/git", "clone",  buildEnvironment.gitPath, buildEnvironment.buildPath});
     }
 }

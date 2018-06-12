@@ -16,7 +16,7 @@ public class BuildFolderClean extends Task {
         String buildPath = buildEnvironment.buildPath;
 
         if (buildPath.length() > 12 && buildPath.startsWith("/tmp/readyci")) {
-            executeCommand(String.format("rm -fR %s", buildPath));
+            executeCommand(new String[] {"rm", "-fR", buildPath});
         }
     }
 }

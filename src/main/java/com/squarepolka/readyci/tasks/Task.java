@@ -26,10 +26,18 @@ public abstract class Task {
     }
 
     protected InputStream executeCommand(String command) {
-        return executeCommand(command, "/tmp/");
+        return executeCommand(new String[] {command});
     }
 
     protected InputStream executeCommand(String command, String workingDirectory) {
+        return executeCommand(new String[] {command}, workingDirectory);
+    }
+
+    protected InputStream executeCommand(String[] command) {
+        return executeCommand(command, "/tmp/");
+    }
+
+    protected InputStream executeCommand(String[] command, String workingDirectory) {
         LOGGER.debug(String.format("Executing command: %s", command));
         try {
             File workingDirectoryFile = new File(workingDirectory);

@@ -17,6 +17,6 @@ public class IOSCarthageUpdate extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) {
-        executeCommand("/usr/local/bin/carthage update --platform iOS", buildEnvironment.buildPath);
+        executeCommand(new String[] {"/usr/local/bin/carthage", "update", "--platform iOS"}, buildEnvironment.projectPath);
     }
 }

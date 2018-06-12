@@ -14,14 +14,14 @@ public class IOSExport extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
         String archivePath = String.format("%s/app.xcarchive", buildEnvironment.buildPath);
-        String exportOptionsPath = String.format("%s/exportOptions.plist", buildEnvironment.buildPath);
+        String exportOptionsPath = String.format("%s/exportOptions.plist", buildEnvironment.projectPath);
         String exportPath = buildEnvironment.buildPath;
 
-        executeCommand(String.format("/usr/bin/xcodebuild " +
-                "-exportArchive " +
-                "-archivePath %s " +
-                "-exportOptionsPlist %s " +
-                "-exportPath %s ", archivePath, exportOptionsPath, exportPath));
+        executeCommand(new String[] {"/usr/bin/xcodebuild",
+                "-exportArchive",
+                "-archivePath" + archivePath,
+                "-exportOptionsPlist " + exportOptionsPath,
+                "-exportPath %s" + exportPath});
 
     }
 }

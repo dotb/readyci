@@ -14,7 +14,7 @@ public class IOSInstallProvisioningProfile extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) {
         String relativeProfilePath = buildEnvironment.buildParameters.get("profilePath");
-        String profilePath = String.format("%s/%s", buildEnvironment.buildPath, relativeProfilePath);
-        executeCommand(String.format("/usr/bin/open %s", profilePath));
+        String profilePath = String.format("%s/%s", buildEnvironment.projectPath, relativeProfilePath);
+        executeCommand(new String[] {"/usr/bin/open", profilePath});
     }
 }

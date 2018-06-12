@@ -28,7 +28,7 @@ public class TaskRunnerFactory {
     }
 
     private BuildEnvironment createBuildEnvironment(ReadyCIConfiguration configuration) {
-        BuildEnvironment buildEnvironment = new BuildEnvironment(configuration.gitpath);
+        BuildEnvironment buildEnvironment = new BuildEnvironment(configuration);
         buildEnvironment.buildParameters.putAll(configuration.parameters);
         return buildEnvironment;
     }

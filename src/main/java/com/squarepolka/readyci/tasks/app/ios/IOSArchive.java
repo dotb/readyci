@@ -20,14 +20,14 @@ public class IOSArchive extends Task {
         String provisioningProfile = buildEnvironment.buildParameters.get(IOSProvisioningProfileRead.BUILD_PROP_PROVISIONING_PROFILE);
         String archivePath = String.format("%s/app.xcarchive", buildEnvironment.buildPath);
 
-        executeCommand(String.format("/usr/bin/xcodebuild " +
-                "-sdk iphoneos " +
-                "DEVELOPMENT_TEAM=%s " +
-                "PROVISIONING_PROFILE=%s " +
-                "-workspace %s " +
-                "-scheme %s " +
-                "-configuration %s " +
-                "-archivePath %s " +
-                "archive", devTeam, provisioningProfile, workspace, scheme, configuration, archivePath), buildEnvironment.buildPath);
+        executeCommand(new String[] {"/usr/bin/xcodebuild",
+                "-sdk iphoneos",
+                "DEVELOPMENT_TEAM=" + devTeam,
+                "PROVISIONING_PROFILE=" + provisioningProfile,
+                "-workspace " + workspace,
+                "-scheme " + scheme,
+                "-configuration " + configuration,
+                "-archivePath " + archivePath,
+                "archive"}, buildEnvironment.projectPath);
     }
 }
