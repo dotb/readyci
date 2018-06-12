@@ -1,16 +1,25 @@
 
   name: An iOS app
   gitPath: <git url>
+  gitBranch: master
+  projectPath: ios app
   server: false
   parameters:
     workspace: <workspace>
     target: <target>
     configuration: Release
     profilePath: <relative path to a .mobileprovision file>
+    infoPlistPath: ios app/<app name>/Info.plist
+    iTunesUsername: <username>
+    iTunesPassword: <password>
 
   tasks:
-  - description: Carthage update
-    type: ios_carthage_update
+
+#  - description: Carthage update
+#    type: ios_carthage_update
+
+  - description: Pod install
+    type: ios_pod_install
 
   - description: Read the provisioning profile and add parameters to the build environment
     type: ios_provisioning_profile_read
@@ -30,5 +39,9 @@
   - description: Sign and export the iOS app
     type: ios_export
 
+  - description: Upload the binary to iTunes Connect
+    type: ios_upload_itunes_connect
+
   - description: Finish up by cleaning the build folder
     type: build_path_clean
+    
