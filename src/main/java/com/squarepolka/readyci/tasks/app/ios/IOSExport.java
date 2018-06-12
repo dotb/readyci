@@ -19,9 +19,9 @@ public class IOSExport extends Task {
 
         executeCommand(new String[] {"/usr/bin/xcodebuild",
                 "-exportArchive",
-                "-archivePath" + archivePath,
-                "-exportOptionsPlist " + exportOptionsPath,
-                "-exportPath %s" + exportPath});
+                "-archivePath", archivePath,
+                "-exportOptionsPlist", exportOptionsPath,
+                "-exportPath", exportPath}, buildEnvironment.projectPath);
 
     }
 }

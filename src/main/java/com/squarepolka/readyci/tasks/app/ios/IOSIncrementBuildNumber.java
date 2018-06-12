@@ -19,8 +19,10 @@ public class IOSIncrementBuildNumber extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
-        String workspaceName = buildEnvironment.buildParameters.get("workspace");
-        String infoPlistPath = String.format("%s/%s/Resources/Info.plist", buildEnvironment.buildPath, workspaceName);
+
+        String buildPath = buildEnvironment.buildPath;
+        String relativepListPath = buildEnvironment.buildParameters.get("infoPlistPath");
+        String infoPlistPath = String.format("%s/%s", buildPath, relativepListPath);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddhhmm");
         String formattedDate = simpleDateFormat.format(new Date());
 

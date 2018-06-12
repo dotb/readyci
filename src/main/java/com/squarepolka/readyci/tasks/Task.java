@@ -38,7 +38,7 @@ public abstract class Task {
     }
 
     protected InputStream executeCommand(String[] command, String workingDirectory) {
-        LOGGER.debug(String.format("Executing command: %s", command));
+        LOGGER.debug(String.format("Executing command: %s", arrayToString(command)));
         try {
             File workingDirectoryFile = new File(workingDirectory);
             Process process = Runtime.getRuntime().exec(command, null, workingDirectoryFile);
@@ -46,7 +46,7 @@ public abstract class Task {
             processInputStream.mark(5120);
             printProcessOutput(process);
             checkProcessSuccess(process);
-            processInputStream.reset();
+            resetInputStream(processInputStream);
             return processInputStream;
         } catch (Exception e) {
             TaskExecuteException taskExecuteException = new TaskExecuteException(String.format("Exception while executing task %s: %s. Tried to run %s", taskIdentifier(), e.toString(), command));
@@ -80,6 +80,23 @@ public abstract class Task {
         int exitValue = process.waitFor();
         if (exitValue != 0) {
             throw new TaskExecuteException(String.format("Exited with %d", exitValue));
+        }
+    }
+
+    protected String arrayToString(String[] stringArray) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String string : stringArray) {
+            stringBuilder.append(string);
+            stringBuilder.append(" ");
+        }
+        return stringBuilder.toString();
+    }
+
+    protected void resetInputStream(InputStream inputStream) {
+        try {
+            inputStream.reset();
+        } catch(IOException e) {
+            LOGGER.warn(String.format("Ignoring an exception while attempting to reset an input stream %s", e.toString()));
         }
     }
 

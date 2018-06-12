@@ -18,7 +18,7 @@ public class IOSExportOptionsCreate extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
-        String exportOptionsPath = String.format("%s/exportOptions.plist", buildEnvironment.buildPath);
+        String exportOptionsPath = String.format("%s/exportOptions.plist", buildEnvironment.projectPath);
         String appName = buildEnvironment.buildParameters.get(IOSProvisioningProfileRead.BUILD_PROP_APP_NAME);
         String devTeam = buildEnvironment.buildParameters.get(IOSProvisioningProfileRead.BUILD_PROP_DEV_TEAM);
         String bundleId = buildEnvironment.buildParameters.get(IOSProvisioningProfileRead.BUILD_PROP_BUNDLE_ID);
@@ -31,9 +31,10 @@ public class IOSExportOptionsCreate extends Task {
         rootDict.put("compileBitcode", true);
         rootDict.put("stripSwiftSymbols", true);
         rootDict.put("method","ad-hoc");
-        rootDict.put("signingCertificate","manual");
+        rootDict.put("signingCertificate","iPhone Distribution");
+        rootDict.put("signingStyle", "manual");
         rootDict.put("thinning","<none>");
-        rootDict.put("teamID",devTeam);
+        rootDict.put("teamID", devTeam);
         NSDictionary provisioningProfilesDict = new NSDictionary();
         provisioningProfilesDict.put(bundleId, appName);
         rootDict.put("provisioningProfiles", provisioningProfilesDict);

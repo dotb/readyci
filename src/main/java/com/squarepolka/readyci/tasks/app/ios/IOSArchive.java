@@ -21,13 +21,13 @@ public class IOSArchive extends Task {
         String archivePath = String.format("%s/app.xcarchive", buildEnvironment.buildPath);
 
         executeCommand(new String[] {"/usr/bin/xcodebuild",
-                "-sdk iphoneos",
                 "DEVELOPMENT_TEAM=" + devTeam,
                 "PROVISIONING_PROFILE=" + provisioningProfile,
-                "-workspace " + workspace,
-                "-scheme " + scheme,
-                "-configuration " + configuration,
-                "-archivePath " + archivePath,
+                "-workspace", workspace,
+                "-scheme", scheme,
+                "-sdk", "iphoneos",
+                "-configuration", configuration,
+                "-archivePath", archivePath,
                 "archive"}, buildEnvironment.projectPath);
     }
 }
