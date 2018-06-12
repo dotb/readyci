@@ -17,6 +17,7 @@ public class IOSProvisioningProfileRead extends Task {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IOSProvisioningProfileRead.class);
     public static final String BUILD_PROP_APP_NAME = "appName";
+    public static final String BUILD_PROP_APP_ID_NAME = "AppIDName";
     public static final String BUILD_PROP_ORGANISATION_NAME = "organisationName";
     public static final String BUILD_PROP_DEV_TEAM = "devTeam";
     public static final String BUILD_PROP_PROVISIONING_PROFILE = "provisioningProfile";
@@ -51,6 +52,7 @@ public class IOSProvisioningProfileRead extends Task {
     private void readProvisioningInputStream(InputStream processInputSteam, BuildEnvironment buildEnvironment) throws Exception {
         NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(processInputSteam);
         String appName = rootDict.objectForKey("Name").toString();
+        String appIDName = rootDict.objectForKey("AppIDName").toString();
         String organisationName = rootDict.objectForKey("TeamName").toString();
         NSArray appIdPrefixs = (NSArray) rootDict.objectForKey("ApplicationIdentifierPrefix");
         String devTeam = appIdPrefixs.lastObject().toString();
@@ -60,6 +62,7 @@ public class IOSProvisioningProfileRead extends Task {
         String bundleId = removeTeamFromBundleId(fullBundleId, devTeam);
 
         buildEnvironment.buildParameters.put(BUILD_PROP_APP_NAME, appName);
+        buildEnvironment.buildParameters.put(BUILD_PROP_APP_ID_NAME, appIDName);
         buildEnvironment.buildParameters.put(BUILD_PROP_ORGANISATION_NAME, organisationName);
         buildEnvironment.buildParameters.put(BUILD_PROP_DEV_TEAM, devTeam);
         buildEnvironment.buildParameters.put(BUILD_PROP_PROVISIONING_PROFILE, provisioningProfile);
