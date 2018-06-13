@@ -29,13 +29,21 @@ public class WebHookPresenter {
     @Async
     public void handleWebHook(Map<String, Object> webHookRequest) {
 
+        // Handle requests from BitBucket and GitHub. Starting with BitBucket
         String repository = Util.getMappedValueAtPath(webHookRequest, "repository.name");
-        String pushType = Util.getMappedValueAtPath(webHookRequest, "push.changes.new.type");
         String branchName = Util.getMappedValueAtPath(webHookRequest, "push.changes.new.name");
         String gitAuthor = Util.getMappedValueAtPath(webHookRequest, "push.changes.new.target.author.raw");
 
-        if (Util.valueExists(pushType) && Util.valueExists(branchName)) {
-            LOGGER.info(String.format("Webhook received for repository %s type %s and branch %s by user %s", repository, pushType, branchName, gitAuthor));
+        // Try load GitHub values if they are missing
+        if (!Util.valueExists(branchName)) {
+            branchName = Util.getMappedValueAtPath(webHookRequest, "repository.default_branch");
+        }
+        if (!Util.valueExists(gitAuthor)) {
+            gitAuthor = Util.getMappedValueAtPath(webHookRequest, "sender.login");
+        }
+
+        if (Util.valueExists(repository) && Util.valueExists(branchName) && Util.valueExists(gitAuthor)) {
+            LOGGER.info(String.format("Webhook received for repository %s and branch %s by user %s", repository, branchName, gitAuthor));
             handleBuildRequest(repository, branchName);
         } else {
             LOGGER.warn("Webhook ignored a request which didn't contain a branch");
