@@ -6,9 +6,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class IOSArchive extends Task {
+
+    public static final String TASK_IOS_ARCHIVE = "ios_archive";
+
     @Override
     public String taskIdentifier() {
-        return "ios_archive";
+        return TASK_IOS_ARCHIVE;
     }
 
     @Override

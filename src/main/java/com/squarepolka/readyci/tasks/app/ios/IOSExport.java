@@ -6,9 +6,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class IOSExport extends Task {
+
+    public static final String TASK_IOS_EXPORT = "ios_export";
+
     @Override
     public String taskIdentifier() {
-        return "ios_export";
+        return TASK_IOS_EXPORT;
     }
 
     @Override

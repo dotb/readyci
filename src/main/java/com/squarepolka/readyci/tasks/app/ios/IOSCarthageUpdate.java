@@ -8,11 +8,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class IOSCarthageUpdate extends Task {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(IOSCarthageUpdate.class);
+    public static final String TASK_IOS_CARTHAGE_UPDATE = "ios_carthage_update";
 
     @Override
     public String taskIdentifier() {
-        return "ios_carthage_update";
+        return TASK_IOS_CARTHAGE_UPDATE;
     }
 
     @Override

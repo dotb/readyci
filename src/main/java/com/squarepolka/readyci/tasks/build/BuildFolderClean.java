@@ -6,9 +6,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BuildFolderClean extends Task {
+
+    public static final String TASK_BUILD_PATH_CLEAN = "build_path_clean";
+
     @Override
     public String taskIdentifier() {
-        return "build_path_clean";
+        return TASK_BUILD_PATH_CLEAN;
     }
 
     @Override

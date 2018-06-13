@@ -7,8 +7,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class TaskGitCheckout extends Task {
 
+    public static final String TASK_CHECKOUT_GIT = "checkout_git";
+
     public String taskIdentifier() {
-        return "checkout_git";
+        return TASK_CHECKOUT_GIT;
     }
 
     public String description() {

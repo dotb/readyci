@@ -11,9 +11,12 @@ import java.io.IOException;
 
 @Component
 public class IOSExportOptionsCreate extends Task {
+
+    public static final String TASK_IOS_EXPORT_OPTIONS_CREATE = "ios_export_options_create";
+
     @Override
     public String taskIdentifier() {
-        return "ios_export_options_create";
+        return TASK_IOS_EXPORT_OPTIONS_CREATE;
     }
 
     @Override

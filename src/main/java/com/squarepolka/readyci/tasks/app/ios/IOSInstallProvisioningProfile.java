@@ -6,9 +6,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class IOSInstallProvisioningProfile extends Task {
+
+    public static final String TASK_IOS_INSTALL_PROFILE = "ios_install_provisioning_profile";
+
     @Override
     public String taskIdentifier() {
-        return "ios_install_provisioning_profile";
+        return TASK_IOS_INSTALL_PROFILE;
     }
 
     @Override

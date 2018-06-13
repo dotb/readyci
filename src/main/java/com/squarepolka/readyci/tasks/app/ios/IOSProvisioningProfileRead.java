@@ -16,6 +16,7 @@ import java.io.InputStream;
 public class IOSProvisioningProfileRead extends Task {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IOSProvisioningProfileRead.class);
+    public static final String TASK_IOS_PROFILE_READ = "ios_provisioning_profile_read";
     public static final String BUILD_PROP_APP_NAME = "appName";
     public static final String BUILD_PROP_APP_ID_NAME = "AppIDName";
     public static final String BUILD_PROP_ORGANISATION_NAME = "organisationName";
@@ -24,7 +25,7 @@ public class IOSProvisioningProfileRead extends Task {
     public static final String BUILD_PROP_BUNDLE_ID = "bundleId";
 
     public String taskIdentifier() {
-        return "ios_provisioning_profile_read";
+        return TASK_IOS_PROFILE_READ;
     }
 
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {

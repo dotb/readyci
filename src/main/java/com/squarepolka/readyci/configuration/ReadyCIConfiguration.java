@@ -15,8 +15,8 @@ import java.util.List;
 public class ReadyCIConfiguration {
 
 
-    public static String ARG_SERVER = "server";
-    public static String ARG_PIPELINE = "pipeline=";
+    public static final String ARG_SERVER = "server";
+    public static final String ARG_PIPELINE = "pipeline=";
     private static final Logger LOGGER = LoggerFactory.getLogger(ReadyCIConfiguration.class);
     private static ReadyCIConfiguration instance;
 

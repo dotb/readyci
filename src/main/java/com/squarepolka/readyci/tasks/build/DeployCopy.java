@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeployCopy extends Task {
 
-    public static String TASK_DEPLOY_COPY = "deploy_copy";
-    public static String TASK_DEPLOY_SOURCE_PATH = "deploySrcPath";
-    public static String TASK_DEPLOY_DESTINATION_PATH = "deployDstPath";
+    public static final String TASK_DEPLOY_COPY = "deploy_copy";
+    public static final String TASK_DEPLOY_SOURCE_PATH = "deploySrcPath";
+    public static final String TASK_DEPLOY_DESTINATION_PATH = "deployDstPath";
 
     @Override
     public String taskIdentifier() {

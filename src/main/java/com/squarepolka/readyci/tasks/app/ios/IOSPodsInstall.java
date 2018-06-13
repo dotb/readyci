@@ -10,10 +10,11 @@ import org.springframework.stereotype.Component;
 public class IOSPodsInstall extends Task {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IOSPodsInstall.class);
+    public static final String TASK_IOS_POD_INSTALL = "ios_pod_install";
 
     @Override
     public String taskIdentifier() {
-        return "ios_pod_install";
+        return TASK_IOS_POD_INSTALL;
     }
 
     @Override

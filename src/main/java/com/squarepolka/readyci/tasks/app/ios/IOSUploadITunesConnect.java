@@ -6,9 +6,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class IOSUploadITunesConnect extends Task {
+
+    public static final String TASK_UPLOAD_ITUNES_CONNECT = "ios_upload_itunes_connect";
+
     @Override
     public String taskIdentifier() {
-        return "ios_upload_itunes_connect";
+        return TASK_UPLOAD_ITUNES_CONNECT;
     }
 
     @Override

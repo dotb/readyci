@@ -8,9 +8,12 @@ import java.io.File;
 
 @Component
 public class BuildFolderCreate extends Task {
+
+    public static final String TASK_BUILD_FOLDER_CREATE = "build_path_create";
+
     @Override
     public String taskIdentifier() {
-        return "build_path_create";
+        return TASK_BUILD_FOLDER_CREATE;
     }
 
     @Override

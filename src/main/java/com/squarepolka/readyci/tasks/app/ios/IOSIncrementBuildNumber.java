@@ -12,9 +12,12 @@ import java.util.Date;
 
 @Component
 public class IOSIncrementBuildNumber extends Task {
+
+    public static final String TASK_IOS_INCREMENT_BUILD_NUMBER = "ios_increment_build_number";
+
     @Override
     public String taskIdentifier() {
-        return "ios_increment_build_number";
+        return TASK_IOS_INCREMENT_BUILD_NUMBER;
     }
 
     @Override

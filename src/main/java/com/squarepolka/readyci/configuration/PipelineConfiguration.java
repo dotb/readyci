@@ -11,8 +11,8 @@ import java.util.Map;
  */
 public class PipelineConfiguration {
 
-    public static String PIPELINE_PROJECT_PATH = "projectPath";
-    public static String PIPELINE_BUILD_PREFIX = "/tmp/readyci/";
+    public static final String PIPELINE_PROJECT_PATH = "projectPath";
+    public static final String PIPELINE_BUILD_PREFIX = "/tmp/readyci/";
 
     public String name;
     public String gitPath;
