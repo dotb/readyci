@@ -161,6 +161,7 @@ Ready CI includes a collection of task types that currently supports Maven and i
 | ios_export                       | Compile your app and export an archive |
 | ios_export_options_create        | Creates a populated .plist with export options |
 | ios_archive                      | Generate an archived .ipa|
+| ios_upload_hockeyapp             | Upload app builds to HockeyApp |
 | ios_upload_itunes_connect        | Upload your build .ipa to iTunes connect |
 | *GIT*                            | |
 | checkout_git                     | Clone a git repository. This step is automatically run and you don't need to reference this task |

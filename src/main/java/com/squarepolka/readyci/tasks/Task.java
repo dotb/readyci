@@ -49,7 +49,7 @@ public abstract class Task {
             resetInputStream(processInputStream);
             return processInputStream;
         } catch (Exception e) {
-            TaskExecuteException taskExecuteException = new TaskExecuteException(String.format("Exception while executing task %s: %s. Tried to run %s", taskIdentifier(), e.toString(), command));
+            TaskExecuteException taskExecuteException = new TaskExecuteException(String.format("Exception while executing task %s: %s. Tried to run %s", taskIdentifier(), e.toString(), arrayToString(command)));
             taskExecuteException.setStackTrace(e.getStackTrace());
             throw taskExecuteException;
         }
