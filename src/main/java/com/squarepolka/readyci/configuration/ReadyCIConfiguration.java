@@ -8,20 +8,16 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * Handles the parsing and storage of multiple pipeline configurations
+ */
 public class ReadyCIConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReadyCIConfiguration.class);
     private static ReadyCIConfiguration instance;
 
-    public String name;
-    public boolean server;
-    public String gitPath;
-    public String gitBranch;
-    public String projectPath;
-    public Map<String, String> parameters;
-    public List<TaskConfiguration> tasks;
+    public List<PipelineConfiguration> pipelines;
 
     public static ReadyCIConfiguration instance() {
         if (null == instance) {
@@ -31,9 +27,25 @@ public class ReadyCIConfiguration {
     }
 
     private ReadyCIConfiguration() {
-        this.name = "";
-        this.server = false;
-        this.tasks = new ArrayList<TaskConfiguration>();
+        this.pipelines = new ArrayList<PipelineConfiguration>();
+    }
+
+    public PipelineConfiguration getPipeline(String pipelineName) {
+        for (PipelineConfiguration pipeline : pipelines) {
+            if (pipeline.name.equalsIgnoreCase(pipelineName)) {
+                return pipeline;
+            }
+        }
+        return null;
+    }
+
+    public PipelineConfiguration getPipeline(String repositoryName, String branch) {
+        for (PipelineConfiguration pipeline : pipelines) {
+            if (pipeline.matchesRepositoryName(repositoryName, branch)) {
+                return pipeline;
+            }
+        }
+        return null;
     }
 
     public void handleInputParameters(String[] arguments) {
@@ -43,24 +55,26 @@ public class ReadyCIConfiguration {
     }
 
     private void handleInputArgument(String argument) {
-        if (argument.equalsIgnoreCase("server")) {
-            server = true;
-        } else if (argument.contains(".yml")) {
+        if (argument.contains(".yml")) {
             loadConfiguration(argument);
+        } else {
+            LOGGER.warn(String.format("Ignoring unknown argument %s", argument));
         }
     }
 
     private void loadConfiguration(String fileName) {
-
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        YAMLFactory yamlFactory = new YAMLFactory();
+        ObjectMapper mapper = new ObjectMapper(yamlFactory);
         try {
             File configurationFile = new File(fileName);
             ReadyCIConfiguration configuration = mapper.readValue(configurationFile, ReadyCIConfiguration.class);
             instance = configuration;
+            LOGGER.info(String.format("Loaded configuration %s with %s pipelines", fileName, configuration.pipelines.size()));
         } catch (Exception e) {
-            throw new LoadConfigurationException(String.format("Could not load configuration from %s: %s", fileName, e.getLocalizedMessage()));
+            LoadConfigurationException configurationException = new LoadConfigurationException(String.format("Could not load configuration from %s: %s", fileName, e.toString()));
+            configurationException.setStackTrace(e.getStackTrace());
+            throw configurationException;
         }
-
     }
 
 }

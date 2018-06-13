@@ -1,13 +1,12 @@
 package com.squarepolka.readyci.taskrunner;
 
-import com.squarepolka.readyci.configuration.ReadyCIConfiguration;
+import com.squarepolka.readyci.configuration.PipelineConfiguration;
 import com.squarepolka.readyci.configuration.TaskConfiguration;
 import com.squarepolka.readyci.tasks.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class TaskRunnerFactory {
@@ -19,18 +18,12 @@ public class TaskRunnerFactory {
         this.allTasks = allTasks;
     }
 
-    public TaskRunner createTaskRunner(ReadyCIConfiguration configuration) {
-        BuildEnvironment buildEnvironment = createBuildEnvironment(configuration);
+    public TaskRunner createTaskRunner(PipelineConfiguration pipelineConf) {
+        BuildEnvironment buildEnvironment = new BuildEnvironment(pipelineConf);
         TaskRunner taskRunner = new TaskRunner(buildEnvironment);
         addDefaultTasks(taskRunner);
-        addConfiguredTasks(taskRunner, configuration.tasks);
+        addConfiguredTasks(taskRunner, pipelineConf.tasks);
         return taskRunner;
-    }
-
-    private BuildEnvironment createBuildEnvironment(ReadyCIConfiguration configuration) {
-        BuildEnvironment buildEnvironment = new BuildEnvironment(configuration);
-        buildEnvironment.buildParameters.putAll(configuration.parameters);
-        return buildEnvironment;
     }
 
     private void addConfiguredTasks(TaskRunner taskRunner, List<TaskConfiguration> taskConfigurations) {
@@ -55,4 +48,5 @@ public class TaskRunnerFactory {
         }
         throw new TaskNotFoundException(taskIdentifer);
     }
+
 }

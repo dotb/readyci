@@ -19,8 +19,6 @@ public class WebHookView {
     public WebHookView(WebHookPresenter webHookPresenter, TaskRunnerFactory taskRunnerFactory) {
         this.webHookPresenter = webHookPresenter;
         this.taskRunnerFactory = taskRunnerFactory;
-
-        webHookPresenter.setView(this);
     }
 
     @RequestMapping(value = "/webhook", method = RequestMethod.POST)
