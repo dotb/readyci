@@ -40,12 +40,12 @@ Run a once off command-line build by specifying a `yml` configuration file and t
 ```bash
 $ java -jar target/readyci-0.1.jar readyConfigExample.yml pipeline=ready-ci
 
-11:26:36.763 [main] INFO com.squarepolka.readyci.configuration.ReadyCIConfiguration - Loaded configuration readyConfigExample.yml with 2 pipelines
+Loaded configuration readyConfigExample.yml with 2 pipelines
 ...
-2018-06-13 11:26:41.768  INFO 44260 --- [           main] com.squarepolka.readyci.ReadyCI          : Ready CI is in command-line mode
-2018-06-13 11:26:41.768  INFO 44260 --- [           main] com.squarepolka.readyci.ReadyCI          : Building pipline ready-ci
+Ready CI is in command-line mode
+Building pipline ready-ci
 ...
-2018-06-13 12:30:58.429  INFO 48558 --- [           main] c.s.readyci.taskrunner.TaskRunner        : FINISHED BUILD 74e404d8-6bae-41fa-8aa1-4d786c797c58 
+FINISHED BUILD 74e404d8-6bae-41fa-8aa1-4d786c797c58 
 ```
 
 A successful build will deploy `readyci.jar` to your `/tmp/` directory. You can check that it's there like this:
@@ -60,10 +60,10 @@ Ready CI can run as a web-service and listen out for web-hook calls. Configure y
 ```bash
 java -jar target/readyci-0.1.jar readyConfigExample.yml server
 
-11:26:36.763 [main] INFO com.squarepolka.readyci.configuration.ReadyCIConfiguration - Loaded configuration readyConfigExample.yml with 2 pipelines
+Loaded configuration readyConfigExample.yml with 2 pipelines
 ...
-2018-06-13 11:36:01.756  INFO 44416 --- [           main] com.squarepolka.readyci.ReadyCI          : Ready CI is in server mode
-2018-06-13 11:36:01.758  INFO 44416 --- [           main] com.squarepolka.readyci.ReadyCI          : Started ReadyCI in 3.655 seconds (JVM running for 4.612)
+Ready CI is in server mode
+Started ReadyCI in 3.655 seconds (JVM running for 4.612)
 ```
 
 You can test your web-hook using cURL
@@ -96,17 +96,17 @@ curl -X POST \
 
 This will kick off a build of Ready CI and you'll see output like this:
 ```bash
-2018-06-13 12:36:19.232  INFO 48786 --- [cTaskExecutor-2] c.s.readyci.webhook.WebHookPresenter     : Webhook proceeding with build for pipline ready-ci
-2018-06-13 12:36:19.233  INFO 48786 --- [cTaskExecutor-2] c.s.readyci.taskrunner.TaskRunner        : RUNNING BUILD c7a56eec-f303-4ad9-8de9-ffe5da68bef5 
-2018-06-13 12:36:19.234  INFO 48786 --- [cTaskExecutor-2] c.s.readyci.taskrunner.TaskRunner        : STARTING TASK build_path_clean | Finish up by cleaning the build folder
+Webhook proceeding with build for pipline ready-ci
+RUNNING BUILD c7a56eec-f303-4ad9-8de9-ffe5da68bef5 
+STARTING TASK build_path_clean | Finish up by cleaning the build folder
 ...
-2018-06-13 12:36:19.276  INFO 48786 --- [cTaskExecutor-2] c.s.readyci.taskrunner.TaskRunner        : STARTING TASK checkout_git |  
+STARTING TASK checkout_git |  
 Cloning into '/tmp/readyci//c7a56eec-f303-4ad9-8de9-ffe5da68bef5'...
-2018-06-13 12:36:21.918  INFO 48786 --- [cTaskExecutor-2] c.s.readyci.taskrunner.TaskRunner        : COMPLETED TASK checkout_git
-2018-06-13 12:36:21.918  INFO 48786 --- [cTaskExecutor-2] c.s.readyci.taskrunner.TaskRunner        : STARTING TASK maven_install | Run maven install
-2018-06-13 12:36:21.918 DEBUG 48786 --- [cTaskExecutor-2] com.squarepolka.readyci.tasks.Task       : Executing command: mvn install 
+COMPLETED TASK checkout_git
+STARTING TASK maven_install | Run maven install
+Executing command: mvn install 
 ...
-2018-06-13 12:36:26.996  INFO 48786 --- [cTaskExecutor-2] c.s.readyci.taskrunner.TaskRunner        : FINISHED BUILD c7a56eec-f303-4ad9-8de9-ffe5da68bef5 
+FINISHED BUILD c7a56eec-f303-4ad9-8de9-ffe5da68bef5 
 ```
 Ready CI currently supports web-hook calls from GitHub and Bitbucket.
 
