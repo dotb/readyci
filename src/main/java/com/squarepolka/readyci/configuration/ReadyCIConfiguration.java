@@ -14,10 +14,15 @@ import java.util.List;
  */
 public class ReadyCIConfiguration {
 
+
+    public static String ARG_SERVER = "server";
+    public static String ARG_PIPELINE = "pipeline=";
     private static final Logger LOGGER = LoggerFactory.getLogger(ReadyCIConfiguration.class);
     private static ReadyCIConfiguration instance;
 
+    public boolean isServerMode;
     public List<PipelineConfiguration> pipelines;
+    public PipelineConfiguration piplineToRun;
 
     public static ReadyCIConfiguration instance() {
         if (null == instance) {
@@ -27,7 +32,9 @@ public class ReadyCIConfiguration {
     }
 
     private ReadyCIConfiguration() {
+        this.isServerMode = false;
         this.pipelines = new ArrayList<PipelineConfiguration>();
+        this.piplineToRun = null;
     }
 
     public PipelineConfiguration getPipeline(String pipelineName) {
@@ -57,6 +64,10 @@ public class ReadyCIConfiguration {
     private void handleInputArgument(String argument) {
         if (argument.contains(".yml")) {
             loadConfiguration(argument);
+        } else if (argument.equalsIgnoreCase(ARG_SERVER)) {
+            isServerMode = true;
+        } else if (argument.startsWith(ARG_PIPELINE)) {
+            runCommandLineBuild(argument);
         } else {
             LOGGER.warn(String.format("Ignoring unknown argument %s", argument));
         }
@@ -67,14 +78,24 @@ public class ReadyCIConfiguration {
         ObjectMapper mapper = new ObjectMapper(yamlFactory);
         try {
             File configurationFile = new File(fileName);
-            ReadyCIConfiguration configuration = mapper.readValue(configurationFile, ReadyCIConfiguration.class);
-            instance = configuration;
-            LOGGER.info(String.format("Loaded configuration %s with %s pipelines", fileName, configuration.pipelines.size()));
+            ReadyCIConfiguration newConfiguration = mapper.readValue(configurationFile, ReadyCIConfiguration.class);
+            this.isServerMode = newConfiguration.isServerMode;
+            this.pipelines = newConfiguration.pipelines;
+            LOGGER.info(String.format("Loaded configuration %s with %s pipelines", fileName, pipelines.size()));
         } catch (Exception e) {
             LoadConfigurationException configurationException = new LoadConfigurationException(String.format("Could not load configuration from %s: %s", fileName, e.toString()));
             configurationException.setStackTrace(e.getStackTrace());
             throw configurationException;
         }
+    }
+
+    private void runCommandLineBuild(String argument) {
+        String pipelineName = parseBuildName(argument);
+        PipelineConfiguration pipelineConfiguration = getPipeline(pipelineName);
+        this.piplineToRun = pipelineConfiguration;
+    }
+    private String parseBuildName(String argument) {
+        return argument.split("=")[1];
     }
 
 }

@@ -1,6 +1,6 @@
 
   pipelines:
-  - name: give-me-a-name
+  - name: first-build-name
     gitPath: <git url>
     gitBranch: master
     parameters:
@@ -36,7 +36,7 @@
     - description: Finish up by cleaning the build folder
       type: build_path_clean
 
-  - name: give-me-another-name
+  - name: second-build-name
       gitPath: <git url>
       gitBranch: master
       parameters:
