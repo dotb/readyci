@@ -6,6 +6,7 @@ A no-fuss CI/CD service and collection of build scripts
 ### :+1: It comes with scripts
 Ready CI comes with build scripts so that you spend less time setting up your automated CI/CD infrastructure, and get to making automated builds faster. Ready CI scripts currently support:
 * iOS apps
+* Maven projects
 
 
 ### :+1: Command-line or web-service
@@ -24,7 +25,7 @@ Paths, filenames and target names look great when you use whitespace. However, w
 
 ## How to use Ready CI
 ### Building Ready CI
-Maven will create target/readyci-0.1.jar
+Use Maven to create a jar: target/readyci-0.1.jar
 ```bash
 $ mvn install
 ```
