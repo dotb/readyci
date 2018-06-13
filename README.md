@@ -109,4 +109,40 @@ Cloning into '/tmp/readyci//c7a56eec-f303-4ad9-8de9-ffe5da68bef5'...
 2018-06-13 12:36:26.996  INFO 48786 --- [cTaskExecutor-2] c.s.readyci.taskrunner.TaskRunner        : FINISHED BUILD c7a56eec-f303-4ad9-8de9-ffe5da68bef5 
 ```
 Ready CI currently supports web-hook calls from GitHub and Bitbucket.
+
+## Configuration explained
+Ready CI is configured by supplying a simple YML file. For example, the configuration below builds Ready CI using Maven and the code on GitHub.
+```yml
+  pipelines:
+  - name: ready-ci # every pipeline needs a name 
+    gitPath: git@github.com:dotb/ready_ci.git
+    gitBranch: master
+    parameters:
+      deploySrcPath: target/readyci-0.1.jar
+      deployDstPath: /tmp/readyci.jar
+
+    tasks:
+    - description: Run maven install
+      type: maven_install
+
+    - description: Copy the built binary to a deployment destination
+      type: deploy_copy
+
+    - description: Finish up by cleaning the build folder
+      type: build_path_clean
+```
+Lets take a look at some of these parameters 
+
+|Parameter|Description|
+|:--------|:-------------|
+| pipelines         | An array of as many pipeline configurations as you want |
+| - name            | Each pipeline is named, and you use this name to start a command-line build |
+|   gitPath         | The path to your code repository |
+|   gitBranch       | Use the gitBranch parameter to specify which branch should trigger builds when web-hook requests are received | 
+|   parameters      | Parameters are used to customise the build tasks |
+|     deploySrcPath | In this example the deploy_copy task needs to know the source and destination paths for the `readyci.jar` file, so that it can copy it to the right place |
+|   tasks:          | The array of tasks is used to configure each build step |
+|   - description   | You can set any description you like. It'll be displayed in the build logs |
+|     type          | The type of task is important, it tells Ready CI which task should be run |
+
  
