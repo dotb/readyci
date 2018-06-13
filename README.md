@@ -133,8 +133,8 @@ Ready CI is configured by supplying a simple YML file. For example, the configur
 ```
 Lets take a look at some of these parameters 
 
-|Parameter|Description|
-|:--------|:-------------|
+| Parameter | Description |
+| :-------- | :---------- |
 | pipelines         | An array of as many pipeline configurations as you want |
 | - name            | Each pipeline is named, and you use this name to start a command-line build |
 |   gitPath         | The path to your code repository |
@@ -145,4 +145,28 @@ Lets take a look at some of these parameters
 |   - description   | You can set any description you like. It'll be displayed in the build logs |
 |     type          | The type of task is important, it tells Ready CI which task should be run |
 
- 
+## Task types
+Ready CI includes a collection of task types that currently supports Maven and iOS builds.
+
+| Task                             | Description |
+| :---                             | :--- |
+| *Maven*                          | |
+| maven_install                    | Run maven install |
+| *iOS*                            | |
+| ios_carthage_update              | Install dependencies using Carthage |
+| ios_pod_install                  | Install dependencies using CocoaPods |
+| ios_install_provisioning_profile | Install a .mobileprovisioning file onto the build host |
+| ios_provisioning_profile_read    | Read build information from a .mobileprovisioning file |
+| ios_increment_build_number       | Increments the buld number in Info.plist |
+| ios_export                       | Compile your app and export an archive |
+| ios_export_options_create        | Creates a populated .plist with export options |
+| ios_archive                      | Generate an archived .ipa|
+| ios_upload_itunes_connect        | Upload your build .ipa to iTunes connect |
+| *GIT*                            | |
+| checkout_git                     | Clone a git repository. This step is automatically run and you don't need to reference this task |
+| *Build*                          | |
+| build_path_create                | Creates a temporary build folder. This step is automatically run and you don't need to reference this task |
+| build_path_clean                 | Cleans the build folder. This step is automatically run and you don't need to reference this task ||
+| *Deploy*                         | |
+| deploy_copy                      | A simple copy based deployment task |
+
