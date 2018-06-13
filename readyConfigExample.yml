@@ -1,6 +1,23 @@
 
   pipelines:
-  - name: first-build-name
+  - name: ready-ci
+    gitPath: git@github.com:dotb/ready_ci.git
+    gitBranch: master
+    parameters:
+      deploySrcPath: target/readyci-0.1.jar
+      deployDstPath: /tmp/readyci.jar
+
+    tasks:
+    - description: Run maven install
+      type: maven_install
+
+    - description: Copy the built binary to a deployment destination
+      type: deploy_copy
+
+    - description: Finish up by cleaning the build folder
+      type: build_path_clean
+
+  - name: build-an-ios-app
     gitPath: <git url>
     gitBranch: master
     parameters:
@@ -10,42 +27,6 @@
       configuration: Release
       profilePath: <mobileprovision filename>
       infoPlistPath: <path to Info.plist>
-
-    tasks:
-    - description: Pod install
-      type: ios_pod_install
-
-    - description: Read the provisioning profile and add parameters to the build environment
-      type: ios_provisioning_profile_read
-
-    - description: Create a exportOptions.plist file
-      type: ios_export_options_create
-
-    - description: Install the provisioning profile in XCode
-      type: ios_install_provisioning_profile
-
-    - description: Increment the build number using todays date
-      type: ios_increment_build_number
-
-    - description: Generate an iOS archive
-      type: ios_archive
-
-    - description: Sign and export the iOS app
-      type: ios_export
-
-    - description: Finish up by cleaning the build folder
-      type: build_path_clean
-
-  - name: second-build-name
-      gitPath: <git url>
-      gitBranch: master
-      parameters:
-        projectPath: ios app
-        workspace: <workspace name>
-        target: <target name>
-        configuration: Release
-        profilePath: <mobileprovision filename>
-        infoPlistPath: <path to Info.plist>
       iTunesUsername: <itunes upload username>
       iTunesPassword: <itunes upload password>
 

@@ -26,27 +26,37 @@ Paths, filenames and target names look great when you use whitespace. However, w
 ### Building Ready CI
 Maven will create target/readyci-0.1.jar
 ```bash
-mvn install
+$ mvn install
 ```
 
 ### Configure pipelines
-Make your own copy of the readyConfigExample.yml file, specifying all of your pipelines and associated build tasks.
+Make your own copy of the `readyConfigExample.yml` file, specifying all of your pipelines and associated build tasks.
 
 ### Running a command-line build
-Run a once off command-line build by specifying a `yml` configuration file and the `pipeline=` parameter.
+Run a once off command-line build by specifying a `yml` configuration file and the `pipeline=` parameter. It's only fitting that Ready CI be able to build it's self! Try this out by using the example configuration `readyConfigExample.yml` to run a Ready CI build named `ready-ci`. 
 ```bash
-java -jar target/readyci-0.1.jar readyConfigExample.yml pipeline=first-build-name
+$ java -jar target/readyci-0.1.jar readyConfigExample.yml pipeline=ready-ci
+
 11:26:36.763 [main] INFO com.squarepolka.readyci.configuration.ReadyCIConfiguration - Loaded configuration readyConfigExample.yml with 2 pipelines
 ...
 2018-06-13 11:26:41.768  INFO 44260 --- [           main] com.squarepolka.readyci.ReadyCI          : Ready CI is in command-line mode
-2018-06-13 11:26:41.768  INFO 44260 --- [           main] com.squarepolka.readyci.ReadyCI          : Building pipline first-build-name
-
+2018-06-13 11:26:41.768  INFO 44260 --- [           main] com.squarepolka.readyci.ReadyCI          : Building pipline ready-ci
+...
+2018-06-13 12:30:58.429  INFO 48558 --- [           main] c.s.readyci.taskrunner.TaskRunner        : FINISHED BUILD 74e404d8-6bae-41fa-8aa1-4d786c797c58 
 ```
+
+A successful build will deploy `readyci.jar` to your `/tmp/` directory. You can check that it's there like this:
+```bash
+$ ls -la /tmp/readyci.jar 
+-rw-r--r--  1 bradley  wheel  16612035 Jun 13 12:30 /tmp/readyci.jar
+```
+
 
 ### Running a build service
 Ready CI can run as a web-service and listen out for web-hook calls. Ready CI currently supports web-hook calls from Bitbucket. Configure Bitbucket to post to http://<your address>:8080/webhook and then run Ready CI with a `yml` configuration time and the `server` parameter. GitHub web-hooks will be supported soon.
 ```bash
 java -jar target/readyci-0.1.jar readyConfigExample.yml server
+
 11:26:36.763 [main] INFO com.squarepolka.readyci.configuration.ReadyCIConfiguration - Loaded configuration readyConfigExample.yml with 2 pipelines
 ...
 2018-06-13 11:36:01.756  INFO 44416 --- [           main] com.squarepolka.readyci.ReadyCI          : Ready CI is in server mode
@@ -76,8 +86,23 @@ curl -X POST \
       ]
    },
    "repository":{
-      "name":"first-build-name"
+      "name":"ready_ci"
    }
 }'
+```
+
+This will kick off a build of Ready CI and you'll see output like this:
+```bash
+2018-06-13 12:36:19.232  INFO 48786 --- [cTaskExecutor-2] c.s.readyci.webhook.WebHookPresenter     : Webhook proceeding with build for pipline ready-ci
+2018-06-13 12:36:19.233  INFO 48786 --- [cTaskExecutor-2] c.s.readyci.taskrunner.TaskRunner        : RUNNING BUILD c7a56eec-f303-4ad9-8de9-ffe5da68bef5 
+2018-06-13 12:36:19.234  INFO 48786 --- [cTaskExecutor-2] c.s.readyci.taskrunner.TaskRunner        : STARTING TASK build_path_clean | Finish up by cleaning the build folder
+...
+2018-06-13 12:36:19.276  INFO 48786 --- [cTaskExecutor-2] c.s.readyci.taskrunner.TaskRunner        : STARTING TASK checkout_git |  
+Cloning into '/tmp/readyci//c7a56eec-f303-4ad9-8de9-ffe5da68bef5'...
+2018-06-13 12:36:21.918  INFO 48786 --- [cTaskExecutor-2] c.s.readyci.taskrunner.TaskRunner        : COMPLETED TASK checkout_git
+2018-06-13 12:36:21.918  INFO 48786 --- [cTaskExecutor-2] c.s.readyci.taskrunner.TaskRunner        : STARTING TASK maven_install | Run maven install
+2018-06-13 12:36:21.918 DEBUG 48786 --- [cTaskExecutor-2] com.squarepolka.readyci.tasks.Task       : Executing command: mvn install 
+...
+2018-06-13 12:36:26.996  INFO 48786 --- [cTaskExecutor-2] c.s.readyci.taskrunner.TaskRunner        : FINISHED BUILD c7a56eec-f303-4ad9-8de9-ffe5da68bef5 
 ```
  
