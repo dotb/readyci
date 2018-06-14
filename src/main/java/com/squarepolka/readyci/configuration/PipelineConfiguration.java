@@ -30,7 +30,7 @@ public class PipelineConfiguration {
 
     public boolean matchesRepositoryName(String repositoryName, String branch) {
         return gitPath.toLowerCase().contains(repositoryName.toLowerCase()) &&
-                gitBranch.equalsIgnoreCase(branch) &&
+                branch.contains(gitBranch) &&
                 repositoryName.length() > 0 &&
                 branch.length() > 0;
     }

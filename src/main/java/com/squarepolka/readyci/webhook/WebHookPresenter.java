@@ -1,5 +1,6 @@
 package com.squarepolka.readyci.webhook;
 
+import com.squarepolka.readyci.ReadyCI;
 import com.squarepolka.readyci.configuration.PipelineConfiguration;
 import com.squarepolka.readyci.configuration.ReadyCIConfiguration;
 import com.squarepolka.readyci.taskrunner.TaskRunner;
@@ -34,16 +35,20 @@ public class WebHookPresenter {
         String repository = Util.getMappedValueAtPath(webHookRequest, "repository.name");
         String branchName = Util.getMappedValueAtPath(webHookRequest, "push.changes.new.name");
         String gitAuthor = Util.getMappedValueAtPath(webHookRequest, "push.changes.new.target.author.raw");
+        String commitMessage = Util.getMappedValueAtPath(webHookRequest, "push.changes.new.target.summary.raw");
 
         // Try load GitHub values if they are missing
         if (!Util.valueExists(branchName)) {
-            branchName = Util.getMappedValueAtPath(webHookRequest, "repository.default_branch");
+            branchName = Util.getMappedValueAtPath(webHookRequest, "ref");
         }
         if (!Util.valueExists(gitAuthor)) {
             gitAuthor = Util.getMappedValueAtPath(webHookRequest, "sender.login");
         }
+        if (!Util.valueExists(commitMessage)) {
+            commitMessage = Util.getMappedValueAtPath(webHookRequest, "head_commit.message");
+        }
 
-        if (Util.valueExists(repository) && Util.valueExists(branchName) && Util.valueExists(gitAuthor)) {
+        if (validateGitCommit(repository, branchName, gitAuthor, commitMessage)) {
             LOGGER.info(String.format("Webhook received for repository %s and branch %s by user %s", repository, branchName, gitAuthor));
             handleBuildRequest(repository, branchName);
         } else {
@@ -68,6 +73,21 @@ public class WebHookPresenter {
             TaskRunner taskRunner = taskRunnerFactory.createTaskRunner(pipelineConfiguration);
             taskRunner.runTasks();
         }
+    }
+
+    private boolean validateGitCommit(String repository, String branchName, String gitAuthor, String commitMessage) {
+        if (Util.valueExists(repository) && Util.valueExists(branchName) && Util.valueExists(gitAuthor) && Util.valueExists(commitMessage)) {
+            String instanceName = ReadyCIConfiguration.instance().instanceName;
+            if (commitMessage.toLowerCase().contains(instanceName.toLowerCase())) {
+                LOGGER.warn("Hmmm, I recognise this GIT commit on %s for branch %s by %s, " +
+                        "because my name is in the commit message. I'm going to ignore this " +
+                        "commit to avoid cyclic builds triggered through the web-hook. " +
+                        "The commit message is %s.", repository, branchName, gitAuthor, commitMessage);
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

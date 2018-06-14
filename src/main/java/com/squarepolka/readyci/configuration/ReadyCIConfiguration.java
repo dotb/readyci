@@ -14,12 +14,12 @@ import java.util.List;
  */
 public class ReadyCIConfiguration {
 
-
     public static final String ARG_SERVER = "server";
     public static final String ARG_PIPELINE = "pipeline=";
     private static final Logger LOGGER = LoggerFactory.getLogger(ReadyCIConfiguration.class);
     private static ReadyCIConfiguration instance;
 
+    public String instanceName;
     public boolean isServerMode;
     public List<PipelineConfiguration> pipelines;
     public PipelineConfiguration piplineToRun;
@@ -32,6 +32,7 @@ public class ReadyCIConfiguration {
     }
 
     private ReadyCIConfiguration() {
+        this.instanceName = "Ready CI";
         this.isServerMode = false;
         this.pipelines = new ArrayList<PipelineConfiguration>();
         this.piplineToRun = null;
@@ -80,6 +81,7 @@ public class ReadyCIConfiguration {
         try {
             File configurationFile = new File(fileName);
             ReadyCIConfiguration newConfiguration = mapper.readValue(configurationFile, ReadyCIConfiguration.class);
+            this.instanceName = newConfiguration.instanceName;
             this.isServerMode = newConfiguration.isServerMode;
             this.pipelines = newConfiguration.pipelines;
             LOGGER.info(String.format("Loaded configuration %s with %s pipelines", fileName, pipelines.size()));

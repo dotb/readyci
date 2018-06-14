@@ -1,3 +1,4 @@
+  instanceName: Ready CI
 
   pipelines:
   - name: ready-ci

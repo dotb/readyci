@@ -1,5 +1,6 @@
 package com.squarepolka.readyci.tasks.code;
 
+import com.squarepolka.readyci.configuration.ReadyCIConfiguration;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;
 import org.springframework.stereotype.Component;
@@ -20,9 +21,11 @@ public class TaskGitCommit extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
-        String commitMessage = buildEnvironment.getProperty(BUILD_PROP_GIT_COMMIT_MESSAGE, "");
+        String configuredCommitMessage = buildEnvironment.getProperty(BUILD_PROP_GIT_COMMIT_MESSAGE, "");
         List<String> filesToCommit = buildEnvironment.getProperties(BUILD_PROP_GIT_COMMIT_FILE_LIST);
         String projectPath = buildEnvironment.projectPath;
+        String instanceName = ReadyCIConfiguration.instance().instanceName;
+        String commitMessage = String.format("%s: %s", instanceName, configuredCommitMessage);
 
         stageFiles(filesToCommit, projectPath);
         createCommit(commitMessage, projectPath);

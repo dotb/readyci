@@ -135,6 +135,7 @@ Lets take a look at some of these parameters
 
 | Parameter | Description |
 | :-------- | :---------- |
+| instanceName      | A name for your instance. This name is used to populate git commit messages so that you can identify automated commits. Ready CI also uses the instanceName to avoid cyclic builds triggered by the web-hook receiving one of it's own commit notifications. 
 | pipelines         | An array of as many pipeline configurations as you want |
 | - name            | Each pipeline is named, and you use this name to start a command-line build |
 |   gitPath         | The path to your code repository |
