@@ -1,5 +1,7 @@
 package com.squarepolka.readyci.util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -47,4 +49,22 @@ public class Util {
         return string.length() > 0;
     }
 
+    /**
+     * Skip half of the available data in an input stream.
+     * This method is useful when a full input stream might block a process,
+     * while keeping some data might be desired.
+     *
+     * Unfortunately, an IOException is sometimes thrown when using the processInputStream.skip(long n) method.
+     * We're using processInputStream.read() instead.
+     * We might be suffering from this: https://bugs.java.com/view_bug.do?bug_id=6222822
+     *
+     * @param inputStream
+     */
+    public static void skipHalfOfStream(InputStream inputStream) throws IOException {
+        int availableBytes = inputStream.available();
+        long bytesToSkip = availableBytes / 2;
+        for (int i = 0; i < bytesToSkip; i++) {
+            inputStream.read();
+        }
+    }
 }
