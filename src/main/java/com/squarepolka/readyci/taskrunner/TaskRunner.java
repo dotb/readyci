@@ -25,10 +25,10 @@ public class TaskRunner {
     }
 
     public void runTasks() {
-        LOGGER.info(String.format("RUNNING BUILD %s ", buildEnvironment.buildUUID));
+        LOGGER.info(String.format("RUNNING BUILD for %s (%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
         checkThatTasksExist();
         runEachTask();
-        LOGGER.info(String.format("FINISHED BUILD %s ", buildEnvironment.buildUUID));
+        LOGGER.info(String.format("FINISHED BUILD for %s (%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
     }
 
     private void checkThatTasksExist() {

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -52,13 +53,20 @@ public class WebHookPresenter {
 
     private void handleBuildRequest(String repository, String branch) {
         ReadyCIConfiguration configuration = ReadyCIConfiguration.instance();
-        PipelineConfiguration pipelineConfiguration = configuration.getPipeline(repository, branch);
-        if (null != pipelineConfiguration) {
-            LOGGER.info(String.format("Webhook proceeding with build for pipline %s", pipelineConfiguration.name));
+        List<PipelineConfiguration> pipelineConfigurations = configuration.getPipelines(repository, branch);
+
+        if (pipelineConfigurations.size() > 0) {
+            LOGGER.info(String.format("Proceeding with build for %s matched pipelines", pipelineConfigurations.size()));
+            runPipelines(pipelineConfigurations);
+        } else {
+            LOGGER.warn(String.format("Ignoring build request for repository %s branch %s. No matching pipelines configured.", repository, branch));
+        }
+    }
+
+    private void runPipelines(List<PipelineConfiguration> pipelineConfigurations) {
+        for (PipelineConfiguration pipelineConfiguration : pipelineConfigurations) {
             TaskRunner taskRunner = taskRunnerFactory.createTaskRunner(pipelineConfiguration);
             taskRunner.runTasks();
-        } else {
-            LOGGER.warn(String.format("Webhook ignoring build request for repository %s branch %s", repository, branch));
         }
     }
 

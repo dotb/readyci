@@ -46,13 +46,14 @@ public class ReadyCIConfiguration {
         return null;
     }
 
-    public PipelineConfiguration getPipeline(String repositoryName, String branch) {
+    public List<PipelineConfiguration> getPipelines(String repositoryName, String branch) {
+        List<PipelineConfiguration> matchedPipelines = new ArrayList<PipelineConfiguration>();
         for (PipelineConfiguration pipeline : pipelines) {
             if (pipeline.matchesRepositoryName(repositoryName, branch)) {
-                return pipeline;
+                matchedPipelines.add(pipeline);
             }
         }
-        return null;
+        return matchedPipelines;
     }
 
     public void handleInputParameters(String[] arguments) {
