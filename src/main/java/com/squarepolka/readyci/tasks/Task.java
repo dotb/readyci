@@ -59,19 +59,31 @@ public abstract class Task {
         BufferedReader processOutputStream = getProcessOutputStream(process.getInputStream());
         BufferedReader processErrorStream = getProcessOutputStream(process.getErrorStream());
 
-        String processOutputLine = "";
-        String processErrorLine = "";
         while (process.isAlive()) {
-            while ((processOutputLine = processOutputStream.readLine()) != null && LOGGER.isDebugEnabled()) {
-                    System.out.println(processOutputLine);
-            }
-            while ((processErrorLine = processErrorStream.readLine()) != null) {
-                    System.out.println(processErrorLine);
-            }
+            printStdOut(processOutputStream);
+            printStdError(processErrorStream);
         }
     }
 
-    protected BufferedReader getProcessOutputStream(InputStream processInputStream) {
+    private void printStdError(BufferedReader processErrorStream) throws IOException {
+        String processErrorLine = "";
+        while (processErrorStream.ready() &&
+                (processErrorLine = processErrorStream.readLine()) != null) {
+                System.out.println(processErrorLine);
+        }
+    }
+
+    private void printStdOut(BufferedReader processOutputStream) throws IOException {
+        String processOutputLine = "";
+        while (processOutputStream.ready() &&
+                (processOutputLine = processOutputStream.readLine()) != null
+                && LOGGER.isDebugEnabled()) {
+
+                System.out.println(processOutputLine);
+        }
+    }
+
+    private BufferedReader getProcessOutputStream(InputStream processInputStream) {
         InputStreamReader processStreamReader = new InputStreamReader(processInputStream);
         return new BufferedReader(processStreamReader);
     }
