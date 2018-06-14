@@ -7,13 +7,12 @@ import com.squarepolka.readyci.tasks.Task;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Component
 public class IOSIncrementBuildNumber extends Task {
 
     public static final String TASK_IOS_INCREMENT_BUILD_NUMBER = "ios_increment_build_number";
+    private static final String CFBUNDLEVERSION = "CFBundleVersion";
 
     @Override
     public String taskIdentifier() {
@@ -26,12 +25,27 @@ public class IOSIncrementBuildNumber extends Task {
         String buildPath = buildEnvironment.buildPath;
         String relativepListPath = buildEnvironment.buildParameters.get("infoPlistPath");
         String infoPlistPath = String.format("%s/%s", buildPath, relativepListPath);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddhhmm");
-        String formattedDate = simpleDateFormat.format(new Date());
 
+        NSDictionary infoDict = getInfoPlistDict(infoPlistPath);
+        Integer buildNumber = getCurrentBuildNumber(infoDict);
+        buildNumber = new Integer(buildNumber.intValue() + 1);
+        updateNewBuildNumber(infoDict, infoPlistPath, buildNumber);
+    }
+
+    public NSDictionary getInfoPlistDict(String infoPlistPath) throws Exception {
         File infoPlistFile = new File(infoPlistPath);
-        NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(infoPlistFile);
-        rootDict.put("CFBundleVersion", formattedDate);
-        PropertyListParser.saveAsXML(rootDict, infoPlistFile);
+        return (NSDictionary) PropertyListParser.parse(infoPlistFile);
+    }
+
+    public Integer getCurrentBuildNumber(NSDictionary infoDict) {
+        String buildNumberStr = infoDict.objectForKey(CFBUNDLEVERSION).toString();
+        Integer buildNumber = new Integer(buildNumberStr);
+        return buildNumber;
+    }
+
+    public void updateNewBuildNumber(NSDictionary infoDict, String infoPlistPath, Integer buildNumber) throws Exception {
+        File infoPlistFile = new File(infoPlistPath);
+        infoDict.put(CFBUNDLEVERSION, buildNumber.toString());
+        PropertyListParser.saveAsXML(infoDict, infoPlistFile);
     }
 }
