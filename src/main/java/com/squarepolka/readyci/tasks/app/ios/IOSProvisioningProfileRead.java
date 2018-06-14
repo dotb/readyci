@@ -63,7 +63,7 @@ public class IOSProvisioningProfileRead extends Task {
         NSDictionary entitlementsDict = (NSDictionary) rootDict.objectForKey("Entitlements");
         String fullBundleId = entitlementsDict.objectForKey("application-identifier").toString();
         String bundleId = removeTeamFromBundleId(fullBundleId, devTeam);
-        NSObject provisionedDevices = entitlementsDict.objectForKey("ProvisionedDevices");
+        NSObject provisionedDevices = rootDict.objectForKey("ProvisionedDevices");
 
         buildEnvironment.addProperty(BUILD_PROP_APP_NAME, appName);
         buildEnvironment.addProperty(BUILD_PROP_APP_ID_NAME, appIDName);
