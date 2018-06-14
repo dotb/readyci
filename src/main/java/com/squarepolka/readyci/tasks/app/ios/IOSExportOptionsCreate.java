@@ -22,9 +22,9 @@ public class IOSExportOptionsCreate extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
         String exportOptionsPath = String.format("%s/exportOptions.plist", buildEnvironment.projectPath);
-        String appName = buildEnvironment.buildParameters.get(IOSProvisioningProfileRead.BUILD_PROP_APP_NAME);
-        String devTeam = buildEnvironment.buildParameters.get(IOSProvisioningProfileRead.BUILD_PROP_DEV_TEAM);
-        String bundleId = buildEnvironment.buildParameters.get(IOSProvisioningProfileRead.BUILD_PROP_BUNDLE_ID);
+        String appName = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_APP_NAME);
+        String devTeam = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_DEV_TEAM);
+        String bundleId = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_BUNDLE_ID);
 
         createExportOptionsFile(devTeam, bundleId, appName, exportOptionsPath);
     }

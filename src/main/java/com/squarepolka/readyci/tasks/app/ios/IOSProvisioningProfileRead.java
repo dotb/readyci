@@ -30,17 +30,17 @@ public class IOSProvisioningProfileRead extends Task {
 
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
 
-        String relativeProfilePath = buildEnvironment.buildParameters.get("profilePath");
+        String relativeProfilePath = buildEnvironment.getProperty("profilePath");
         String profilePath = String.format("%s/%s", buildEnvironment.projectPath, relativeProfilePath);
 
         InputStream provisioningFileInputStream = decryptProvisioningFile(profilePath);
         readProvisioningInputStream(provisioningFileInputStream, buildEnvironment);
 
         LOGGER.info(String.format("BUILDING %s for %s in team %s with identifier %s and profile %s",
-                buildEnvironment.buildParameters.get(BUILD_PROP_APP_NAME),
-                buildEnvironment.buildParameters.get(BUILD_PROP_ORGANISATION_NAME),
-                buildEnvironment.buildParameters.get(BUILD_PROP_DEV_TEAM),
-                buildEnvironment.buildParameters.get(BUILD_PROP_BUNDLE_ID),
+                buildEnvironment.getProperty(BUILD_PROP_APP_NAME),
+                buildEnvironment.getProperty(BUILD_PROP_ORGANISATION_NAME),
+                buildEnvironment.getProperty(BUILD_PROP_DEV_TEAM),
+                buildEnvironment.getProperty(BUILD_PROP_BUNDLE_ID),
                 relativeProfilePath));
     }
 
@@ -62,12 +62,12 @@ public class IOSProvisioningProfileRead extends Task {
         String fullBundleId = entitlementsDict.objectForKey("application-identifier").toString();
         String bundleId = removeTeamFromBundleId(fullBundleId, devTeam);
 
-        buildEnvironment.buildParameters.put(BUILD_PROP_APP_NAME, appName);
-        buildEnvironment.buildParameters.put(BUILD_PROP_APP_ID_NAME, appIDName);
-        buildEnvironment.buildParameters.put(BUILD_PROP_ORGANISATION_NAME, organisationName);
-        buildEnvironment.buildParameters.put(BUILD_PROP_DEV_TEAM, devTeam);
-        buildEnvironment.buildParameters.put(BUILD_PROP_PROVISIONING_PROFILE, provisioningProfile);
-        buildEnvironment.buildParameters.put(BUILD_PROP_BUNDLE_ID, bundleId);
+        buildEnvironment.addProperty(BUILD_PROP_APP_NAME, appName);
+        buildEnvironment.addProperty(BUILD_PROP_APP_ID_NAME, appIDName);
+        buildEnvironment.addProperty(BUILD_PROP_ORGANISATION_NAME, organisationName);
+        buildEnvironment.addProperty(BUILD_PROP_DEV_TEAM, devTeam);
+        buildEnvironment.addProperty(BUILD_PROP_PROVISIONING_PROFILE, provisioningProfile);
+        buildEnvironment.addProperty(BUILD_PROP_BUNDLE_ID, bundleId);
     }
 
     private String removeTeamFromBundleId(String bundleId, String teamId) {

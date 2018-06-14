@@ -16,11 +16,11 @@ public class IOSArchive extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
-        String workspace = String.format("%s.xcworkspace", buildEnvironment.buildParameters.get("workspace"));
-        String scheme = buildEnvironment.buildParameters.get("target");
-        String configuration = buildEnvironment.buildParameters.get("configuration");
-        String devTeam = buildEnvironment.buildParameters.get(IOSProvisioningProfileRead.BUILD_PROP_DEV_TEAM);
-        String provisioningProfile = buildEnvironment.buildParameters.get(IOSProvisioningProfileRead.BUILD_PROP_PROVISIONING_PROFILE);
+        String workspace = String.format("%s.xcworkspace", buildEnvironment.getProperty("workspace"));
+        String scheme = buildEnvironment.getProperty("target");
+        String configuration = buildEnvironment.getProperty("configuration");
+        String devTeam = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_DEV_TEAM);
+        String provisioningProfile = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_PROVISIONING_PROFILE);
         String archivePath = String.format("%s/app.xcarchive", buildEnvironment.buildPath);
 
         executeCommand(new String[] {"/usr/bin/xcodebuild",

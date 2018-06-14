@@ -1,7 +1,5 @@
 package com.squarepolka.readyci.util;
 
-import com.squarepolka.readyci.taskrunner.BuildEnvironment;
-
 import java.util.List;
 import java.util.Map;
 
@@ -49,20 +47,4 @@ public class Util {
         return string.length() > 0;
     }
 
-    public static String getBuildProperty(BuildEnvironment buildEnvironment, String propertyName, String defaultValue) {
-        try {
-            String value = getBuildProperty(buildEnvironment, propertyName);
-            return value;
-        } catch (PropertyMissingException e) {
-            return defaultValue;
-        }
-    }
-
-    public static String getBuildProperty(BuildEnvironment buildEnvironment, String propertyName) {
-        String value = buildEnvironment.buildParameters.get(propertyName);
-        if (null == value) {
-            throw new PropertyMissingException(propertyName);
-        }
-        return value;
-    }
 }

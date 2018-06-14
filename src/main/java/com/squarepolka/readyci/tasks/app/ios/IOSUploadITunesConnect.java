@@ -17,10 +17,10 @@ public class IOSUploadITunesConnect extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
 
-        String appIdName = buildEnvironment.buildParameters.get(IOSProvisioningProfileRead.BUILD_PROP_APP_ID_NAME);
+        String appIdName = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_APP_ID_NAME);
         String exportPath = String.format("%s/%s.ipa", buildEnvironment.buildPath, appIdName);
-        String iTunesUsername = buildEnvironment.buildParameters.get("iTunesUsername");
-        String iTunesPassword = buildEnvironment.buildParameters.get("iTunesPassword");
+        String iTunesUsername = buildEnvironment.getProperty("iTunesUsername");
+        String iTunesPassword = buildEnvironment.getProperty("iTunesPassword");
 
         executeCommand(new String[] {"/Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/Frameworks/ITunesSoftwareService.framework/Support/altool",
         "--upload-app",

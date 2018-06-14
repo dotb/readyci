@@ -17,14 +17,14 @@ public class PipelineConfiguration {
     public String name;
     public String gitPath;
     public String gitBranch;
-    public Map<String, String> parameters;
+    public Map<String, Object> parameters;
     public List<TaskConfiguration> tasks;
 
     public PipelineConfiguration() {
         this.name = "unknown";
         this.gitPath = "";
         this.gitBranch = "master";
-        this.parameters = new HashMap<String, String>();
+        this.parameters = new HashMap<String, Object>();
         this.tasks = new ArrayList<TaskConfiguration>();
     }
 

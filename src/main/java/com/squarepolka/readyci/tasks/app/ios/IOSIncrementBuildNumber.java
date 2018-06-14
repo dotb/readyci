@@ -23,7 +23,7 @@ public class IOSIncrementBuildNumber extends Task {
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
 
         String buildPath = buildEnvironment.buildPath;
-        String relativepListPath = buildEnvironment.buildParameters.get("infoPlistPath");
+        String relativepListPath = buildEnvironment.getProperty("infoPlistPath");
         String infoPlistPath = String.format("%s/%s", buildPath, relativepListPath);
 
         NSDictionary infoDict = getInfoPlistDict(infoPlistPath);

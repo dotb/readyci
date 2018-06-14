@@ -18,8 +18,8 @@ public class DeployCopy extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
-        String sourcePath = buildEnvironment.buildParameters.get(TASK_DEPLOY_SOURCE_PATH);
-        String destinationPath = buildEnvironment.buildParameters.get(TASK_DEPLOY_DESTINATION_PATH);
+        String sourcePath = buildEnvironment.getProperty(TASK_DEPLOY_SOURCE_PATH);
+        String destinationPath = buildEnvironment.getProperty(TASK_DEPLOY_DESTINATION_PATH);
 
         executeCommand(new String[] {"/bin/cp", sourcePath, destinationPath}, buildEnvironment.projectPath);
     }

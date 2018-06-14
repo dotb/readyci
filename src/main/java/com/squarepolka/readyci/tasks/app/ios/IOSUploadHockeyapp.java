@@ -2,7 +2,6 @@ package com.squarepolka.readyci.tasks.app.ios;
 
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;
-import com.squarepolka.readyci.util.Util;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,10 +19,10 @@ public class IOSUploadHockeyapp extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) {
-        String appIdName = Util.getBuildProperty(buildEnvironment, IOSProvisioningProfileRead.BUILD_PROP_APP_ID_NAME);
-        String hockappToken = Util.getBuildProperty(buildEnvironment, BUILD_PROP_HOCKEYAPP_TOKEN);
-        String releaseTags = Util.getBuildProperty(buildEnvironment, BUILD_PROP_HOCKEYAPP_RELEASE_TAGS, "");
-        String releaseNotes = Util.getBuildProperty(buildEnvironment, BUILD_PROP_HOCKEYAPP_RELEASE_NOTES, "");
+        String appIdName = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_APP_ID_NAME);
+        String hockappToken = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_TOKEN);
+        String releaseTags = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_TAGS, "");
+        String releaseNotes = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_NOTES, "");
         String appBinaryPath = String.format("%s/%s.ipa", buildEnvironment.buildPath, appIdName);
         String dsymPath = String.format("%s/app.xcarchive/dSYMs/%s.app.dSYM", buildEnvironment.buildPath, appIdName);
         String dsymPathZip = String.format("%s/app.xcarchive/dSYMs/%s.dsym.zip", buildEnvironment.buildPath, appIdName);
