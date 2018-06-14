@@ -43,7 +43,7 @@
     - description: Install the provisioning profile in XCode
       type: ios_install_provisioning_profile
 
-    - description: Increment the build number using todays date
+    - description: Increment the build number
       type: ios_increment_build_number
 
     - description: Generate an iOS archive

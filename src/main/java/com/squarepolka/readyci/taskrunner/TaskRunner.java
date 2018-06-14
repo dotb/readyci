@@ -25,10 +25,10 @@ public class TaskRunner {
     }
 
     public void runTasks() {
-        LOGGER.info(String.format("RUNNING BUILD for %s (%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
+        LOGGER.info(String.format("EXECUTING\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
         checkThatTasksExist();
         runEachTask();
-        LOGGER.info(String.format("FINISHED BUILD for %s (%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
+        LOGGER.info(String.format("COMPLETED\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
     }
 
     private void checkThatTasksExist() {
@@ -41,7 +41,6 @@ public class TaskRunner {
         for (Task task : tasks) {
             try {
                 runTask(task);
-                handleTaskSuccess(task);
             } catch (Exception e) {
                 handleTaskFailure(task, e);
             }
@@ -49,16 +48,12 @@ public class TaskRunner {
     }
 
     private void runTask(Task task) throws Exception {
-        LOGGER.info(String.format("STARTING TASK %s | %s", task.taskIdentifier(), task.description));
+        LOGGER.info(String.format("RUNNING\tTASK\t%s\t%s", task.taskIdentifier(), task.description));
         task.performTask(buildEnvironment);
     }
 
-    private void handleTaskSuccess(Task task) {
-        LOGGER.info(String.format("COMPLETED TASK %s", task.taskIdentifier()));
-    }
-
     private void handleTaskFailure(Task task, Exception e) {
-        String errorMessage = String.format("FAILED TASK %s with exception: %s", task.taskIdentifier(), e.toString());
+        String errorMessage = String.format("FAILED\tTASK\t%s with exception: %s", task.taskIdentifier(), e.toString());
         LOGGER.error(errorMessage);
         if (task.shouldStopOnFailure()) {
             TaskExecuteException taskExecuteException = new TaskExecuteException(errorMessage);

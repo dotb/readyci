@@ -62,7 +62,7 @@ public abstract class Task {
         String processOutputLine = "";
         String processErrorLine = "";
         while (process.isAlive()) {
-            while ((processOutputLine = processOutputStream.readLine()) != null) {
+            while ((processOutputLine = processOutputStream.readLine()) != null && LOGGER.isDebugEnabled()) {
                     System.out.println(processOutputLine);
             }
             while ((processErrorLine = processErrorStream.readLine()) != null) {

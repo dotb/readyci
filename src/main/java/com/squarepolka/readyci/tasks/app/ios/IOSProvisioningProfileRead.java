@@ -36,7 +36,7 @@ public class IOSProvisioningProfileRead extends Task {
         InputStream provisioningFileInputStream = decryptProvisioningFile(profilePath);
         readProvisioningInputStream(provisioningFileInputStream, buildEnvironment);
 
-        LOGGER.info(String.format("BUILDING %s for %s in team %s with identifier %s and profile %s",
+        LOGGER.info(String.format("BUILDING\tiOS app\t%s for %s in team %s with identifier %s and profile %s",
                 buildEnvironment.getProperty(BUILD_PROP_APP_NAME),
                 buildEnvironment.getProperty(BUILD_PROP_ORGANISATION_NAME),
                 buildEnvironment.getProperty(BUILD_PROP_DEV_TEAM),
