@@ -13,7 +13,7 @@ public class BuildEnvironment {
     public String gitPath;
     public String gitBranch;
     public String projectPath;
-    public Map<String, List<String>> buildParameters;
+    private Map<String, List<String>> buildParameters;
 
     public BuildEnvironment(PipelineConfiguration configuration) {
         this.pipelineName = configuration.name;
@@ -27,7 +27,76 @@ public class BuildEnvironment {
     }
 
     /**
-     * This method copys the pipeline build parameters loaded from the yml file into the
+     * Fetch a list of environment properties
+     * @param propertyName
+     * @return list of String property values
+     * @throws PropertyMissingException if the property does not exist
+     */
+    public List<String> getProperties(String propertyName) {
+        List<String> values = buildParameters.get(propertyName);
+        if (null == values || values.size() <= 0) {
+            throw new PropertyMissingException(propertyName);
+        }
+        return values;
+    }
+
+    /**
+     * Fetch a single environment property
+     * @param propertyName
+     * @return a single String property value
+     * @throws PropertyMissingException if the property does not exist
+     */
+    public String getProperty(String propertyName) {
+        List<String> values = getProperties(propertyName);
+        String value = values.get(0);
+        return value;
+    }
+
+    /**
+     * Fetch a single environment property, specifying a default if the property does not exist
+     * @param propertyName
+     * @param defaultValue
+     * @return The stored property or defaultValue if the property does not exist
+     */
+    public String getProperty(String propertyName, String defaultValue) {
+        try {
+            String value = getProperty(propertyName);
+            return value;
+        } catch (PropertyMissingException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Add an environment property to this build environment
+     * @param propertyName
+     * @param propertyValue
+     */
+    public void addProperty(String propertyName, String propertyValue) {
+        List<String> values = buildParameters.get(propertyName);
+        if (null == values) {
+            values = new ArrayList<String>();
+        }
+        values.add(propertyValue);
+        buildParameters.put(propertyName, values);
+    }
+
+    /**
+     * Add a list of environment properties to this build environment
+     * @param propertyName
+     * @param propertyValues
+     */
+    public void addProperty(String propertyName, List<String> propertyValues) {
+        List<String> values = buildParameters.get(propertyName);
+        if (null == values) {
+            values = new ArrayList<String>();
+        }
+        values.addAll(propertyValues);
+        buildParameters.put(propertyName, values);
+    }
+
+    /**
+     * This method copies the pipeline build parameters loaded from the yml file into the
      * buildParameters object. It needs to do type checking and store strings within List<String>
      * so that we can support both String and List<String> values.
      *
@@ -57,39 +126,4 @@ public class BuildEnvironment {
         }
     }
 
-    public String getProperty(String propertyName, String defaultValue) {
-        try {
-            String value = getProperty(propertyName);
-            return value;
-        } catch (PropertyMissingException e) {
-            return defaultValue;
-        }
-    }
-
-    public String getProperty(String propertyName) {
-        List<String> values = buildParameters.get(propertyName);
-        String value = values.get(0);
-        if (null == value) {
-            throw new PropertyMissingException(propertyName);
-        }
-        return value;
-    }
-
-    public void addProperty(String propertyName, String propertyValue) {
-        List<String> values = buildParameters.get(propertyName);
-        if (null == values) {
-            values = new ArrayList<String>();
-        }
-        values.add(propertyValue);
-        buildParameters.put(propertyName, values);
-    }
-
-    public void addProperty(String propertyName, List<String> propertyValues) {
-        List<String> values = buildParameters.get(propertyName);
-        if (null == values) {
-            values = new ArrayList<String>();
-        }
-        values.addAll(propertyValues);
-        buildParameters.put(propertyName, values);
-    }
 }
