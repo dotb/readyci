@@ -172,3 +172,7 @@ Ready CI includes a collection of task types that currently supports Maven and i
 | *Deploy*                         | |
 | deploy_copy                      | A simple copy based deployment task |
 
+## Release notes
+| Release | Features |
+| :---  | :---|
+| 0.2   |   0.2 Kicks things off with a whole host of features, like allowing you to build iOS app projects and maven projects. Upload iOS binaries to Hockeyapp and iTunes connect. Increment the iOS build number. Automatically commit modified files back to GIT.  |
