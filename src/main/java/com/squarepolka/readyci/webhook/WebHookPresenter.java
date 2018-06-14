@@ -79,10 +79,10 @@ public class WebHookPresenter {
         if (Util.valueExists(repository) && Util.valueExists(branchName) && Util.valueExists(gitAuthor) && Util.valueExists(commitMessage)) {
             String instanceName = ReadyCIConfiguration.instance().instanceName;
             if (commitMessage.toLowerCase().contains(instanceName.toLowerCase())) {
-                LOGGER.warn("Hmmm, I recognise this GIT commit on %s for branch %s by %s, " +
+                LOGGER.warn(String.format("Hmmm, I recognise this GIT commit on %s for branch %s by %s, " +
                         "because my name is in the commit message. I'm going to ignore this " +
                         "commit to avoid cyclic builds triggered through the web-hook. " +
-                        "The commit message is %s.", repository, branchName, gitAuthor, commitMessage);
+                        "The commit message is %s.", repository, branchName, gitAuthor, commitMessage));
             } else {
                 return true;
             }
