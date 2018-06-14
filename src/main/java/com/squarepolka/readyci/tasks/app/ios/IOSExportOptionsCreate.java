@@ -25,15 +25,16 @@ public class IOSExportOptionsCreate extends Task {
         String appName = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_APP_NAME);
         String devTeam = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_DEV_TEAM);
         String bundleId = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_BUNDLE_ID);
+        String provisioningMethod = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_PROVISIONING_METHOD);
 
-        createExportOptionsFile(devTeam, bundleId, appName, exportOptionsPath);
+        createExportOptionsFile(devTeam, bundleId, appName, exportOptionsPath, provisioningMethod);
     }
 
-    private void createExportOptionsFile(String devTeam, String bundleId, String appName, String exportOptionsPath) throws IOException {
+    private void createExportOptionsFile(String devTeam, String bundleId, String appName, String exportOptionsPath, String provisioningMethod) throws IOException {
         NSDictionary rootDict = new NSDictionary();
         rootDict.put("compileBitcode", true);
         rootDict.put("stripSwiftSymbols", true);
-        rootDict.put("method","ad-hoc");
+        rootDict.put("method", provisioningMethod);
         rootDict.put("signingCertificate","iPhone Distribution");
         rootDict.put("signingStyle", "manual");
         rootDict.put("thinning","<none>");

@@ -2,6 +2,7 @@ package com.squarepolka.readyci.tasks.app.ios;
 
 import com.dd.plist.NSArray;
 import com.dd.plist.NSDictionary;
+import com.dd.plist.NSObject;
 import com.dd.plist.PropertyListParser;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;
@@ -23,6 +24,7 @@ public class IOSProvisioningProfileRead extends Task {
     public static final String BUILD_PROP_DEV_TEAM = "devTeam";
     public static final String BUILD_PROP_PROVISIONING_PROFILE = "provisioningProfile";
     public static final String BUILD_PROP_BUNDLE_ID = "bundleId";
+    public static final String BUILD_PROP_PROVISIONING_METHOD = "iosProvisioningMethod";
 
     public String taskIdentifier() {
         return TASK_IOS_PROFILE_READ;
@@ -61,6 +63,7 @@ public class IOSProvisioningProfileRead extends Task {
         NSDictionary entitlementsDict = (NSDictionary) rootDict.objectForKey("Entitlements");
         String fullBundleId = entitlementsDict.objectForKey("application-identifier").toString();
         String bundleId = removeTeamFromBundleId(fullBundleId, devTeam);
+        NSObject provisionedDevices = entitlementsDict.objectForKey("ProvisionedDevices");
 
         buildEnvironment.addProperty(BUILD_PROP_APP_NAME, appName);
         buildEnvironment.addProperty(BUILD_PROP_APP_ID_NAME, appIDName);
@@ -68,6 +71,12 @@ public class IOSProvisioningProfileRead extends Task {
         buildEnvironment.addProperty(BUILD_PROP_DEV_TEAM, devTeam);
         buildEnvironment.addProperty(BUILD_PROP_PROVISIONING_PROFILE, provisioningProfile);
         buildEnvironment.addProperty(BUILD_PROP_BUNDLE_ID, bundleId);
+
+        if (null == provisionedDevices) {
+            buildEnvironment.addProperty(BUILD_PROP_PROVISIONING_METHOD, "app-store");
+        } else {
+            buildEnvironment.addProperty(BUILD_PROP_PROVISIONING_METHOD, "ad-hoc");
+        }
     }
 
     private String removeTeamFromBundleId(String bundleId, String teamId) {
