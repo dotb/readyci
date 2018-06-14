@@ -25,10 +25,15 @@ public class TaskRunner {
     }
 
     public void runTasks() {
-        LOGGER.info(String.format("EXECUTING\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
-        checkThatTasksExist();
-        runEachTask();
-        LOGGER.info(String.format("COMPLETED\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
+        try {
+            LOGGER.info(String.format("EXECUTING\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
+            checkThatTasksExist();
+            runEachTask();
+            LOGGER.info(String.format("COMPLETED\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
+        } catch (RuntimeException e) {
+            LOGGER.info(String.format("FAILED\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
+            throw e;
+        }
     }
 
     private void checkThatTasksExist() {

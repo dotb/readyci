@@ -29,11 +29,9 @@ public class IOSUploadHockeyapp extends Task {
 
         // Zip the dSYM bundle
         executeCommand(new String[] {"zip",
-                "archive",
                 "-r",
-                dsymPath,
-                "--out",
-                dsymPathZip});
+                dsymPathZip,
+                dsymPath});
 
         // Upload to HockeyApp
         executeCommand(new String[] {"/usr/bin/curl",
