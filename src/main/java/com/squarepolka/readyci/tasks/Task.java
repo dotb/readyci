@@ -121,7 +121,8 @@ public abstract class Task {
         try {
             inputStream.reset();
         } catch(IOException e) {
-            LOGGER.warn(String.format("Ignoring an exception while attempting to reset an input stream %s", e.toString()));
+            // An exception is expected when really long input streams are reset.
+            LOGGER.debug(String.format("Ignoring an exception while attempting to reset an input stream %s", e.toString()));
         }
     }
 
