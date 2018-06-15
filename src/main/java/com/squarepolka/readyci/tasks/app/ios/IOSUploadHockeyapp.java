@@ -42,7 +42,7 @@ public class IOSUploadHockeyapp extends Task {
             "-F", "notes=" + releaseNotes,
             "-F", "tags=" + releaseTags,
             "-F", "notes_type=0",               // Textual release notes
-            "-F", "status=2",                   // # Make this version available for download
+            "-F", "status=2",                   // Make this version available for download
             "-F", "notify=1",                   // Notify users who can install the app
             "-F", "strategy=add",               // Add the build if one with the same build number exists
             "-F", "mandatory=1"                 // Download is mandatory
