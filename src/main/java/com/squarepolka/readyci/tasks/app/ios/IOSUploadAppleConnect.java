@@ -5,7 +5,7 @@ import com.squarepolka.readyci.tasks.Task;
 import org.springframework.stereotype.Component;
 
 @Component
-public class IOSUploadITunesConnect extends Task {
+public class IOSUploadAppleConnect extends Task {
 
     public static final String TASK_UPLOAD_ITUNES_CONNECT = "ios_upload_itunes_connect";
 

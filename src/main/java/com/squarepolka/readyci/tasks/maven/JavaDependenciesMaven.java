@@ -5,7 +5,7 @@ import com.squarepolka.readyci.tasks.Task;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MavenInstall extends Task {
+public class JavaDependenciesMaven extends Task {
 
     public static final String TASK_MAVEN_BUILD = "maven_install";
 

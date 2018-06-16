@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 @Component
-public class IOSExportOptionsCreate extends Task {
+public class IOSBuildExportOptionsCreate extends Task {
 
     public static final String TASK_IOS_EXPORT_OPTIONS_CREATE = "ios_export_options_create";
 

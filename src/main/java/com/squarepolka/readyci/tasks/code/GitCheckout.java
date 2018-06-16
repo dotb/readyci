@@ -5,7 +5,7 @@ import com.squarepolka.readyci.tasks.Task;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TaskGitCheckout extends Task {
+public class GitCheckout extends Task {
 
     public static final String TASK_CHECKOUT_GIT = "checkout_git";
 

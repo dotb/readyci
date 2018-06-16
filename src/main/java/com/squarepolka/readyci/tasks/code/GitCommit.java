@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class TaskGitCommit extends Task {
+public class GitCommit extends Task {
 
     public static final String TASK_COMMIT_GIT = "commit_git";
     public static final String BUILD_PROP_GIT_COMMIT_MESSAGE = "gitCommitMessage";

@@ -5,7 +5,7 @@ import com.squarepolka.readyci.tasks.Task;
 import org.springframework.stereotype.Component;
 
 @Component
-public class IOSInstallProvisioningProfile extends Task {
+public class IOSProvisioningProfileInstall extends Task {
 
     public static final String TASK_IOS_INSTALL_PROFILE = "ios_install_provisioning_profile";
 

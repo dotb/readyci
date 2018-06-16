@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class IOSPodsInstall extends Task {
+public class IOSDependenciesPods extends Task {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IOSPodsInstall.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IOSDependenciesPods.class);
     public static final String TASK_IOS_POD_INSTALL = "ios_pod_install";
 
     @Override
