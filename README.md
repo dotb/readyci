@@ -111,7 +111,7 @@ FINISHED BUILD c7a56eec-f303-4ad9-8de9-ffe5da68bef5
 Ready CI currently supports web-hook calls from GitHub and Bitbucket.
 
 ## Configuration explained
-Ready CI is configured by supplying a simple YML file. For example, the configuration below builds Ready CI using Maven and the code on GitHub.
+Ready CI is configured by supplying a simple YML file on the command line, and an optional configuration file in the root of your repository named readyci.yml. For example, the configuration below builds Ready CI using Maven and the code on GitHub.
 ```yml
   pipelines:
   - name: ready-ci # every pipeline needs a name 
@@ -176,3 +176,4 @@ Ready CI includes a collection of task types that currently supports Maven and i
 | Release | Features |
 | :---  | :---|
 | 0.2   |   0.2 Kicks things off with a whole host of features, like allowing you to build iOS app projects and maven projects. Upload iOS binaries to Hockeyapp and iTunes connect. Increment the iOS build number. Automatically commit modified files back to GIT.  |
+| 0.3   |   Added the ability to read configuration from both the ReadyCI host and the repository. Simply add a readyci.yml file to the root of your repository and it'll be included in the build. |

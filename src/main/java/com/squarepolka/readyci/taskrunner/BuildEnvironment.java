@@ -23,7 +23,7 @@ public class BuildEnvironment {
         this.buildPath = String.format("%s/%s", PipelineConfiguration.PIPELINE_BUILD_PREFIX, buildUUID);
         this.buildParameters = new HashMap<String, List<String>>();
         setBuildParameters(configuration);
-        setProjectPath(configuration);
+        updateProjectPaths(configuration);
     }
 
     /**
@@ -102,7 +102,7 @@ public class BuildEnvironment {
      *
      * @param configuration
      */
-    private void setBuildParameters(PipelineConfiguration configuration) {
+    public void setBuildParameters(PipelineConfiguration configuration) {
         for (Map.Entry<String, Object> configParameter : configuration.parameters.entrySet()) {
             String propertyName = configParameter.getKey();
             Object objectValue = configParameter.getValue();
@@ -116,7 +116,7 @@ public class BuildEnvironment {
         }
     }
 
-    private void setProjectPath(PipelineConfiguration configuration) {
+    public void updateProjectPaths(PipelineConfiguration configuration) {
         // Handle the optional project path parameter
         if (configuration.parameters.containsKey(PipelineConfiguration.PIPELINE_PROJECT_PATH)) {
             String projectPath = (String) configuration.parameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH);

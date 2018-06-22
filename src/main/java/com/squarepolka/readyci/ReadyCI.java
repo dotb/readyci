@@ -55,7 +55,7 @@ public class ReadyCI implements CommandLineRunner {
         if (null != pipelineConfiguration) {
             LOGGER.info(String.format("Building pipline %s", pipelineConfiguration.name));
             TaskRunner taskRunner = taskRunnerFactory.createTaskRunner(pipelineConfiguration);
-            taskRunner.runTasks();
+            taskRunner.runAllTasks();
         } else {
             LOGGER.warn("A command line build was not specified, doing nothing. Give me a pipeline name and I'll make it happen.");
         }

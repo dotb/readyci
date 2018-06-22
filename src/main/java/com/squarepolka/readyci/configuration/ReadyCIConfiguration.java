@@ -63,6 +63,24 @@ public class ReadyCIConfiguration {
         }
     }
 
+    public static ReadyCIConfiguration readConfigurationFile(String configurationFileName) {
+        File configurationFile = new File(configurationFileName);
+        return readConfigurationFile(configurationFile);
+    }
+
+    public static ReadyCIConfiguration readConfigurationFile(File configurationFile) {
+        YAMLFactory yamlFactory = new YAMLFactory();
+        ObjectMapper mapper = new ObjectMapper(yamlFactory);
+        try {
+            ReadyCIConfiguration parsedConfiguration = mapper.readValue(configurationFile, ReadyCIConfiguration.class);
+            return parsedConfiguration;
+        } catch (Exception e) {
+            LoadConfigurationException configurationException = new LoadConfigurationException(String.format("Could not load configuration from %s: %s", configurationFile.getAbsolutePath(), e.toString()));
+            configurationException.setStackTrace(e.getStackTrace());
+            throw configurationException;
+        }
+    }
+
     private void handleInputArgument(String argument) {
         if (argument.contains(".yml")) {
             loadConfiguration(argument);
@@ -76,20 +94,11 @@ public class ReadyCIConfiguration {
     }
 
     private void loadConfiguration(String fileName) {
-        YAMLFactory yamlFactory = new YAMLFactory();
-        ObjectMapper mapper = new ObjectMapper(yamlFactory);
-        try {
-            File configurationFile = new File(fileName);
-            ReadyCIConfiguration newConfiguration = mapper.readValue(configurationFile, ReadyCIConfiguration.class);
+            ReadyCIConfiguration newConfiguration = readConfigurationFile(fileName);
             this.instanceName = newConfiguration.instanceName;
             this.isServerMode = newConfiguration.isServerMode;
             this.pipelines = newConfiguration.pipelines;
             LOGGER.info(String.format("Loaded configuration %s with %s pipelines", fileName, pipelines.size()));
-        } catch (Exception e) {
-            LoadConfigurationException configurationException = new LoadConfigurationException(String.format("Could not load configuration from %s: %s", fileName, e.toString()));
-            configurationException.setStackTrace(e.getStackTrace());
-            throw configurationException;
-        }
     }
 
     private void runCommandLineBuild(String argument) {

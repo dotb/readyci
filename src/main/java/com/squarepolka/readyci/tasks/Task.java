@@ -2,6 +2,7 @@ package com.squarepolka.readyci.tasks;
 
 import com.squarepolka.readyci.configuration.TaskConfiguration;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
+import com.squarepolka.readyci.taskrunner.TaskRunner;
 import com.squarepolka.readyci.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ public abstract class Task {
     private static final Logger LOGGER = LoggerFactory.getLogger(Task.class);
 
     public String description;
+    public TaskRunner taskRunner;
 
     public Task() {
         this.description = "";

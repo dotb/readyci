@@ -12,23 +12,36 @@ public class TaskRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskRunner.class);
 
-    protected List<Task> tasks;
+    public TaskRunnerFactory taskRunnerFactory;
+    protected List<Task> defaultTasks;
+    protected List<Task> configuredTasks;
     protected BuildEnvironment buildEnvironment;
 
-    public TaskRunner(BuildEnvironment buildEnvironment) {
-        this.tasks = new ArrayList<Task>();
+    public TaskRunner(BuildEnvironment buildEnvironment, TaskRunnerFactory taskRunnerFactory) {
+        this.defaultTasks = new ArrayList<Task>();
+        this.configuredTasks = new ArrayList<Task>();
         this.buildEnvironment = buildEnvironment;
+        this.taskRunnerFactory = taskRunnerFactory;
     }
 
-    public void addTask(Task task) {
-        tasks.add(task);
+    public void setConfiguredTasks(List<Task> tasks) {
+        this.configuredTasks = tasks;
     }
 
-    public void runTasks() {
+    public void addConfiguredTask(Task task) {
+        configuredTasks.add(task);
+    }
+
+    public void addDefaultTask(Task task) {
+        defaultTasks.add(task);
+    }
+
+    public void runAllTasks() {
         try {
             LOGGER.info(String.format("EXECUTING\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
+            runTaskList(defaultTasks);
             checkThatTasksExist();
-            runEachTask();
+            runTaskList(configuredTasks);
             LOGGER.info(String.format("COMPLETED\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
         } catch (RuntimeException e) {
             LOGGER.info(String.format("FAILED\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
@@ -37,15 +50,17 @@ public class TaskRunner {
     }
 
     private void checkThatTasksExist() {
-        if (tasks.size() <= 0) {
+        if (configuredTasks.size() <= 0) {
             throw new RuntimeException("There are no tasks to run. Add some tasks and then try again.");
         }
     }
 
-    private void runEachTask() {
+    private void runTaskList(List<Task> tasks) {
         for (Task task : tasks) {
             try {
+                task.taskRunner = this;
                 runTask(task);
+                task.taskRunner = null;
             } catch (Exception e) {
                 handleTaskFailure(task, e);
             }

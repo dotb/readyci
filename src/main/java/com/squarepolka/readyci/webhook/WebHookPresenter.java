@@ -1,6 +1,5 @@
 package com.squarepolka.readyci.webhook;
 
-import com.squarepolka.readyci.ReadyCI;
 import com.squarepolka.readyci.configuration.PipelineConfiguration;
 import com.squarepolka.readyci.configuration.ReadyCIConfiguration;
 import com.squarepolka.readyci.taskrunner.TaskRunner;
@@ -71,7 +70,7 @@ public class WebHookPresenter {
     private void runPipelines(List<PipelineConfiguration> pipelineConfigurations) {
         for (PipelineConfiguration pipelineConfiguration : pipelineConfigurations) {
             TaskRunner taskRunner = taskRunnerFactory.createTaskRunner(pipelineConfiguration);
-            taskRunner.runTasks();
+            taskRunner.runAllTasks();
         }
     }
 

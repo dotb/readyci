@@ -6,7 +6,7 @@
 
     <groupId>com.squarepolka</groupId>
     <artifactId>readyci</artifactId>
-    <version>0.2</version>
+    <version>0.3</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -52,7 +52,7 @@
         <version>1.5.7.RELEASE</version>
         </dependency>
 
-        <!-- plist reading and writing -->
+        <!-- plist reading and writing PLists -->
         <dependency>
             <groupId>com.googlecode.plist</groupId>
             <artifactId>dd-plist</artifactId>
