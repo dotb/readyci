@@ -10,16 +10,12 @@ public class BuildEnvironment {
     public String pipelineName;
     public String buildUUID;
     public String buildPath;
-    public String gitPath;
-    public String gitBranch;
     public String projectPath;
     private Map<String, List<String>> buildParameters;
 
     public BuildEnvironment(PipelineConfiguration configuration) {
         this.pipelineName = configuration.name;
         this.buildUUID = UUID.randomUUID().toString();
-        this.gitPath = configuration.gitPath;
-        this.gitBranch = configuration.gitBranch;
         this.buildPath = String.format("%s/%s", PipelineConfiguration.PIPELINE_BUILD_PREFIX, buildUUID);
         this.buildParameters = new HashMap<String, List<String>>();
         setBuildParameters(configuration);

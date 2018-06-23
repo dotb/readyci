@@ -1,5 +1,7 @@
 package com.squarepolka.readyci.configuration;
 
+import com.squarepolka.readyci.tasks.code.GitCheckout;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,20 +17,18 @@ public class PipelineConfiguration {
     public static final String PIPELINE_BUILD_PREFIX = "/tmp/readyci/";
 
     public String name;
-    public String gitPath;
-    public String gitBranch;
     public Map<String, Object> parameters;
     public List<TaskConfiguration> tasks;
 
     public PipelineConfiguration() {
         this.name = "unknown";
-        this.gitPath = "";
-        this.gitBranch = "master";
         this.parameters = new HashMap<String, Object>();
         this.tasks = new ArrayList<TaskConfiguration>();
     }
 
     public boolean matchesRepositoryName(String repositoryName, String branch) {
+        String gitPath = (String) parameters.get(GitCheckout.BUILD_PROP_GIT_PATH);
+        String gitBranch = (String) parameters.get(GitCheckout.BUILD_PROP_GIT_BRANCH);
         return gitPath.toLowerCase().contains(repositoryName.toLowerCase()) &&
                 branch.contains(gitBranch) &&
                 repositoryName.length() > 0 &&

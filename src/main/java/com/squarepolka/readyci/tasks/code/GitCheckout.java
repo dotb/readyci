@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 public class GitCheckout extends Task {
 
     public static final String TASK_CHECKOUT_GIT = "checkout_git";
+    public static final String BUILD_PROP_GIT_PATH = "gitPath";
+    public static final String BUILD_PROP_GIT_BRANCH = "gitBranch";
 
     public String taskIdentifier() {
         return TASK_CHECKOUT_GIT;
@@ -18,6 +20,7 @@ public class GitCheckout extends Task {
     }
 
     public void performTask(BuildEnvironment buildEnvironment) {
-        executeCommand(new String[] {"/usr/bin/git", "clone",  buildEnvironment.gitPath, buildEnvironment.buildPath});
+        String gitPath = buildEnvironment.getProperty(BUILD_PROP_GIT_PATH);
+        executeCommand(new String[] {"/usr/bin/git", "clone",  gitPath, buildEnvironment.buildPath});
     }
 }
