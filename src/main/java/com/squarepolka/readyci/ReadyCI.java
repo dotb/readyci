@@ -32,7 +32,7 @@ public class ReadyCI implements CommandLineRunner {
     public static void main(String[] arguments) {
 
         ReadyCIConfiguration readyCIConfiguration = ReadyCIConfiguration.instance();
-        readyCIConfiguration.handleInputParameters(arguments);
+        readyCIConfiguration.handleInputArguments(arguments);
 
         SpringApplication.run(ReadyCI.class, arguments);
     }
@@ -51,13 +51,14 @@ public class ReadyCI implements CommandLineRunner {
 
     private void runCommandLinePipeline() {
         ReadyCIConfiguration readyCIConfiguration = ReadyCIConfiguration.instance();
-        PipelineConfiguration pipelineConfiguration = readyCIConfiguration.piplineToRun;
+        PipelineConfiguration pipelineConfiguration = readyCIConfiguration.pipelineToRun;
+
         if (null != pipelineConfiguration) {
-            LOGGER.info(String.format("Building pipline %s", pipelineConfiguration.name));
+            LOGGER.info(String.format("Building pipeline %s", pipelineConfiguration.name));
             TaskRunner taskRunner = taskRunnerFactory.createTaskRunner(pipelineConfiguration);
             taskRunner.runAllTasks();
         } else {
-            LOGGER.warn("A command line build was not specified, doing nothing. Give me a pipeline name and I'll make it happen.");
+            LOGGER.error("I tried to run a command-line build but a pipeline name was not specified. Please specify a pipeline name, for example, using the argument pipeline=ready-ci");
         }
     }
 }

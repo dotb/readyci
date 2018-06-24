@@ -15,13 +15,14 @@ public class PipelineConfiguration {
 
     public static final String PIPELINE_PROJECT_PATH = "projectPath";
     public static final String PIPELINE_BUILD_PREFIX = "/tmp/readyci/";
+    public static final String PIPELINE_NAME_DEFAULT = "unknown";
 
     public String name;
     public Map<String, Object> parameters;
     public List<TaskConfiguration> tasks;
 
     public PipelineConfiguration() {
-        this.name = "unknown";
+        this.name = PIPELINE_NAME_DEFAULT;
         this.parameters = new HashMap<String, Object>();
         this.tasks = new ArrayList<TaskConfiguration>();
     }

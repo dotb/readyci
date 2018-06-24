@@ -2,6 +2,8 @@ package com.squarepolka.readyci.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.squarepolka.readyci.configuration.parameter.ParsedParameter;
+import com.squarepolka.readyci.configuration.parameter.ParameterParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +24,7 @@ public class ReadyCIConfiguration {
     public String instanceName;
     public boolean isServerMode;
     public List<PipelineConfiguration> pipelines;
-    public PipelineConfiguration piplineToRun;
+    public PipelineConfiguration pipelineToRun;
 
     public static ReadyCIConfiguration instance() {
         if (null == instance) {
@@ -35,16 +37,21 @@ public class ReadyCIConfiguration {
         this.instanceName = "Ready CI";
         this.isServerMode = false;
         this.pipelines = new ArrayList<PipelineConfiguration>();
-        this.piplineToRun = null;
+        this.pipelineToRun = null;
     }
 
+    /**
+     * Use the specified pipelineName to return a pipeline configuration.
+     * @param pipelineName
+     * @return the associated pipeline
+     */
     public PipelineConfiguration getPipeline(String pipelineName) {
         for (PipelineConfiguration pipeline : pipelines) {
             if (pipeline.name.equalsIgnoreCase(pipelineName)) {
                 return pipeline;
             }
         }
-        return null;
+        throw new LoadConfigurationException(String.format("A pipeline configuration for the pipeline name, %s, does not exist", pipelineName));
     }
 
     public List<PipelineConfiguration> getPipelines(String repositoryName, String branch) {
@@ -57,9 +64,21 @@ public class ReadyCIConfiguration {
         return matchedPipelines;
     }
 
-    public void handleInputParameters(String[] arguments) {
+    public void handleInputArguments(String[] arguments) {
         for (String argument : arguments) {
             handleInputArgument(argument);
+        }
+    }
+
+    private void handleInputArgument(String argument) {
+        if (argument.contains(".yml")) {
+            loadConfiguration(argument);
+        } else if (argument.equalsIgnoreCase(ARG_SERVER)) {
+            isServerMode = true;
+        } else if (argument.startsWith(ARG_PIPELINE)) {
+            customisePipelineToRun(argument);
+        } else {
+            addParameterToAllPipelines(argument);
         }
     }
 
@@ -81,18 +100,6 @@ public class ReadyCIConfiguration {
         }
     }
 
-    private void handleInputArgument(String argument) {
-        if (argument.contains(".yml")) {
-            loadConfiguration(argument);
-        } else if (argument.equalsIgnoreCase(ARG_SERVER)) {
-            isServerMode = true;
-        } else if (argument.startsWith(ARG_PIPELINE)) {
-            runCommandLineBuild(argument);
-        } else {
-            LOGGER.warn(String.format("Ignoring unknown argument %s", argument));
-        }
-    }
-
     private void loadConfiguration(String fileName) {
             ReadyCIConfiguration newConfiguration = readConfigurationFile(fileName);
             this.instanceName = newConfiguration.instanceName;
@@ -101,13 +108,29 @@ public class ReadyCIConfiguration {
             LOGGER.info(String.format("Loaded configuration %s with %s pipelines", fileName, pipelines.size()));
     }
 
-    private void runCommandLineBuild(String argument) {
-        String pipelineName = parseBuildName(argument);
-        PipelineConfiguration pipelineConfiguration = getPipeline(pipelineName);
-        this.piplineToRun = pipelineConfiguration;
+    private void customisePipelineToRun(String pipelineNameArgument) {
+        ParsedParameter parsedParameter = new ParsedParameter(pipelineNameArgument);
+        String pipelineToRunName = parsedParameter.parameterValue;
+        PipelineConfiguration pipelineConfigurationToRun;
+        try {
+            pipelineConfigurationToRun = getPipeline(pipelineToRunName);
+        } catch (LoadConfigurationException e) {
+            pipelineConfigurationToRun = new PipelineConfiguration();
+            pipelineConfigurationToRun.name = pipelineToRunName;
+            pipelines.add(pipelineConfigurationToRun);
+        }
+        pipelineToRun = pipelineConfigurationToRun;
     }
-    private String parseBuildName(String argument) {
-        return argument.split("=")[1];
+
+    private void addParameterToAllPipelines(String parameterArgument) {
+        try {
+            ParsedParameter parsedParameter = new ParsedParameter(parameterArgument);
+            for (PipelineConfiguration pipelineConfiguration : pipelines) {
+                pipelineConfiguration.parameters.put(parsedParameter.parameterKey, parsedParameter.parameterValue);
+            }
+        } catch (ParameterParseException e){
+            LOGGER.warn(e.toString());
+        }
     }
 
 }

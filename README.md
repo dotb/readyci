@@ -54,6 +54,16 @@ $ ls -la /tmp/readyci.jar
 -rw-r--r--  1 bradley  wheel  16612035 Jun 13 12:30 /tmp/readyci.jar
 ```
 
+####Examples
+Point ReadyCI at a repository which has a readyci.yml configuration file in the root of the repository. ReadyCI will fetch the repository, load the configuration in `readyci.yml`, and execute the `ready-ci` pipeline. 
+```bash
+$ java -jar target/readyci-0.1.jar pipeline=ready-ci gitPath=git@github.com:dotb/ready_ci.git
+```
+
+Load a local configuration file and build the `ready-ci` pipeline. The local configuration file needs to specify the gitPath to be used to fetch the repository. The repository can also contain a `readyci.yml` configuration file which will be loaded before the build commences.
+```
+$ java -jar target/readyci-0.1.jar pipeline=ready-ci readyConfigExample.yml 
+```
 
 ### Running a build service
 Ready CI can run as a web-service and listen out for web-hook calls. Configure your GIT repository to post to http://<your address>:8080/webhook and then run Ready CI with a `yml` configuration time and the `server` parameter.
