@@ -65,6 +65,12 @@ Load a local configuration file and build the `ready-ci` pipeline. The local con
 $ java -jar target/readyci-0.1.jar pipeline=ready-ci readyConfigExample.yml 
 ```
 
+You can also make a simple call to ReadyCI in the root of a repository, where a `readyci.yml` configuration file is available. ReadyCI will read the `readyci.yml` configuration and then execute the build pipeline you specify.
+```
+$ java -jar target/readyci-0.1.jar pipeline=ready-ci
+```
+
+
 ### Running a build service
 Ready CI can run as a web-service and listen out for web-hook calls. Configure your GIT repository to post to http://<your address>:8080/webhook and then run Ready CI with a `yml` configuration time and the `server` parameter.
 ```bash

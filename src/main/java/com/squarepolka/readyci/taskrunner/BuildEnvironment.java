@@ -11,12 +11,14 @@ public class BuildEnvironment {
     public String buildUUID;
     public String buildPath;
     public String projectPath;
+    public String realCIRunPath;
     private Map<String, List<String>> buildParameters;
 
     public BuildEnvironment(PipelineConfiguration configuration) {
         this.pipelineName = configuration.name;
         this.buildUUID = UUID.randomUUID().toString();
         this.buildPath = String.format("%s/%s", PipelineConfiguration.PIPELINE_BUILD_PREFIX, buildUUID);
+        this.realCIRunPath = System.getProperty("user.dir");
         this.buildParameters = new HashMap<String, List<String>>();
         setBuildParameters(configuration);
         updateProjectPaths(configuration);

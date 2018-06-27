@@ -3,6 +3,7 @@ package com.squarepolka.readyci.taskrunner;
 import com.squarepolka.readyci.configuration.PipelineConfiguration;
 import com.squarepolka.readyci.configuration.TaskConfiguration;
 import com.squarepolka.readyci.tasks.Task;
+import com.squarepolka.readyci.tasks.code.GitCheckout;
 import com.squarepolka.readyci.tasks.realci.ConfigurationLoad;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,7 +43,7 @@ public class TaskRunnerFactory {
     private void addDefaultTasks(TaskRunner taskRunner) {
         taskRunner.addDefaultTask(findTaskForIdentifier("build_path_clean"));
         taskRunner.addDefaultTask(findTaskForIdentifier("build_path_create"));
-        taskRunner.addDefaultTask(findTaskForIdentifier("checkout_git"));
+        taskRunner.addDefaultTask(findTaskForIdentifier(GitCheckout.TASK_CHECKOUT_GIT));
         taskRunner.addDefaultTask(findTaskForIdentifier(ConfigurationLoad.TASK_CONFIGURATION_LOAD));
     }
 
