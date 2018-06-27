@@ -1,7 +1,7 @@
   instanceName: Ready CI
 
   pipelines:
-  - name: ready-ci
+  - name: readyci
     gitPath: git@github.com:dotb/ready_ci.git
     gitBranch: master
     parameters:
