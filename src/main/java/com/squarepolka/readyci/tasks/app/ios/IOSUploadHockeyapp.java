@@ -19,13 +19,13 @@ public class IOSUploadHockeyapp extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) {
-        String appIdName = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_APP_ID_NAME);
+        String scheme = buildEnvironment.getProperty(IOSBuildArchive.BUILD_PROP_IOS_TARGET);
         String hockappToken = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_TOKEN);
         String releaseTags = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_TAGS, "");
         String releaseNotes = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_NOTES, "");
-        String appBinaryPath = String.format("%s/%s.ipa", buildEnvironment.buildPath, appIdName);
-        String dsymPath = String.format("%s/app.xcarchive/dSYMs/%s.app.dSYM", buildEnvironment.buildPath, appIdName);
-        String dsymPathZip = String.format("%s/app.xcarchive/dSYMs/%s.dsym.zip", buildEnvironment.buildPath, appIdName);
+        String appBinaryPath = String.format("%s/%s.ipa", buildEnvironment.buildPath, scheme);
+        String dsymPath = String.format("%s/app.xcarchive/dSYMs/%s.app.dSYM", buildEnvironment.buildPath, scheme);
+        String dsymPathZip = String.format("%s/app.xcarchive/dSYMs/%s.dsym.zip", buildEnvironment.buildPath, scheme);
 
         // Zip the dSYM bundle
         executeCommand(new String[] {"zip",
