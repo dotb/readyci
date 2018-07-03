@@ -17,7 +17,7 @@ public class IOSUploadAppleConnect extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
 
-        String scheme = buildEnvironment.getProperty(IOSBuildArchive.BUILD_PROP_IOS_TARGET);
+        String scheme = buildEnvironment.getProperty(IOSBuildArchive.BUILD_PROP_IOS_SCHEME);
         String exportPath = String.format("%s/%s.ipa", buildEnvironment.buildPath, scheme);
         String iTunesUsername = buildEnvironment.getProperty("iTunesUsername");
         String iTunesPassword = buildEnvironment.getProperty("iTunesPassword");

@@ -19,7 +19,7 @@ public class IOSUploadHockeyapp extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) {
-        String scheme = buildEnvironment.getProperty(IOSBuildArchive.BUILD_PROP_IOS_TARGET);
+        String scheme = buildEnvironment.getProperty(IOSBuildArchive.BUILD_PROP_IOS_SCHEME);
         String hockappToken = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_TOKEN);
         String releaseTags = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_TAGS, "");
         String releaseNotes = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_NOTES, "");

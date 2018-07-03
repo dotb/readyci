@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class IOSBuildArchive extends Task {
 
     public static final String TASK_IOS_ARCHIVE = "ios_archive";
-    public static final String BUILD_PROP_IOS_TARGET = "target";
+    public static final String BUILD_PROP_IOS_SCHEME = "scheme";
 
     @Override
     public String taskIdentifier() {
@@ -18,7 +18,7 @@ public class IOSBuildArchive extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) {
         String workspace = String.format("%s.xcworkspace", buildEnvironment.getProperty("workspace"));
-        String scheme = buildEnvironment.getProperty(BUILD_PROP_IOS_TARGET);
+        String scheme = buildEnvironment.getProperty(BUILD_PROP_IOS_SCHEME);
         String configuration = buildEnvironment.getProperty("configuration");
         String devTeam = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_DEV_TEAM);
         String provisioningProfile = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_PROVISIONING_PROFILE);
