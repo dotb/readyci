@@ -4,6 +4,8 @@ import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class IOSProvisioningProfileInstall extends Task {
 
@@ -16,8 +18,14 @@ public class IOSProvisioningProfileInstall extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) {
-        String relativeProfilePath = buildEnvironment.getProperty("profilePath");
-        String profilePath = String.format("%s/%s", buildEnvironment.projectPath, relativeProfilePath);
+        List<String> relativeProfilePaths = buildEnvironment.getProperties(IOSProvisioningProfileRead.BUILD_PROP_PROFILE_PATHS);
+        for (String relativeProfilePath : relativeProfilePaths) {
+            installProfile(relativeProfilePath, buildEnvironment.projectPath);
+        }
+    }
+
+    public void installProfile(String relativeProfilePath, String projectPath) {
+        String profilePath = String.format("%s/%s", projectPath, relativeProfilePath);
         executeCommand(new String[] {"/usr/bin/open", profilePath});
     }
 }

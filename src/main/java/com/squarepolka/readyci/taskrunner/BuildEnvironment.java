@@ -12,16 +12,39 @@ public class BuildEnvironment {
     public String buildPath;
     public String projectPath;
     public String realCIRunPath;
-    private Map<String, List<String>> buildParameters;
+    private Map<String, Object> buildParameters;
 
     public BuildEnvironment(PipelineConfiguration configuration) {
         this.pipelineName = configuration.name;
         this.buildUUID = UUID.randomUUID().toString();
         this.buildPath = String.format("%s/%s", PipelineConfiguration.PIPELINE_BUILD_PREFIX, buildUUID);
         this.realCIRunPath = System.getProperty("user.dir");
-        this.buildParameters = new HashMap<String, List<String>>();
+        this.buildParameters = new HashMap<String, Object>();
         setBuildParameters(configuration);
         updateProjectPaths(configuration);
+    }
+
+    public void addObject(String propertyName, Object propertyValue) {
+        List<Object> values = (List<Object>) buildParameters.get(propertyName);
+        if (null == values) {
+            values = new ArrayList<Object>();
+        }
+        values.add(propertyValue);
+        buildParameters.put(propertyName, values);
+    }
+
+    public Object getObject(String propertyName) {
+        List<Object> values = getObjects(propertyName);
+        Object value = values.get(0);
+        return value;
+    }
+
+    public List<Object> getObjects(String propertyName) {
+        List<Object> values = (List<Object>) buildParameters.get(propertyName);
+        if (null == values || values.size() <= 0) {
+            throw new PropertyMissingException(propertyName);
+        }
+        return values;
     }
 
     /**
@@ -31,7 +54,7 @@ public class BuildEnvironment {
      * @throws PropertyMissingException if the property does not exist
      */
     public List<String> getProperties(String propertyName) {
-        List<String> values = buildParameters.get(propertyName);
+        List<String> values = (List<String>) buildParameters.get(propertyName);
         if (null == values || values.size() <= 0) {
             throw new PropertyMissingException(propertyName);
         }
@@ -71,7 +94,7 @@ public class BuildEnvironment {
      * @param propertyValue
      */
     public void addProperty(String propertyName, String propertyValue) {
-        List<String> values = buildParameters.get(propertyName);
+        List<String> values = (List<String>) buildParameters.get(propertyName);
         if (null == values) {
             values = new ArrayList<String>();
         }
@@ -85,7 +108,7 @@ public class BuildEnvironment {
      * @param propertyValues
      */
     public void addProperty(String propertyName, List<String> propertyValues) {
-        List<String> values = buildParameters.get(propertyName);
+        List<String> values = (List<String>) buildParameters.get(propertyName);
         if (null == values) {
             values = new ArrayList<String>();
         }

@@ -2,9 +2,9 @@
 
   pipelines:
   - name: readyci
-    gitPath: git@github.com:dotb/ready_ci.git
-    gitBranch: master
     parameters:
+      gitPath: git@github.com:dotb/ready_ci.git
+      gitBranch: master
       deploySrcPath: target/readyci-0.1.jar
       deployDstPath: /tmp/readyci.jar
 
@@ -19,17 +19,25 @@
       type: build_path_clean
 
   - name: build-an-ios-app
-    gitPath: <git url>
-    gitBranch: master
     parameters:
+      gitPath: <git url>
+      gitBranch: master
       projectPath: ios app
       workspace: <workspace name>
-      target: <target name>
+      scheme: <target name>
       configuration: Release
-      profilePath: <mobileprovision filename>
       infoPlistPath: <path to Info.plist>
+      hockappToken: <token>
+      hockeyappReleaseTags: <tags for release users or groups>
+      hockeyappReleaseNotes: New app build available
       iTunesUsername: <itunes upload username>
       iTunesPassword: <itunes upload password>
+      gitCommitMessage: Bumped the build number using Real CI
+      gitCommitFileList:
+      - <list of updated files to commit back to the repo>
+      iosProfiles:
+      - <file 1>.mobileprovision
+      - <file 2>.mobileprovision
 
     tasks:
     - description: Pod install

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class IOSBuildExportOptionsCreate extends Task {
@@ -22,15 +23,13 @@ public class IOSBuildExportOptionsCreate extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
         String exportOptionsPath = String.format("%s/exportOptions.plist", buildEnvironment.projectPath);
-        String appName = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_APP_NAME);
         String devTeam = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_DEV_TEAM);
-        String bundleId = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_BUNDLE_ID);
         String provisioningMethod = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_PROVISIONING_METHOD);
-
-        createExportOptionsFile(devTeam, bundleId, appName, exportOptionsPath, provisioningMethod);
+        List<Object> provisioningProfiles = buildEnvironment.getObjects(IOSProvisioningProfileRead.BUILD_PROP_IOS_PROFILES);
+        createExportOptionsFile(devTeam, exportOptionsPath, provisioningMethod, provisioningProfiles);
     }
 
-    private void createExportOptionsFile(String devTeam, String bundleId, String appName, String exportOptionsPath, String provisioningMethod) throws IOException {
+    private void createExportOptionsFile(String devTeam, String exportOptionsPath, String provisioningMethod, List<Object> provisioningProfiles) throws IOException {
         NSDictionary rootDict = new NSDictionary();
         rootDict.put("compileBitcode", true);
         rootDict.put("stripSwiftSymbols", true);
@@ -39,8 +38,12 @@ public class IOSBuildExportOptionsCreate extends Task {
         rootDict.put("signingStyle", "manual");
         rootDict.put("thinning","<none>");
         rootDict.put("teamID", devTeam);
+
         NSDictionary provisioningProfilesDict = new NSDictionary();
-        provisioningProfilesDict.put(bundleId, appName);
+        for (Object profileObject : provisioningProfiles) {
+            ProvisioningProfile profile = (ProvisioningProfile) profileObject;
+            provisioningProfilesDict.put(profile.bundleId, profile.name);
+        }
         rootDict.put("provisioningProfiles", provisioningProfilesDict);
 
         File exportOptionsFile = new File(exportOptionsPath);
