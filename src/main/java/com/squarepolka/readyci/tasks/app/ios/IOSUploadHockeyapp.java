@@ -24,14 +24,14 @@ public class IOSUploadHockeyapp extends Task {
         String releaseTags = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_TAGS, "");
         String releaseNotes = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_NOTES, "");
         String appBinaryPath = String.format("%s/%s.ipa", buildEnvironment.buildPath, scheme);
-        String dsymPath = String.format("%s/app.xcarchive/dSYMs/%s.app.dSYM", buildEnvironment.buildPath, scheme);
-        String dsymPathZip = String.format("%s/app.xcarchive/dSYMs/%s.dsym.zip", buildEnvironment.buildPath, scheme);
+        String dsymPath = String.format("%s/app.xcarchive/dSYMs", buildEnvironment.buildPath);
+        String dsymPathZip = String.format("%s/app.xcarchive/dSYMs/dsym.zip", buildEnvironment.buildPath);
 
         // Zip the dSYM bundle
         executeCommand(new String[] {"zip",
                 "-r",
                 dsymPathZip,
-                dsymPath});
+                "."}, dsymPath);
 
         // Upload to HockeyApp
         executeCommand(new String[] {"/usr/bin/curl",
