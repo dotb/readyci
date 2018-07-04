@@ -1,4 +1,4 @@
-package com.squarepolka.readyci.tasks.app.ios;
+package com.squarepolka.readyci.tasks.app.ios.provisioningprofile;
 
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;

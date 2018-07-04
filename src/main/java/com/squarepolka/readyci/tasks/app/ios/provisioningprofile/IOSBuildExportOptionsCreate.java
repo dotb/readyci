@@ -1,4 +1,4 @@
-package com.squarepolka.readyci.tasks.app.ios;
+package com.squarepolka.readyci.tasks.app.ios.provisioningprofile;
 
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;

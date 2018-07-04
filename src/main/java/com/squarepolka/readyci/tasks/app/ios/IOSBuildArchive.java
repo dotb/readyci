@@ -2,6 +2,7 @@ package com.squarepolka.readyci.tasks.app.ios;
 
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;
+import com.squarepolka.readyci.tasks.app.ios.provisioningprofile.IOSProvisioningProfileRead;
 import org.springframework.stereotype.Component;
 
 @Component

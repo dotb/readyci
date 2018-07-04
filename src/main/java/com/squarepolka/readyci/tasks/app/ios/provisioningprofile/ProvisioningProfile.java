@@ -1,4 +1,4 @@
-package com.squarepolka.readyci.tasks.app.ios;
+package com.squarepolka.readyci.tasks.app.ios.provisioningprofile;
 
 public class ProvisioningProfile {
     public String name;
