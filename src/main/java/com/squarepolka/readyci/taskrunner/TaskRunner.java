@@ -68,7 +68,7 @@ public class TaskRunner {
     }
 
     private void runTask(Task task) throws Exception {
-        LOGGER.info(String.format("RUNNING\tTASK\t%s\t%s", task.taskIdentifier(), task.description));
+        LOGGER.info(String.format("RUNNING\tTASK\t%s", task.taskIdentifier()));
         task.performTask(buildEnvironment);
     }
 

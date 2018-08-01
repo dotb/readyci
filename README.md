@@ -138,14 +138,11 @@ Ready CI is configured by supplying a simple YML file on the command line, and a
       deployDstPath: /tmp/readyci.jar
 
     tasks:
-    - description: Run maven install
-      type: maven_install
+    - task: maven_install # Run maven install
+ 
+    - task: deploy_copy # Copy the built binary to a deployment destination
 
-    - description: Copy the built binary to a deployment destination
-      type: deploy_copy
-
-    - description: Finish up by cleaning the build folder
-      type: build_path_clean
+    - task: build_path_clean
 ```
 Lets take a look at some of these parameters 
 
@@ -159,8 +156,7 @@ Lets take a look at some of these parameters
 |   parameters      | Parameters are used to customise the build tasks |
 |     deploySrcPath | In this example the deploy_copy task needs to know the source and destination paths for the `readyci.jar` file, so that it can copy it to the right place |
 |   tasks:          | The array of tasks is used to configure each build step |
-|   - description   | You can set any description you like. It'll be displayed in the build logs |
-|     type          | The type of task is important, it tells ReadyCI which task should be run |
+|   -  task         | The type of task is important, it tells ReadyCI which task should be run |
 
 ## Task types
 ReadyCI includes a collection of task types that currently supports Maven and iOS builds.
