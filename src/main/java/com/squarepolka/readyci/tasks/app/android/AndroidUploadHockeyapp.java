@@ -5,7 +5,7 @@ import com.squarepolka.readyci.tasks.Task;
 import org.springframework.stereotype.Component;
 
 @Component
-public class IOSUploadHockeyapp extends Task {
+public class AndroidUploadHockeyapp extends Task {
 
     public static final String TASK_UPLOAD_HOCKEYAPP = "ios_upload_hockeyapp";
     public static final String BUILD_PROP_HOCKEYAPP_TOKEN = "hockappToken";
