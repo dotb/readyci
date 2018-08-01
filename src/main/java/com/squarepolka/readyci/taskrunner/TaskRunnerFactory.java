@@ -41,10 +41,10 @@ public class TaskRunnerFactory {
     }
 
     private void addDefaultTasks(TaskRunner taskRunner) {
-        taskRunner.addDefaultTask(findTaskForIdentifier("build_path_clean"));
-        taskRunner.addDefaultTask(findTaskForIdentifier("build_path_create"));
-        taskRunner.addDefaultTask(findTaskForIdentifier(GitCheckout.TASK_CHECKOUT_GIT));
-        taskRunner.addDefaultTask(findTaskForIdentifier(ConfigurationLoad.TASK_CONFIGURATION_LOAD));
+        taskRunner.addDefaultPreTask(findTaskForIdentifier("build_path_create"));
+        taskRunner.addDefaultPreTask(findTaskForIdentifier(GitCheckout.TASK_CHECKOUT_GIT));
+        taskRunner.addDefaultPreTask(findTaskForIdentifier(ConfigurationLoad.TASK_CONFIGURATION_LOAD));
+        taskRunner.addDefaultPostTask(findTaskForIdentifier("build_path_clean"));
     }
 
     private Task findTaskForIdentifier(String taskIdentifer) {
