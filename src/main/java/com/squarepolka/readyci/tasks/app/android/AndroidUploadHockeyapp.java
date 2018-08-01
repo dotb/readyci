@@ -25,8 +25,8 @@ public class AndroidUploadHockeyapp extends Task {
         String releaseNotes = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_NOTES, "");
         String apkPath = String.format("~/app/build/outputs/apk/%s/app-%s-unsigned.apk", scheme, scheme);
 
-        String dsymPath = String.format("%s/app.xcarchive/dSYMs", buildEnvironment.buildPath);
-        String dsymPathZip = String.format("%s/app.xcarchive/dSYMs/dsym.zip", buildEnvironment.buildPath);
+        String dsymPath = String.format("%s/app.xcarchive/dSYMs", buildEnvironment.scratchPath);
+        String dsymPathZip = String.format("%s/app.xcarchive/dSYMs/dsym.zip", buildEnvironment.scratchPath);
 
         // Zip the dSYM bundle
         executeCommand(new String[] {"zip",
@@ -47,7 +47,7 @@ public class AndroidUploadHockeyapp extends Task {
                 "-F", "notify=1",                   // Notify users who can install the app
                 "-F", "strategy=add",               // Add the build if one with the same build number exists
                 "-F", "mandatory=1"                 // Download is mandatory
-        }, buildEnvironment.projectPath);
+        }, buildEnvironment.scratchPath);
 
     }
 

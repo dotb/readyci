@@ -16,9 +16,9 @@ public class IOSBuildExport extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
-        String archivePath = String.format("%s/app.xcarchive", buildEnvironment.buildPath);
-        String exportOptionsPath = String.format("%s/exportOptions.plist", buildEnvironment.projectPath);
-        String exportPath = buildEnvironment.buildPath;
+        String archivePath = String.format("%s/app.xcarchive", buildEnvironment.scratchPath);
+        String exportOptionsPath = String.format("%s/exportOptions.plist", buildEnvironment.scratchPath);
+        String exportPath = buildEnvironment.scratchPath;
 
         executeCommand(new String[] {"/usr/bin/xcodebuild",
                 "-exportArchive",

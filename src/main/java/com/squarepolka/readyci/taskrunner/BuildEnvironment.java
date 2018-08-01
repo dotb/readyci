@@ -9,19 +9,25 @@ public class BuildEnvironment {
 
     public String pipelineName;
     public String buildUUID;
-    public String buildPath;
+    public String codePath;
+    public String projectFolder;
     public String projectPath;
+    public String scratchPath;
     public String realCIRunPath;
     private Map<String, Object> buildParameters;
 
     public BuildEnvironment(PipelineConfiguration configuration) {
         this.pipelineName = configuration.name;
         this.buildUUID = UUID.randomUUID().toString();
-        this.buildPath = String.format("%s/%s", PipelineConfiguration.PIPELINE_BUILD_PREFIX, buildUUID);
+        this.scratchPath = String.format("%s/%s", PipelineConfiguration.PIPELINE_PATH_PREFIX_BUILD, buildUUID);
+        this.codePath = String.format("%s/%s", scratchPath, PipelineConfiguration.PIPELINE_PATH_PREFIX_CODE);
         this.realCIRunPath = System.getProperty("user.dir");
         this.buildParameters = new HashMap<String, Object>();
+
+        this.projectFolder = (String) configuration.parameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH);
+        getProjectFolderFromConfiguration(configuration);
+        configureProjectPath();
         setBuildParameters(configuration);
-        updateProjectPaths(configuration);
     }
 
     public void addObject(String propertyName, Object propertyValue) {
@@ -137,14 +143,17 @@ public class BuildEnvironment {
         }
     }
 
-    public void updateProjectPaths(PipelineConfiguration configuration) {
-        // Handle the optional project path parameter
+    public void getProjectFolderFromConfiguration(PipelineConfiguration configuration) {
         if (configuration.parameters.containsKey(PipelineConfiguration.PIPELINE_PROJECT_PATH)) {
-            String projectPath = (String) configuration.parameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH);
-            this.projectPath = String.format("/%s/%s", buildPath, projectPath);
+            String projectFolder = (String) configuration.parameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH);
+            this.projectFolder = projectFolder;
         } else {
-            this.projectPath = buildPath;
+            this.projectFolder = "";
         }
+    }
+
+    public void configureProjectPath() {
+        this.projectPath = String.format("/%s/%s", codePath, projectFolder);
     }
 
 }

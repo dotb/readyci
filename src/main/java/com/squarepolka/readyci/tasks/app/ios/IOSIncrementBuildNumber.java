@@ -22,9 +22,9 @@ public class IOSIncrementBuildNumber extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
 
-        String buildPath = buildEnvironment.buildPath;
+        String codePath = buildEnvironment.codePath;
         String relativepListPath = buildEnvironment.getProperty("infoPlistPath");
-        String infoPlistPath = String.format("%s/%s", buildPath, relativepListPath);
+        String infoPlistPath = String.format("%s/%s", codePath, relativepListPath);
 
         NSDictionary infoDict = getInfoPlistDict(infoPlistPath);
         Integer buildNumber = getCurrentBuildNumber(infoDict);
