@@ -2,10 +2,12 @@ package com.squarepolka.readyci.taskrunner;
 
 import com.squarepolka.readyci.tasks.Task;
 import com.squarepolka.readyci.tasks.TaskExecuteException;
+import com.squarepolka.readyci.util.time.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class TaskRunner {
@@ -76,7 +78,13 @@ public class TaskRunner {
 
     private void runTask(Task task) throws Exception {
         LOGGER.info(String.format("RUNNING\tTASK\t%s", task.taskIdentifier()));
+        Calendar taskStartTime = Calendar.getInstance();
         task.performTask(buildEnvironment);
+        Calendar taskEndTime = Calendar.getInstance();
+        long elapsedTime = taskEndTime.getTimeInMillis() - taskStartTime.getTimeInMillis();
+        TimeUtils timeUtils = new TimeUtils();
+        String formattedTime = timeUtils.getFormattedTaskTime(elapsedTime);
+        LOGGER.info(String.format("FINISHED\tTASK\t%s IN %s", task.taskIdentifier(), formattedTime));
     }
 
     private void handleTaskFailure(Task task, Exception e) {
