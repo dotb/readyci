@@ -84,11 +84,11 @@ public class TaskRunner {
         long elapsedTime = taskEndTime.getTimeInMillis() - taskStartTime.getTimeInMillis();
         TimeUtils timeUtils = new TimeUtils();
         String formattedTime = timeUtils.getFormattedTaskTime(elapsedTime);
-        LOGGER.info(String.format("FINISHED\tTASK\t%s IN %s", task.taskIdentifier(), formattedTime));
+        LOGGER.info(String.format("\t\t\tFINISHED IN %s", formattedTime));
     }
 
     private void handleTaskFailure(Task task, Exception e) {
-        String errorMessage = String.format("FAILED\tTASK\t%s with exception: %s", task.taskIdentifier(), e.toString());
+        String errorMessage = String.format("FAILED\tTASK\t%s with exception: %s\n", task.taskIdentifier(), e.toString());
         LOGGER.error(errorMessage);
         if (task.shouldStopOnFailure()) {
             TaskExecuteException taskExecuteException = new TaskExecuteException(errorMessage);
