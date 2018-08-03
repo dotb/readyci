@@ -26,7 +26,6 @@ public class BuildEnvironmentTest {
         subject = Mockito.spy(new BuildEnvironment(pipelineConfiguration));
     }
 
-
     @Test
     public void addObject() {
         List<Object> initialValues = (List<Object>) subject.buildParameters.get("testKey");
@@ -49,32 +48,72 @@ public class BuildEnvironmentTest {
         assertEquals("The returned value is populated", "testValue", returnedValue);
     }
 
+    @Test(expected = PropertyMissingException.class)
+    public void getObjectsEmpty() {
+        subject.getObjects("testKey");
+    }
+
     @Test
-    public void getObjects() {
+    public void getObjectsPopulated() {
         subject.addObject("testKey", "testValue");
         List<Object> returnedList = (List<Object>) subject.getObjects("testKey");
         String testValue = (String) returnedList.get(0);
         assertEquals("The returned list is populated", testValue, testValue);
     }
 
+    @Test(expected = PropertyMissingException.class)
+    public void getPropertiesEmpty() {
+        subject.getProperties("testKey");
+    }
+
     @Test
     public void getProperties() {
+        subject.addProperty("testKey", "testValue");
+        List<String> returnedList = subject.getProperties("testKey");
+        String testValue = returnedList.get(0);
+        assertEquals("The returned list is populated", testValue, testValue);
+    }
+
+    @Test(expected = PropertyMissingException.class)
+    public void getPropertyEmpty() {
+        subject.getProperty("testKey");
     }
 
     @Test
-    public void getProperty() {
+    public void getPropertyPopulated() {
+        subject.addProperty("testKey", "testValue");
+        String returnedValue = (String) subject.getProperty("testKey");
+        assertEquals("The returned value is populated", "testValue", returnedValue);
     }
 
     @Test
-    public void getProperty1() {
+    public void getPropertyWithDefaultValueEmpty() {
+        String returnedValue = subject.getProperty("testKey", "defaultValue");
+        assertEquals("The returned value is set to the default", "defaultValue", returnedValue);
+    }
+
+    @Test
+    public void getPropertyWithDefaultValuePopulated() {
+        subject.addProperty("testKey", "testValue");
+        String returnedValue = subject.getProperty("testKey", "defaultValue");
+        assertEquals("The returned value is set to the stored value", "testValue", returnedValue);
     }
 
     @Test
     public void addProperty() {
+        subject.addProperty("testKey", "testValue");
+        String returnedValue = subject.getProperty("testKey");
+        assertEquals("The returned value is set to the stored value", "testValue", returnedValue);
     }
 
     @Test
-    public void addProperty1() {
+    public void addPropertyList() {
+        List<String> testData = new ArrayList<String>();
+        testData.add("testValue");
+        subject.addProperty("testKey", testData);
+        List<String> returnedList = subject.getProperties("testKey");
+        String testValue = returnedList.get(0);
+        assertEquals("The returned list is populated", testValue, testValue);
     }
 
     @Test
