@@ -19,7 +19,7 @@ public class IOSDependenciesPods extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) {
-        executeCommand(new String[]{"pod", "repo", "update", buildEnvironment.projectPath}
-        executeCommand(new String[]{"pod", "install", buildEnvironment.projectPath}
+        executeCommand(new String[]{"pod", "repo", "update", buildEnvironment.projectPath});
+        executeCommand(new String[]{"pod", "install", buildEnvironment.projectPath});
     }
 }
