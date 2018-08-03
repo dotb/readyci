@@ -86,7 +86,7 @@ public class TaskRunner {
     }
 
     private void handleTaskFailure(Task task, Exception e) {
-        String errorMessage = String.format("FAILED\tTASK\t%s with exception: %s\n", task.taskIdentifier(), e.toString());
+        String errorMessage = String.format("FAILED\tTASK\t%s with exception: %s", task.taskIdentifier(), e.toString());
         LOGGER.error(errorMessage);
         if (task.shouldStopOnFailure()) {
             TaskExecuteException taskExecuteException = new TaskExecuteException(errorMessage);
