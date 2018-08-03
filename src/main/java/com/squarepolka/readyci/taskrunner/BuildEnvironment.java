@@ -136,9 +136,9 @@ public class BuildEnvironment {
             if (objectValue instanceof String) {
                 String stringValue = (String) objectValue;
                 addProperty(propertyName, stringValue);
-            } else if (objectValue instanceof  List) {
-                List<String> stringValue = (List<String>) objectValue;
-                addProperty(propertyName, stringValue);
+            } else if (objectValue instanceof List) {
+                List<String> listValue = (List<String>) objectValue;
+                addProperty(propertyName, listValue);
             }
         }
     }
