@@ -1,6 +1,7 @@
 package com.squarepolka.readyci.taskrunner;
 
 import com.squarepolka.readyci.configuration.PipelineConfiguration;
+import com.squarepolka.readyci.util.PropertyMissingException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -23,6 +24,57 @@ public class BuildEnvironmentTest {
         pipelineConfiguration.parameters = parameters;
         Mockito.when(pipelineConfiguration.parameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH)).thenReturn("\"project/path\"");
         subject = Mockito.spy(new BuildEnvironment(pipelineConfiguration));
+    }
+
+
+    @Test
+    public void addObject() {
+        List<Object> initialValues = (List<Object>) subject.buildParameters.get("testKey");
+        assertEquals("initialValues start as null", null, initialValues);
+        subject.addObject("testKey", "testValue");
+        List<Object> values = (List<Object>) subject.buildParameters.get("testKey");
+        String firstValue = (String) values.get(0);
+        assertEquals("buildParameters contains the test value", "testValue", firstValue);
+    }
+
+    @Test(expected = PropertyMissingException.class)
+    public void getObjectEmpty() {
+        List<String> returnedList = (List<String>) subject.getObject("testKey");
+    }
+
+    @Test
+    public void getObjectPopulated() {
+        subject.addObject("testKey", "testValue");
+        String returnedValue = (String) subject.getObject("testKey");
+        assertEquals("The returned value is populated", "testValue", returnedValue);
+    }
+
+    @Test
+    public void getObjects() {
+        subject.addObject("testKey", "testValue");
+        List<Object> returnedList = (List<Object>) subject.getObjects("testKey");
+        String testValue = (String) returnedList.get(0);
+        assertEquals("The returned list is populated", testValue, testValue);
+    }
+
+    @Test
+    public void getProperties() {
+    }
+
+    @Test
+    public void getProperty() {
+    }
+
+    @Test
+    public void getProperty1() {
+    }
+
+    @Test
+    public void addProperty() {
+    }
+
+    @Test
+    public void addProperty1() {
     }
 
     @Test
@@ -69,12 +121,22 @@ public class BuildEnvironmentTest {
         Mockito.when(pipelineConfiguration.parameters.containsKey(PipelineConfiguration.PIPELINE_PROJECT_PATH)).thenReturn(true);
         Mockito.when(pipelineConfiguration.parameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH)).thenReturn("testPath");
         subject.getProjectFolderFromConfiguration(pipelineConfiguration);
-        assertEquals("The projectPath should be set", "testPath", subject.projectFolder);
+        assertEquals("The projectFolder should be set", "testPath", subject.projectFolder);
     }
 
     @Test
     public void getProjectFolderFromConfigurationNotSpecified() {
         subject.getProjectFolderFromConfiguration(pipelineConfiguration);
-        assertEquals("The projectPath should be empty", "", subject.projectFolder);
+        assertEquals("The projectFolder should be empty", "", subject.projectFolder);
     }
+
+
+    @Test
+    public void configureProjectPath() {
+        subject.codePath = "codepath";
+        subject.projectFolder = "projectfolder";
+        subject.configureProjectPath();
+        assertEquals("The projectPath is configured correctly", "/codepath/projectfolder", subject.projectPath);
+    }
+
 }

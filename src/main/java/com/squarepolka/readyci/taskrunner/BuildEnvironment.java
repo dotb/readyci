@@ -14,7 +14,7 @@ public class BuildEnvironment {
     public String projectPath;
     public String scratchPath;
     public String realCIRunPath;
-    private Map<String, Object> buildParameters;
+    public Map<String, Object> buildParameters;
 
     public BuildEnvironment(PipelineConfiguration configuration) {
         this.pipelineName = configuration.name;
