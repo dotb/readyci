@@ -64,4 +64,17 @@ public class BuildEnvironmentTest {
         assertEquals("Correct second list property has been added", "secondString", secondValue);
     }
 
+    @Test
+    public void getProjectFolderFromConfigurationSpecified() {
+        Mockito.when(pipelineConfiguration.parameters.containsKey(PipelineConfiguration.PIPELINE_PROJECT_PATH)).thenReturn(true);
+        Mockito.when(pipelineConfiguration.parameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH)).thenReturn("testPath");
+        subject.getProjectFolderFromConfiguration(pipelineConfiguration);
+        assertEquals("The projectPath should be set", "testPath", subject.projectFolder);
+    }
+
+    @Test
+    public void getProjectFolderFromConfigurationNotSpecified() {
+        subject.getProjectFolderFromConfiguration(pipelineConfiguration);
+        assertEquals("The projectPath should be empty", "", subject.projectFolder);
+    }
 }
