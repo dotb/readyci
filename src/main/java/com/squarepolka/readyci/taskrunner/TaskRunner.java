@@ -3,12 +3,10 @@ package com.squarepolka.readyci.taskrunner;
 import com.squarepolka.readyci.tasks.Task;
 import com.squarepolka.readyci.tasks.TaskExecuteException;
 import com.squarepolka.readyci.util.time.TaskTimer;
-import com.squarepolka.readyci.util.time.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class TaskRunner {
