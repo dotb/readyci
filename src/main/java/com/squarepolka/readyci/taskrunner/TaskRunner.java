@@ -2,6 +2,7 @@ package com.squarepolka.readyci.taskrunner;
 
 import com.squarepolka.readyci.tasks.Task;
 import com.squarepolka.readyci.tasks.TaskExecuteException;
+import com.squarepolka.readyci.util.time.TaskTimer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +77,10 @@ public class TaskRunner {
 
     private void runTask(Task task) throws Exception {
         LOGGER.info(String.format("RUNNING\tTASK\t%s", task.taskIdentifier()));
+        TaskTimer taskTimer = TaskTimer.newStartedTimer();
         task.performTask(buildEnvironment);
+        String formattedTime = taskTimer.stopAndGetElapsedTime();
+        LOGGER.info(String.format("\t\t\tFINISHED IN %s", formattedTime));
     }
 
     private void handleTaskFailure(Task task, Exception e) {
