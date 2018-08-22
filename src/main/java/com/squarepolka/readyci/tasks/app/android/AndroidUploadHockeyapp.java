@@ -1,13 +1,13 @@
-package com.squarepolka.readyci.tasks.app.ios;
+package com.squarepolka.readyci.tasks.app.android;
 
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;
 import org.springframework.stereotype.Component;
 
 @Component
-public class IOSUploadHockeyapp extends Task {
+public class AndroidUploadHockeyapp extends Task {
 
-    public static final String TASK_UPLOAD_HOCKEYAPP = "ios_upload_hockeyapp";
+    public static final String TASK_UPLOAD_HOCKEYAPP = "android_upload_hockeyapp";
     public static final String BUILD_PROP_HOCKEYAPP_TOKEN = "hockappToken";
     public static final String BUILD_PROP_HOCKEYAPP_RELEASE_TAGS = "hockeyappReleaseTags";
     public static final String BUILD_PROP_HOCKEYAPP_RELEASE_NOTES = "hockeyappReleaseNotes";
@@ -19,27 +19,29 @@ public class IOSUploadHockeyapp extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) {
-        String scheme = buildEnvironment.getProperty(IOSBuildArchive.BUILD_PROP_IOS_SCHEME);
+        String scheme = buildEnvironment.getProperty(AndroidSignApp.BUILD_PROP_SCHEME);
         String hockappToken = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_TOKEN);
         String releaseTags = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_TAGS, "");
         String releaseNotes = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_NOTES, "");
-        String apkPath = String.format("~/app/build/outputs/apk/%s/app-%s-unsigned.apk", scheme, scheme);
 
-        String dsymPath = String.format("%s/app.xcarchive/dSYMs", buildEnvironment.buildPath);
-        String dsymPathZip = String.format("%s/app.xcarchive/dSYMs/dsym.zip", buildEnvironment.buildPath);
+        //buildEnvironment.buildPath =  /tmp/readyci//8699079c-0f1f-4d65-bf33-9e59cb276cc2
+
+        //String appBinaryPath = String.format("%s/%s.ipa", buildEnvironment.buildPath, scheme);
+        String appBinaryPath = String.format("/Users/gooi/flybuys-android/app/build/outputs/apk/release/app-release-unsigned.apk");
+//        String dsymPath = String.format("%s/app.xcarchive/dSYMs", buildEnvironment.buildPath);
+//        String dsymPathZip = String.format("%s/app.xcarchive/dSYMs/dsym.zip", buildEnvironment.buildPath);
 
         // Zip the dSYM bundle
-        executeCommand(new String[] {"zip",
-                "-r",
-                dsymPathZip,
-                "."}, dsymPath);
+//        executeCommand(new String[] {"zip",
+//                "-r",
+//                dsymPathZip,
+//                "."}, dsymPath);
 
         // Upload to HockeyApp
         executeCommand(new String[] {"/usr/bin/curl",
                 "https://rink.hockeyapp.net/api/2/apps/upload",
                 "-H", "X-HockeyAppToken: " + hockappToken,
-                "-F", "ipa=@" + apkPath,
-                "-F", "dsym=@" + dsymPathZip,
+                "-F", "ipa=@" + appBinaryPath,
                 "-F", "notes=" + releaseNotes,
                 "-F", "tags=" + releaseTags,
                 "-F", "notes_type=0",               // Textual release notes
