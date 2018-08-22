@@ -27,7 +27,7 @@ public class AndroidUploadHockeyapp extends Task {
         //buildEnvironment.buildPath =  /tmp/readyci//8699079c-0f1f-4d65-bf33-9e59cb276cc2
 
         //String appBinaryPath = String.format("%s/%s.ipa", buildEnvironment.buildPath, scheme);
-        String appBinaryPath = String.format("/Users/gooi/flybuys-android/app/build/outputs/apk/release/app-release-unsigned.apk");
+        String appBinaryPath = String.format("%s/app/build/outputs/apk/%s/app-%s-unsigned.apk", buildEnvironment.realCIRunPath, scheme.toLowerCase(), scheme.toLowerCase());
 //        String dsymPath = String.format("%s/app.xcarchive/dSYMs", buildEnvironment.buildPath);
 //        String dsymPathZip = String.format("%s/app.xcarchive/dSYMs/dsym.zip", buildEnvironment.buildPath);
 
