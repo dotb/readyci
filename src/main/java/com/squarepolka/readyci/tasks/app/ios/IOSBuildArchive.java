@@ -22,7 +22,7 @@ public class IOSBuildArchive extends Task {
         String scheme = buildEnvironment.getProperty(BUILD_PROP_IOS_SCHEME);
         String configuration = buildEnvironment.getProperty("configuration");
         String devTeam = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_DEV_TEAM);
-        String archivePath = String.format("%s/app.xcarchive", buildEnvironment.buildPath);
+        String archivePath = String.format("%s/app.xcarchive", buildEnvironment.scratchPath);
 
         executeCommand(new String[] {"/usr/bin/xcodebuild",
                 "DEVELOPMENT_TEAM=" + devTeam,

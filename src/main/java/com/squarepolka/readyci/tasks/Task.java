@@ -13,15 +13,10 @@ public abstract class Task {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Task.class);
 
-    public String description;
     public TaskRunner taskRunner;
 
-    public Task() {
-        this.description = "";
-    }
-
     public void configure(TaskConfiguration taskConfiguration) {
-        this.description = taskConfiguration.description;
+
     }
 
     public boolean shouldStopOnFailure() {

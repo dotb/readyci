@@ -2,6 +2,7 @@ package com.squarepolka.readyci.taskrunner;
 
 import com.squarepolka.readyci.tasks.Task;
 import com.squarepolka.readyci.tasks.TaskExecuteException;
+import com.squarepolka.readyci.util.time.TaskTimer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,12 +14,14 @@ public class TaskRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskRunner.class);
 
     public TaskRunnerFactory taskRunnerFactory;
-    protected List<Task> defaultTasks;
+    protected List<Task> defaultPreTasks;
+    protected List<Task> defaultPostTasks;
     protected List<Task> configuredTasks;
     protected BuildEnvironment buildEnvironment;
 
     public TaskRunner(BuildEnvironment buildEnvironment, TaskRunnerFactory taskRunnerFactory) {
-        this.defaultTasks = new ArrayList<Task>();
+        this.defaultPreTasks = new ArrayList<Task>();
+        this.defaultPostTasks = new ArrayList<Task>();
         this.configuredTasks = new ArrayList<Task>();
         this.buildEnvironment = buildEnvironment;
         this.taskRunnerFactory = taskRunnerFactory;
@@ -32,16 +35,21 @@ public class TaskRunner {
         configuredTasks.add(task);
     }
 
-    public void addDefaultTask(Task task) {
-        defaultTasks.add(task);
+    public void addDefaultPreTask(Task task) {
+        defaultPreTasks.add(task);
+    }
+
+    public void addDefaultPostTask(Task task) {
+        defaultPostTasks.add(task);
     }
 
     public void runAllTasks() {
         try {
             LOGGER.info(String.format("EXECUTING\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
-            runTaskList(defaultTasks);
+            runTaskList(defaultPreTasks);
             checkThatTasksExist();
             runTaskList(configuredTasks);
+            runTaskList(defaultPostTasks);
             LOGGER.info(String.format("COMPLETED\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
         } catch (RuntimeException e) {
             LOGGER.info(String.format("FAILED\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
@@ -68,8 +76,11 @@ public class TaskRunner {
     }
 
     private void runTask(Task task) throws Exception {
-        LOGGER.info(String.format("RUNNING\tTASK\t%s\t%s", task.taskIdentifier(), task.description));
+        LOGGER.info(String.format("RUNNING\tTASK\t%s", task.taskIdentifier()));
+        TaskTimer taskTimer = TaskTimer.newStartedTimer();
         task.performTask(buildEnvironment);
+        String formattedTime = taskTimer.stopAndGetElapsedTime();
+        LOGGER.info(String.format("\t\t\tFINISHED IN %s", formattedTime));
     }
 
     private void handleTaskFailure(Task task, Exception e) {

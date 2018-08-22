@@ -7,12 +7,14 @@ import com.squarepolka.readyci.tasks.Task;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.util.List;
 
 @Component
 public class IOSIncrementBuildNumber extends Task {
 
     public static final String TASK_IOS_INCREMENT_BUILD_NUMBER = "ios_increment_build_number";
     private static final String CFBUNDLEVERSION = "CFBundleVersion";
+    private static final String BUILD_PROP_INC_BLD_PLIST_FILES = "iOSIncrementBuildNumbers";
 
     @Override
     public String taskIdentifier() {
@@ -22,28 +24,33 @@ public class IOSIncrementBuildNumber extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
 
-        String buildPath = buildEnvironment.buildPath;
-        String relativepListPath = buildEnvironment.getProperty("infoPlistPath");
-        String infoPlistPath = String.format("%s/%s", buildPath, relativepListPath);
+        String codePath = buildEnvironment.codePath;
+        List<String> relativePListPaths = buildEnvironment.getProperties(BUILD_PROP_INC_BLD_PLIST_FILES);
+        for (String relativepListPath : relativePListPaths) {
+            incrementBuildNumberAtPath(relativepListPath, codePath);
+        }
+    }
 
+    private void incrementBuildNumberAtPath(String relativepListPath, String codePath) throws Exception {
+        String infoPlistPath = String.format("%s/%s", codePath, relativepListPath);
         NSDictionary infoDict = getInfoPlistDict(infoPlistPath);
         Integer buildNumber = getCurrentBuildNumber(infoDict);
         buildNumber = new Integer(buildNumber.intValue() + 1);
         updateNewBuildNumber(infoDict, infoPlistPath, buildNumber);
     }
 
-    public NSDictionary getInfoPlistDict(String infoPlistPath) throws Exception {
+    private NSDictionary getInfoPlistDict(String infoPlistPath) throws Exception {
         File infoPlistFile = new File(infoPlistPath);
         return (NSDictionary) PropertyListParser.parse(infoPlistFile);
     }
 
-    public Integer getCurrentBuildNumber(NSDictionary infoDict) {
+    private Integer getCurrentBuildNumber(NSDictionary infoDict) {
         String buildNumberStr = infoDict.objectForKey(CFBUNDLEVERSION).toString();
         Integer buildNumber = new Integer(buildNumberStr);
         return buildNumber;
     }
 
-    public void updateNewBuildNumber(NSDictionary infoDict, String infoPlistPath, Integer buildNumber) throws Exception {
+    private void updateNewBuildNumber(NSDictionary infoDict, String infoPlistPath, Integer buildNumber) throws Exception {
         File infoPlistFile = new File(infoPlistPath);
         infoDict.put(CFBUNDLEVERSION, buildNumber.toString());
         PropertyListParser.saveAsXML(infoDict, infoPlistFile);

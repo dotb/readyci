@@ -33,7 +33,7 @@ public class TaskRunnerFactory {
     public List<Task> createTaskListFromConfig(List<TaskConfiguration> taskConfigurations) {
         List<Task> taskList = new ArrayList<Task>();
         for (TaskConfiguration taskConfiguration : taskConfigurations) {
-            Task task = findTaskForIdentifier(taskConfiguration.type);
+            Task task = findTaskForIdentifier(taskConfiguration.task);
             task.configure(taskConfiguration);
             taskList.add(task);
         }
@@ -41,10 +41,10 @@ public class TaskRunnerFactory {
     }
 
     private void addDefaultTasks(TaskRunner taskRunner) {
-        taskRunner.addDefaultTask(findTaskForIdentifier("build_path_clean"));
-        taskRunner.addDefaultTask(findTaskForIdentifier("build_path_create"));
-        taskRunner.addDefaultTask(findTaskForIdentifier(GitCheckout.TASK_CHECKOUT_GIT));
-        taskRunner.addDefaultTask(findTaskForIdentifier(ConfigurationLoad.TASK_CONFIGURATION_LOAD));
+        taskRunner.addDefaultPreTask(findTaskForIdentifier("build_path_create"));
+        taskRunner.addDefaultPreTask(findTaskForIdentifier(GitCheckout.TASK_CHECKOUT_GIT));
+        taskRunner.addDefaultPreTask(findTaskForIdentifier(ConfigurationLoad.TASK_CONFIGURATION_LOAD));
+        taskRunner.addDefaultPostTask(findTaskForIdentifier("build_path_clean"));
     }
 
     private Task findTaskForIdentifier(String taskIdentifer) {
