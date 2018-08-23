@@ -74,7 +74,7 @@ Load the `readyConfigExample.yml`  configuration file and build the pipeline.  Y
 ```
 $ java -jar target/readyci.jar pipeline=readyci readyConfigExample.yml 
 ```
-  
+
 *** Note: ***  
 If you name your yml configuration file as  `readyci.yml`, you don't need to specify the name of the yml file when running it in command line. ReadyCI will read the configuration file and execute the build pipeline you specify.
 ```
@@ -187,6 +187,11 @@ ReadyCI includes a collection of task types that currently supports Maven and iO
 | ios_archive                      | Generate an archived .ipa|
 | ios_upload_hockeyapp             | Upload app builds to HockeyApp |
 | ios_upload_itunes_connect        | Upload your build .ipa to iTunes connect |
+| *Android*                        | |
+| android_create_local_properties  | Create local.properties file and writes the sdk path |
+| android_create_apk_file          | Creates apk file for the scheme specified |
+| android_sign_app                 | Signs the apk file generated, assuming that the jks (keystore) file is in the root of the repository |
+| android_upload_hockeyapp         | Upload app builds to HockeyApp |
 | *GIT*                            | |
 | checkout_git                     | Clone a git repository. This step is automatically run and you don't need to reference this task |
 | *Build*                          | |
