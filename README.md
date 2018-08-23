@@ -27,18 +27,17 @@ Paths, filenames and target names look great when you use whitespace. However, w
 
 ## How to use ReadyCI
 ### Building ReadyCI
-Use Maven to create a jar: target/readyci-0.1.jar
+Download ReadyCI to your computer and navigate to the ReadyCI folder in your terminal.
+Assuming that you have Maven installed, create a jar: target/readyci-0.3.jar using the following command:
 ```bash
 $ mvn install
 ```
 
-### Configure pipelines
-Make your own copy of the `readyConfigExample.yml` file, specifying all of your pipelines and associated build tasks.
-
 ### Running a command-line build
-Run a once off command-line build by specifying a `yml` configuration file and the `pipeline=` parameter. It's only fitting that ReadyCI be able to build it's self! Try this out by using the example configuration `readyConfigExample.yml` to run a ReadyCI build named `readyci`. 
+Run a once off command-line build by specifying the `yml` configuration file and the `pipeline=` parameter. It's only fitting that ReadyCI be able to build itself!   
+Try this out with the example found below using the configuration `readyConfigExample.yml` to run a ReadyCI build named `readyci` (as found in the yml file). 
 ```bash
-$ java -jar target/readyci-0.1.jar readyConfigExample.yml pipeline=readyci
+$ java -jar target/readyci-0.3.jar readyConfigExample.yml pipeline=readyci
 
 Loaded configuration readyConfigExample.yml with 2 pipelines
 ...
@@ -54,18 +53,30 @@ $ ls -la /tmp/readyci.jar
 -rw-r--r--  1 bradley  wheel  16612035 Jun 13 12:30 /tmp/readyci.jar
 ```
 
-####Examples
-Point ReadyCI at a repository which has a readyci.yml configuration file in the root of the repository. ReadyCI will fetch the repository, load the configuration in `readyci.yml`, and execute the `readyci` pipeline. 
-```bash
-$ java -jar target/readyci.jar pipeline=ready-ci gitPath=git@github.com:dotb/readyci.git
-```
 
-Load a local configuration file and build the `readyci` pipeline. The local configuration file needs to specify the gitPath to be used to fetch the repository. The repository can also contain a `readyci.yml` configuration file which will be loaded before the build commences.
+### Configure pipelines
+Make your own copy of the `readyConfigExample.yml` file found in the ReadyCI folder and place it into the root of your Android/iOS project root repository. 
+Edit the file to specify all of your pipelines and associated build tasks.
+
+
+#### Examples
+1 . If you would like ReadyCI to clone the repository for you into a folder.  
+
+Redirect terminal to an empty folder which has the readyci yml configuration file, run the following command found below. ReadyCI will fetch the repository, load the configuration in `readyConfigExample.yml`, and execute the `readyci` pipeline. 
+```bash
+$ java -jar target/readyci.jar pipeline=ready-ci readyConfigExample.yml gitPath=git@github.com:dotb/readyci.git
+```
+  
+
+2 . If you would like to build and upload the project without leaving a trace on your computer
+Load the `readyConfigExample.yml`  configuration file and build the pipeline.  You will need to specify the gitPath in the local configuration file in order to fetch the repository.
+ The repository found on git can also contain a `readyci.yml` configuration file which will be loaded before the build commences.
 ```
 $ java -jar target/readyci.jar pipeline=readyci readyConfigExample.yml 
 ```
-
-You can also make a simple call to ReadyCI in the root of a repository, where a `readyci.yml` configuration file is available. ReadyCI will read the `readyci.yml` configuration and then execute the build pipeline you specify.
+  
+*** Note: ***  
+If you name your yml configuration file as  `readyci.yml`, you don't need to specify the name of the yml file when running it in command line. ReadyCI will read the configuration file and execute the build pipeline you specify.
 ```
 $ java -jar target/readyci.jar pipeline=readyci
 ```
