@@ -91,7 +91,8 @@ ReadyCI will fetch the repository, load the configuration in `readyConfigExample
 $ java -jar target/readyci-0.3.jar readyConfigExample.yml pipeline=ready-ci gitPath=git@github.com:dotb/readyci.git
 ```
   
-***or*** you can specify the gitPath in the configuration file itself, and just run readyCI as below:
+***or***   
+you can specify the gitPath in the configuration file itself, and just run readyCI as below:
 ```
 $ java -jar target/readyci-0.3.jar readyConfigExample.yml pipeline=readyci 
 ```
@@ -167,7 +168,7 @@ FINISHED BUILD c7a56eec-f303-4ad9-8de9-ffe5da68bef5
 Ready CI currently supports web-hook calls from GitHub and Bitbucket.
 
 ## Configuration explained
-Ready CI is configured by supplying a simple YML file on the command line, and an optional configuration file in the root of your repository named readyci.yml. For example, the configuration below builds Ready CI using Maven and the code on GitHub.
+Ready CI is configured by supplying a simple YML configuration file on the command line, which is contained in the root of your repository. For example, the configuration below builds Ready CI using Maven and the code on GitHub.
 ```yml
   pipelines:
   - name: readyci # every pipeline needs a name 
@@ -184,7 +185,8 @@ Ready CI is configured by supplying a simple YML file on the command line, and a
 
     - task: build_path_clean
 ```
-Lets take a look at some of these parameters 
+    
+Lets take a look at some of these parameters: (Full list of parameters are found in readyConfigExample.yml)
 
 | Parameter | Description |
 | :-------- | :---------- |
@@ -194,12 +196,12 @@ Lets take a look at some of these parameters
 |   gitPath         | The path to your code repository |
 |   gitBranch       | Use the gitBranch parameter to specify which branch should trigger builds when web-hook requests are received | 
 |   parameters      | Parameters are used to customise the build tasks |
-|     deploySrcPath | In this example the deploy_copy task needs to know the source and destination paths for the `readyci.jar` file, so that it can copy it to the right place |
+|     deploySrcPath & deployDstPath | In this example the deploy_copy task needs to know the source and destination paths for the `readyci.jar` file, so that it can copy it to the right place |
 |   tasks:          | The array of tasks is used to configure each build step |
-|   -  task         | The type of task is important, it tells ReadyCI which task should be run |
+|   -  task         | The task is important and **case sensitive**, it tells ReadyCI which task should be run |
 
 ## Task types
-ReadyCI includes a collection of task types that currently supports Maven and iOS builds.
+ReadyCI includes a collection of task types that currently supports Maven and iOS/Android builds. Below is the full list of tasks available:
 
 | Task                             | Description |
 | :---                             | :--- |
@@ -219,7 +221,7 @@ ReadyCI includes a collection of task types that currently supports Maven and iO
 | *Android*                        | |
 | android_create_local_properties  | Create local.properties file and writes the sdk path |
 | android_create_apk_file          | Creates apk file for the scheme specified |
-| android_sign_app                 | Signs the apk file generated, assuming that the jks (keystore) file is in the root of the repository |
+| android_sign_app                 | Signs the apk file generated, **assuming that the jks (keystore) file is in the root of the repository** |
 | android_upload_hockeyapp         | Upload app builds to HockeyApp |
 | *GIT*                            | |
 | checkout_git                     | Clone a git repository. This step is automatically run and you don't need to reference this task |
