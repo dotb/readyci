@@ -35,7 +35,8 @@ $ mvn install
 
 ### Running a command-line build
 Run a once off command-line build by specifying the `yml` configuration file and the `pipeline=` parameter. It's only fitting that ReadyCI be able to build itself!   
-Try this out with the example found below using the configuration `readyConfigExample.yml` to run a ReadyCI build named `readyci` (as found in the yml file). 
+
+Try this out with the example found below using the configuration `readyConfigExample.yml` to run a ReadyCI build named `readyci`. 
 ```bash
 $ java -jar target/readyci-0.3.jar readyConfigExample.yml pipeline=readyci
 
@@ -56,19 +57,21 @@ $ ls -la /tmp/readyci-0.3.jar
 
 
 ### Configure pipelines
-Make your own copy of the `readyConfigExample.yml` file found in the ReadyCI folder and edit the file to specify all of your pipelines and associated build tasks.
+Make your own copy of the `readyConfigExample.yml` file found in the ReadyCI folder and edit the file to specify all of your pipelines and associated build tasks.  
+Please scroll down to 'Configuration Explained' and 'Task Types' for reference.
 
 
-#### Options
-- If you already have your iOS/Android project cloned onto your computer.
-Paste the `readyConfigExample.yml` file into the root of your project repository and commit it.
+### Running ReadyCI
+#### Option 1
+If you already have your iOS/Android project cloned onto your computer, ReadyCI can directly commence on automated building!
+Paste the `readyConfigExample.yml` file into the root of your project repository and **commit** it.
 Then, redirect terminal to the root of that project repository and run the following command:
 ```bash
 $ java -jar target/readyci-0.3.jar readyConfigExample.yml pipeline=ready-ci 
 ```  
 
-
-- If you don't have a local copy of your project repository and would like ReadyCI to clone it for you and do an automated build.  
+#### Option 2
+If you don't have a local copy of your project repository and would like ReadyCI to clone it for you and do an automated build.  
 Redirect terminal to a directory which has a readyci yml configuration file. Run the following command found below, specifying the gitPath. 
 ReadyCI will fetch the repository, load the configuration in `readyConfigExample.yml`, and execute the `readyci` pipeline. 
 ```bash
@@ -80,7 +83,8 @@ $ java -jar target/readyci-0.3.jar readyConfigExample.yml pipeline=ready-ci gitP
 $ java -jar target/readyci-0.3.jar readyConfigExample.yml pipeline=readyci 
 ```
 
-- If your project repository already contains a `readyci.yml` configuration file. ReadyCI can clone the repository for you and load the configuration file before the build commences.
+#### Option 3
+If your project repository on Git already contains a `readyci.yml` configuration file, ReadyCI can clone the repository for you and load the configuration file before the build commences.
 You only need to specify the pipeline to run in the file and the gitPath for which ReadyCI can clone from.
 ```bash
 $ java -jar target/readyci-0.3.jar pipeline=ready-ci gitPath=git@github.com:dotb/readyci.git
