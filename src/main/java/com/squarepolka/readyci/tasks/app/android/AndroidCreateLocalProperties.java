@@ -37,7 +37,7 @@ public class AndroidCreateLocalProperties extends Task {
 
     private File getLocalPropertiesFile(BuildEnvironment buildEnvironment) {
 //        String filePath = String.format("%s/local.properties", buildEnvironment.buildPath);
-        String filePath = String.format("%s/local.properties", buildEnvironment.realCIRunPath);
+        String filePath = String.format("%s/local.properties", buildEnvironment.projectPath);
         File localPropertiesFile = new File(filePath);
         return localPropertiesFile;
     }

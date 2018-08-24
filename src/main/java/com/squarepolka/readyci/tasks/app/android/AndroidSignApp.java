@@ -29,7 +29,7 @@ public class AndroidSignApp extends Task {
         String keystoreName = buildEnvironment.getProperty(BUILD_PROP_KEYSTORE_NAME);
         String keystoreAlias = buildEnvironment.getProperty(BUILD_PROP_KEYSTORE_ALIAS);
         String scheme = buildEnvironment.getProperty(BUILD_PROP_SCHEME);
-        String apkPath = String.format("%s/app/build/outputs/apk/%s/app-%s-unsigned.apk", buildEnvironment.realCIRunPath, scheme.toLowerCase(), scheme.toLowerCase());
+        String apkPath = String.format("%s/app/build/outputs/apk/%s/app-%s-unsigned.apk", buildEnvironment.projectPath, scheme.toLowerCase(), scheme.toLowerCase());
 
         // create a scanner so we can read the command-line input
         Scanner scanner = new Scanner(System.in);
