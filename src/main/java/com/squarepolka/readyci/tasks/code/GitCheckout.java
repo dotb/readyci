@@ -23,8 +23,15 @@ public class GitCheckout extends Task {
         String gitPath = buildEnvironment.realCIRunPath;
         try {
             gitPath = buildEnvironment.getProperty(BUILD_PROP_GIT_PATH);
+
+            String gitBranch = buildEnvironment.getProperty(BUILD_PROP_GIT_BRANCH);
+
+            if (gitBranch == null){
+                gitBranch = "master";
+            }
+
             LOGGER.debug("The gitPath parameter is specified, so I'll check out the code.");
-            executeCommand(new String[]{"/usr/bin/git", "clone", gitPath, buildEnvironment.codePath});
+            executeCommand(new String[]{"/usr/bin/git", "clone", "-b", gitBranch, gitPath, buildEnvironment.codePath});
         } catch (PropertyMissingException e) {
             LOGGER.debug("The gitPath parameter was not specified, so I'll assume the code is already checked out.");
             buildEnvironment.codePath = buildEnvironment.realCIRunPath;
