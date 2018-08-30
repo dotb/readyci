@@ -189,3 +189,4 @@ ReadyCI includes a collection of task types that currently supports Maven and iO
 | :---  | :---|
 | 0.2   |   0.2 Kicks things off with a whole host of features, like allowing you to build iOS app projects and maven projects. Upload iOS binaries to Hockeyapp and iTunes connect. Increment the iOS build number. Automatically commit modified files back to GIT.  |
 | 0.3   |   Added the ability to read configuration from both the ReadyCI host and the repository. Simply add a readyci.yml file to the root of your repository and it'll be included in the build. |
+| 0.4   |   Added timing of tasks, output in the console log. Added 'pod repo update' to the Cocoapod task. | 
