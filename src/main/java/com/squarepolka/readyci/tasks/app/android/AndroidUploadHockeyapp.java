@@ -29,7 +29,7 @@ public class AndroidUploadHockeyapp extends Task {
         String releaseNotes = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_NOTES, "");
 
         //String appBinaryPath = String.format("%s/%s.ipa", buildEnvironment.buildPath, scheme);
-        String appBinaryPath = String.format("%s/app/build/outputs/apk/%s/app-%s-unsigned.apk", buildEnvironment.projectPath, scheme.toLowerCase(), scheme.toLowerCase());
+        String appBinaryPath = String.format("%s/app/build/outputs/apk/%s/app-%s.apk", buildEnvironment.projectPath, scheme.toLowerCase(), scheme.toLowerCase());
 //        String dsymPath = String.format("%s/app.xcarchive/dSYMs", buildEnvironment.buildPath);
 //        String dsymPathZip = String.format("%s/app.xcarchive/dSYMs/dsym.zip", buildEnvironment.buildPath);
 
