@@ -6,7 +6,7 @@
 
     <groupId>com.squarepolka</groupId>
     <artifactId>readyci</artifactId>
-    <version>0.3</version>
+    <version>0.4</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -132,6 +132,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>1.6</source>
+
                     <target>1.6</target>
                 </configuration>
             </plugin>
