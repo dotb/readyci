@@ -223,6 +223,7 @@ ReadyCI includes a collection of task types that currently supports Maven and iO
 | android_create_apk_file          | Creates apk file for the scheme specified |
 | android_sign_app                 | Signs the apk file generated, **assuming that the jks (keystore) file is in the root of the repository** |
 | android_upload_hockeyapp         | Upload app builds to HockeyApp |
+| android_zip_align                | Provides optimization to Android application (APK) files. Task must be run after app is signed (currently under construction) |
 | *GIT*                            | |
 | checkout_git                     | Clone a git repository. This step is automatically run and you don't need to reference this task |
 | *Build*                          | |

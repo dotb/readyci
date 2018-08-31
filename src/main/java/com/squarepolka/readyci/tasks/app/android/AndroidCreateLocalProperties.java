@@ -11,6 +11,7 @@ import java.io.FileWriter;
 public class AndroidCreateLocalProperties extends Task {
 
     public static final String TASK_ANDROID_CREATE_LOCAL_PROPERTIES = "android_create_local_properties";
+    public static final String BUILD_PROP_SDK_PATH = "androidSdkPath";
     private String fileName = "local.properties";
 
     @Override
@@ -28,7 +29,9 @@ public class AndroidCreateLocalProperties extends Task {
         FileWriter writer = new FileWriter(localPropFile);
 
         // Writes the content to the file
-        String out = String.format("sdk.dir=/Users/%s/Library/Android/sdk", buildEnvironment.username);
+        //String out = String.format("sdk.dir=/Users/%s/Library/Android/sdk", buildEnvironment.username);
+
+        String out = String.format("sdk.dir=%s", buildEnvironment.getProperty(BUILD_PROP_SDK_PATH));
         writer.write(out);
         writer.flush();
         writer.close();

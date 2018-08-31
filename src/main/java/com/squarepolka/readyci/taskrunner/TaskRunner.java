@@ -47,20 +47,27 @@ public class TaskRunner {
         try {
             LOGGER.info(String.format("EXECUTING\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
             runTaskList(defaultPreTasks);
-            checkThatTasksExist();
-            runTaskList(configuredTasks);
-            runTaskList(defaultPostTasks);
-            LOGGER.info(String.format("COMPLETED\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
+
+
+            if (checkThatTasksExist()){
+                runTaskList(configuredTasks);
+                runTaskList(defaultPostTasks);
+                LOGGER.info(String.format("COMPLETED\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
+            }else{
+                LOGGER.debug("YML file does not contain any tasks");
+            }
+
         } catch (RuntimeException e) {
             LOGGER.info(String.format("FAILED\tBUILD\t%s\t(%s)", buildEnvironment.pipelineName, buildEnvironment.buildUUID));
             throw e;
         }
     }
 
-    private void checkThatTasksExist() {
+    private boolean checkThatTasksExist() {
         if (configuredTasks.size() <= 0) {
-            throw new RuntimeException("There are no tasks to run. Add some tasks and then try again.");
+            return false;
         }
+        return true;
     }
 
     private void runTaskList(List<Task> tasks) {
