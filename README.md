@@ -104,7 +104,7 @@ You only need to specify the pipeline to run in the file and the gitPath for whi
 $ java -jar target/readyci-0.3.jar pipeline=ready-ci gitPath=git@github.com:dotb/readyci.git
 ```
 
-#### Option 4 - most useful
+#### Option 4 - my favourite
 If you would like to keep sensitive information(store pass etc) away from your project contributors and if you have a server, you can make the
 server store the sensitive parameters in a yml file and ask the server to run the automated builds. Other build parameters can be specified
 in a seperate yml file `readyci.yml` in the project repository.
@@ -121,8 +121,6 @@ ReadyCI will read the configuration file and execute the build pipeline that you
 ```
 $ java -jar target/readyci.jar pipeline=readyci
 ```
-
-Android Notes
 
 
 ### Running a build service
@@ -236,7 +234,6 @@ ReadyCI includes a collection of task types that currently supports Maven and iO
 | android_create_apk_file          | Creates apk file for the scheme specified |
 | android_sign_app                 | Signs the apk file generated.  You should not specify this task if your app gradle file already contains signingConfigs.  If you are ***not*** using the signingConfigs but specifying them in the yml file, please remove them.|
 | android_upload_hockeyapp         | Upload app builds to HockeyApp |
-| android_zip_align                | Provides optimization to Android application (APK) files. Task must be run after app is signed (currently under construction) |
 | *GIT*                            | |
 | checkout_git                     | Clone a git repository. This step is automatically run and you don't need to reference this task |
 | *Build*                          | |
@@ -244,6 +241,37 @@ ReadyCI includes a collection of task types that currently supports Maven and iO
 | build_path_clean                 | Cleans the build folder. This step is automatically run and you don't need to reference this task ||
 | *Deploy*                         | |
 | deploy_copy                      | A simple copy based deployment task |
+
+## Task Parameters
+Parameters needed by each task. Parameters do not need to be duplicated in the yml file.
+
+| Task                             | Parameters Used|
+| :---                             | :--- |
+| *Maven*                          | |
+| maven_install                    | _none_ |
+| *iOS*                            | Compulsary parameters: projectPath, infoPlistPath|
+| ios_carthage_update              | _none_ |
+| ios_pod_install                  | _none_ |
+| ios_install_provisioning_profile | iosProfiles |
+| ios_provisioning_profile_read    | iosProfiles |
+| ios_increment_build_number       | _none_ |
+| ios_export                       | _none_ |
+| ios_export_options_create        | _none_ |
+| ios_archive                      | scheme, workspace, configuration |
+| ios_upload_hockeyapp             | hockappToken, hockeyappReleaseTags, hockeyappReleaseNotes |
+| ios_upload_itunes_connect        | scheme, iTunesUsername, iTunesPassword |
+| *Android*                        | |
+| android_create_local_properties  | _none_ |
+| android_create_apk_file          | scheme |
+| android_sign_app                 | javaKeystorePath, keystoreAlias, storepass, scheme |
+| android_upload_hockeyapp         | hockappToken, hockeyappReleaseTags, hockeyappReleaseNotes |
+| *GIT*                            |  |
+| checkout_git                     | gitPath, gitBranch |
+| *Build*                          |  |
+| build_path_create                | _none_ |
+| build_path_clean                 | _none_ |
+| *Deploy*                         | |
+| deploy_copy                      | deploySrcPath, deployDstPath |
 
 ## Release notes
 | Release | Features |
