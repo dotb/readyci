@@ -11,6 +11,7 @@ A no-fuss CI/CD service and collection of build scripts
   * [Running a Build Service](#running-a-build-service)
 - [Configuration Explained](#configuration-explained)
 - [Task Types](#task-types)
+- [Task Parameters](#task-parameters)
 - [Release Notes](#release-notes)
   
   
@@ -248,28 +249,28 @@ Parameters needed by each task. Parameters do not need to be duplicated in the y
 | Task                             | Parameters Used|
 | :---                             | :--- |
 | *Maven*                          | |
-| maven_install                    | _none_ |
+| maven_install                    | - |
 | *iOS*                            | Compulsary parameters: projectPath, infoPlistPath|
-| ios_carthage_update              | _none_ |
-| ios_pod_install                  | _none_ |
+| ios_carthage_update              | - |
+| ios_pod_install                  | - |
 | ios_install_provisioning_profile | iosProfiles |
 | ios_provisioning_profile_read    | iosProfiles |
-| ios_increment_build_number       | _none_ |
-| ios_export                       | _none_ |
-| ios_export_options_create        | _none_ |
+| ios_increment_build_number       | - |
+| ios_export                       | - |
+| ios_export_options_create        | - |
 | ios_archive                      | scheme, workspace, configuration |
 | ios_upload_hockeyapp             | hockappToken, hockeyappReleaseTags, hockeyappReleaseNotes |
 | ios_upload_itunes_connect        | scheme, iTunesUsername, iTunesPassword |
 | *Android*                        | |
-| android_create_local_properties  | _none_ |
+| android_create_local_properties  | - |
 | android_create_apk_file          | scheme |
 | android_sign_app                 | javaKeystorePath, keystoreAlias, storepass, scheme |
 | android_upload_hockeyapp         | hockappToken, hockeyappReleaseTags, hockeyappReleaseNotes |
 | *GIT*                            |  |
 | checkout_git                     | gitPath, gitBranch |
 | *Build*                          |  |
-| build_path_create                | _none_ |
-| build_path_clean                 | _none_ |
+| build_path_create                | - |
+| build_path_clean                 | - |
 | *Deploy*                         | |
 | deploy_copy                      | deploySrcPath, deployDstPath |
 
