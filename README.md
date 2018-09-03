@@ -104,12 +104,25 @@ You only need to specify the pipeline to run in the file and the gitPath for whi
 $ java -jar target/readyci-0.3.jar pipeline=ready-ci gitPath=git@github.com:dotb/readyci.git
 ```
 
+#### Option 4 - most useful
+If you would like to keep sensitive information(store pass etc) away from your project contributors and if you have a server, you can make the
+server store the sensitive parameters in a yml file and ask the server to run the automated builds. Other build parameters can be specified
+in a seperate yml file `readyci.yml` in the project repository.
+
+ReadyCI will 1st read the credentials of the yml file. After that, when the repository is cloned, ReadyCI will read the consequent parameters and tasks from `readyci.yml` and combine all the parameters together.
+```bash
+$ java -jar target/readyci-0.3.jar readyci-credentials.yml pipeline=ready-ci gitPath=git@github.com:dotb/readyci.git
+```
+
+
  ****Note:***  
 If you name your yml configuration file as  `readyci.yml`, you don't need to specify the name of the yml file when running it on command line. 
 ReadyCI will read the configuration file and execute the build pipeline that you specify.
 ```
 $ java -jar target/readyci.jar pipeline=readyci
 ```
+
+Android Notes
 
 
 ### Running a build service
@@ -194,7 +207,7 @@ Lets take a look at some of these parameters: (Full list of parameters are found
 | pipelines         | An array of as many pipeline configurations as you want |
 | - name            | Each pipeline is named, and you use this name to start a command-line build |
 |   gitPath         | The path to your code repository |
-|   gitBranch       | Use the gitBranch parameter to specify which branch should trigger builds when web-hook requests are received | 
+|   gitBranch       | Use the gitBranch parameter to specify which branch git should clone from. Or, which branch should trigger builds when web-hook requests are received | 
 |   parameters      | Parameters are used to customise the build tasks |
 |     deploySrcPath & deployDstPath | In this example the deploy_copy task needs to know the source and destination paths for the `readyci.jar` file, so that it can copy it to the right place |
 |   tasks:          | The array of tasks is used to configure each build step |
@@ -221,7 +234,7 @@ ReadyCI includes a collection of task types that currently supports Maven and iO
 | *Android*                        | |
 | android_create_local_properties  | Create local.properties file and writes the sdk path |
 | android_create_apk_file          | Creates apk file for the scheme specified |
-| android_sign_app                 | Signs the apk file generated, **assuming that the jks (keystore) file is in the root of the repository** |
+| android_sign_app                 | Signs the apk file generated.  You should not specify this task if your app gradle file already contains signingConfigs.  If you are ***not*** using the signingConfigs but specifying them in the yml file, please remove them.|
 | android_upload_hockeyapp         | Upload app builds to HockeyApp |
 | android_zip_align                | Provides optimization to Android application (APK) files. Task must be run after app is signed (currently under construction) |
 | *GIT*                            | |

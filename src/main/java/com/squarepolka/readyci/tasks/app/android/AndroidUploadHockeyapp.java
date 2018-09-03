@@ -27,25 +27,13 @@ public class AndroidUploadHockeyapp extends Task {
         String hockappToken = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_TOKEN);
         String releaseTags = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_TAGS, "");
         String releaseNotes = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_NOTES, "");
-
-        //String appBinaryPath = String.format("%s/%s.ipa", buildEnvironment.buildPath, scheme);
         String appBinaryPath = String.format("%s/app/build/outputs/apk/%s/app-%s.apk", buildEnvironment.projectPath, scheme.toLowerCase(), scheme.toLowerCase());
-//        String dsymPath = String.format("%s/app.xcarchive/dSYMs", buildEnvironment.buildPath);
-//        String dsymPathZip = String.format("%s/app.xcarchive/dSYMs/dsym.zip", buildEnvironment.buildPath);
-
-        // Zip the dSYM bundle
-//        executeCommand(new String[] {"zip",
-//                "-r",
-//                dsymPathZip,
-//                "."}, dsymPath);
-
 
         // Upload to HockeyApp
         executeCommand(new String[] {"/usr/bin/curl",
                 "https://rink.hockeyapp.net/api/2/apps/upload",
                 "-H", "X-HockeyAppToken: " + hockappToken,
                 "-F", "ipa=@" + appBinaryPath,
-
                 "-F", "notes=" + releaseNotes,
                 "-F", "tags=" + releaseTags,
                 "-F", "notes_type=0",               // Textual release notes
