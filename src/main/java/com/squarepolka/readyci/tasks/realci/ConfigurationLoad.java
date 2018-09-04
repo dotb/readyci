@@ -1,6 +1,5 @@
 package com.squarepolka.readyci.tasks.realci;
 
-import com.squarepolka.readyci.configuration.LoadConfigurationException;
 import com.squarepolka.readyci.configuration.PipelineConfiguration;
 import com.squarepolka.readyci.configuration.ReadyCIConfiguration;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
@@ -49,18 +48,10 @@ public class ConfigurationLoad extends Task {
         buildEnvironment.configureProjectPath();
         buildEnvironment.setBuildParameters(repoPipelineConf);
 
-//        List<Task> configuredTasks = taskRunner.taskRunnerFactory.createTaskListFromConfig(repoPipelineConf.tasks);
-//        LOGGER.debug(String.format("Loaded %s tasks from the repository configuration %s", configuredTasks.size(), TASK_CONFIGURATION_FILE_NAME));
-//        taskRunner.setConfiguredTasks(configuredTasks);
+        List<Task> configuredTasks = taskRunner.taskRunnerFactory.createTaskListFromConfig(repoPipelineConf.tasks);
+        LOGGER.debug(String.format("Loaded %s tasks from the repository configuration %s", configuredTasks.size(), TASK_CONFIGURATION_FILE_NAME));
+        taskRunner.setConfiguredTasks(configuredTasks);
 
-        try {
-            List<Task> configuredTasks = taskRunner.taskRunnerFactory.createTaskListFromConfig(repoPipelineConf.tasks);
-            LOGGER.debug(String.format("Loaded %s tasks from the repository configuration %s", configuredTasks.size(), TASK_CONFIGURATION_FILE_NAME));
-            taskRunner.setConfiguredTasks(configuredTasks);
-        }catch (LoadConfigurationException e){
-            LOGGER.debug(String.format("No tasks found"));
-
-        }
 
     }
 }
