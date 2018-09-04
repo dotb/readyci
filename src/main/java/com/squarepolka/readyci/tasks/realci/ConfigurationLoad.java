@@ -47,8 +47,11 @@ public class ConfigurationLoad extends Task {
         buildEnvironment.getProjectFolderFromConfiguration(repoPipelineConf);
         buildEnvironment.configureProjectPath();
         buildEnvironment.setBuildParameters(repoPipelineConf);
+
         List<Task> configuredTasks = taskRunner.taskRunnerFactory.createTaskListFromConfig(repoPipelineConf.tasks);
         LOGGER.debug(String.format("Loaded %s tasks from the repository configuration %s", configuredTasks.size(), TASK_CONFIGURATION_FILE_NAME));
         taskRunner.setConfiguredTasks(configuredTasks);
+
+
     }
 }

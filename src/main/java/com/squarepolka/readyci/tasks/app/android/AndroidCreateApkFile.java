@@ -2,7 +2,11 @@ package com.squarepolka.readyci.tasks.app.android;
 
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;
+import com.squarepolka.readyci.tasks.TaskExecuteException;
+import com.squarepolka.readyci.util.PropertyMissingException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AndroidCreateApkFile extends Task {
 
     public static final String TASK_CREATE_APK_FILE = "android_create_apk_file";
@@ -17,10 +21,10 @@ public class AndroidCreateApkFile extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
         String scheme = buildEnvironment.getProperty(BUILD_PROP_SCHEME);
-
-        String buildVariationCommand = String.format("./gradlew assemble%s", scheme);
-
-        executeCommand(new String[]{buildVariationCommand}, buildEnvironment.projectPath);
-
+        String arg = String.format("assemble%s", scheme);
+        executeCommand(new String[] {
+                "./gradlew",
+                arg
+        }, buildEnvironment.projectPath);
     }
 }
