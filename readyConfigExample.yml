@@ -72,12 +72,11 @@
           storepass: <password for jks file>
           keystoreAlias: <alias name of jks>
 
-        tasks:
-          tasks:
-            - task: android_create_local_properties #Create a local.properties file and writes the path of the android sdk in it
+    tasks:
+    - task: android_create_local_properties #Create a local.properties file and writes the path of the android sdk in it
 
-            - task: android_create_apk_file #Create apk file from project
+    - task: android_create_apk_file #Create apk file from project
 
-            - task: android_sign_app #Sign the apk file using the jks file specified
+    - task: android_sign_app #Sign the apk file using the jks file specified
 
-            - task: android_upload_hockeyapp #Upload the apk file to hockeyApp using the hockeyApp token specified
+    - task: android_upload_hockeyapp #Upload the apk file to hockeyApp using the hockeyApp token specified
