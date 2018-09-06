@@ -58,19 +58,19 @@
 
   - name: build-an-android-app
     parameters:
-          gitPath: <git url>
-          gitBranch: <branch that you want to clone from>
-          scheme: <target name>
-          hockappToken: <token>
-          hockeyappReleaseTags: <tags for release users or groups>
-          hockeyappReleaseNotes: New app build available
-          gitCommitMessage: Bumped the build number using Real CI
-          gitCommitFileList:
-          - <list of updated files to commit back to the repo>
-          androidSdkPath: <path to android sdk on local machine>
-          javaKeystorePath: <path to jks file>
-          storepass: <password for jks file>
-          keystoreAlias: <alias name of jks>
+      gitPath: <git url>
+      gitBranch: <branch that you want to clone from>
+      scheme: <target name>
+      hockappToken: <token>
+      hockeyappReleaseTags: <tags for release users or groups>
+      hockeyappReleaseNotes: New app build available
+      gitCommitMessage: Bumped the build number using Real CI
+      gitCommitFileList:
+      - <list of updated files to commit back to the repo>
+      androidSdkPath: <path to android sdk on local machine>
+      javaKeystorePath: <path to jks file>
+      storepass: <password for jks file>
+      keystoreAlias: <alias name of jks>
 
     tasks:
     - task: android_create_local_properties #Create a local.properties file and writes the path of the android sdk in it
