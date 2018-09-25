@@ -234,6 +234,8 @@ ReadyCI includes a collection of task types that currently supports Maven and iO
 | android_create_local_properties  | Create local.properties file and writes the sdk path |
 | android_create_apk_file          | Creates apk file for the scheme specified |
 | android_sign_app                 | Signs the apk file generated.  You should not specify this task if your app gradle file already contains signingConfigs.  If you are ***not*** using the signingConfigs but specifying them in the yml file, please remove them.|
+| android_task_increment           | Increments the build number in version.properties |
+| android_upload_play_store        | Upload app builds to Google play store  |
 | android_upload_hockeyapp         | Upload app builds to HockeyApp |
 | *GIT*                            | |
 | checkout_git                     | Clone a git repository. This step is automatically run and you don't need to reference this task |
@@ -266,6 +268,7 @@ Parameters needed by each task. Parameters do not need to be duplicated in the y
 | android_create_apk_file          | scheme |
 | android_sign_app                 | javaKeystorePath, keystoreAlias, storepass, scheme |
 | android_upload_hockeyapp         | hockappToken, hockeyappReleaseTags, hockeyappReleaseNotes |
+| android_upload_play_store        | deployTrack, packageName, playStoreAuthCert, playStoreEmail |
 | *GIT*                            |  |
 | checkout_git                     | gitPath, gitBranch |
 | *Build*                          |  |
