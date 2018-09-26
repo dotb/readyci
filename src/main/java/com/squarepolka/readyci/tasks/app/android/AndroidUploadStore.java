@@ -98,13 +98,13 @@ public class AndroidUploadStore extends Task {
                             new Track().setReleases(
                                     Collections.singletonList(
                                             new TrackRelease()
-                                                    .setName("My Alpha Release")
+                                                    .setName("Alpha Release")
                                                     .setVersionCodes(apkVersionCodes)
                                                     .setStatus("completed")
                                                     .setReleaseNotes(Collections.singletonList(
                                                             new LocalizedText()
-                                                                    .setLanguage("en-US")
-                                                                    .setText("Adds the exciting new feature X!"))))));
+                                                                    .setLanguage("en-AU")
+                                                                    .setText("This is an alpha release"))))));
             Track updatedTrack = updateTrackRequest.execute();
             LOGGER.info(String.format("AndroidUploadStore: Track %s has been updated.", updatedTrack.getTrack()));
 
@@ -112,7 +112,7 @@ public class AndroidUploadStore extends Task {
             // Commit changes for edit.
             AndroidPublisher.Edits.Commit commitRequest = edits.commit(packageName, editId);
             AppEdit appEdit = commitRequest.execute();
-            LOGGER.info(String.format("AndroidUploadStore: App edit with id %s has been comitted", appEdit.getId()));
+            LOGGER.info(String.format("AndroidUploadStore: App edit with id %s has been committed", appEdit.getId()));
 
         } catch (Exception ex) {
             LOGGER.error("AndroidUploadStore: Exception was thrown while uploading apk to alpha track", ex);
