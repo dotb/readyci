@@ -206,7 +206,8 @@ Lets take a look at some of these parameters: (Full list of parameters are found
 | pipelines         | An array of as many pipeline configurations as you want |
 | - name            | Each pipeline is named, and you use this name to start a command-line build |
 |   gitPath         | The path to your code repository |
-|   gitBranch       | Use the gitBranch parameter to specify which branch git should clone from. Or, which branch should trigger builds when web-hook requests are received | 
+|   gitBranch       | Use the gitBranch parameter to specify which branch git should clone from. Or, which branch should trigger builds when web-hook requests are received |
+|   credentialsRepository   | The ssh / http path to the repository containing the project build / upload secrets
 |   parameters      | Parameters are used to customise the build tasks |
 |     deploySrcPath & deployDstPath | In this example the deploy_copy task needs to know the source and destination paths for the `readyci.jar` file, so that it can copy it to the right place |
 |   tasks:          | The array of tasks is used to configure each build step |

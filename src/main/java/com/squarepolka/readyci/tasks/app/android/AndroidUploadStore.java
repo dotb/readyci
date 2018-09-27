@@ -61,6 +61,7 @@ public class AndroidUploadStore extends Task {
                 throw new Exception(sb.toString());
             }
 
+            String playStoreCertLocation = String.format("%s/%s", buildEnvironment.credentialsPath, playStoreCert);
 
             String scheme = buildEnvironment.getProperty(BUILD_PROP_SCHEME);
             String appBinaryPath = String.format("%s/app/build/outputs/apk/%s/app-%s.apk",
@@ -68,8 +69,9 @@ public class AndroidUploadStore extends Task {
 
             LOGGER.warn("AndroidUploadStore: uploading "+appBinaryPath);
 
+
             // Create the API service.
-            AndroidPublisher service = AndroidPublisherHelper.init(packageName, playStoreEmail, playStoreCert);
+            AndroidPublisher service = AndroidPublisherHelper.init(packageName, playStoreEmail, playStoreCertLocation);
             final AndroidPublisher.Edits edits = service.edits();
 
             // Create a new edit to make changes to your listing.
