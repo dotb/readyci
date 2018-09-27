@@ -34,7 +34,6 @@ public class AndroidFetchBuildDependencies extends Task {
         }
 
         String credentialsTarLocation = String.format("%s/credentials.tar.gz", buildEnvironment.projectPath);
-        String credentialsLocation = String.format("%s/.build_credentials", buildEnvironment.codePath);
 
         // download an archive of the repository under master
         executeCommand(new String[]{"/usr/bin/git", "archive", "--remote", credentialsRepository, "master", "-o", credentialsTarLocation});
@@ -42,16 +41,15 @@ public class AndroidFetchBuildDependencies extends Task {
         // copy the properties + jks files into the project path
         executeCommand(new String[]{"tar", "-xvf", credentialsTarLocation, "-C", buildEnvironment.projectPath, "*.properties", "*.jks"});
 
-
         // copy the rest of the credentials to a special folder
         // TODO - exclude the non properties and jks files
-        executeCommand(new String[] {"/bin/mkdir", credentialsLocation});
-        executeCommand(new String[]{"tar", "-xvf", credentialsTarLocation, "-C", credentialsLocation});
+        executeCommand(new String[] {"/bin/mkdir", buildEnvironment.credentialsPath});
+        executeCommand(new String[]{"tar", "-xvf", credentialsTarLocation, "-C", buildEnvironment.credentialsPath});
         executeCommand(new String[] {"/bin/rm", credentialsTarLocation});
 
 
         // read in the .build_credentials/*.yml files
-        File[] files = new File(credentialsLocation).listFiles(new FilenameFilter() {
+        File[] files = new File(buildEnvironment.credentialsPath).listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
                 return name.endsWith(".yml");
