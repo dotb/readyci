@@ -158,4 +158,18 @@ public class BuildEnvironment {
         this.projectPath = String.format("/%s/%s", codePath, projectFolder);
     }
 
+    @Override
+    public String toString() {
+        return "BuildEnvironment{" +
+                "pipelineName='" + pipelineName + '\'' +
+                ", buildUUID='" + buildUUID + '\'' +
+                ", codePath='" + codePath + '\'' +
+                ", projectFolder='" + projectFolder + '\'' +
+                ", projectPath='" + projectPath + '\'' +
+                ", scratchPath='" + scratchPath + '\'' +
+                ", realCIRunPath='" + realCIRunPath + '\'' +
+                ", username='" + username + '\'' +
+                ", buildParameters=" + buildParameters +
+                '}';
+    }
 }
