@@ -22,13 +22,22 @@ public class AndroidCreateLocalProperties extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
 
+        String sdkPath = System.getenv("ANDROID_HOME");
+        if(!buildEnvironment.getProperty(BUILD_PROP_SDK_PATH, "").isEmpty()) {
+            sdkPath = buildEnvironment.getProperty(BUILD_PROP_SDK_PATH);
+        }
+
+        if(sdkPath.isEmpty()) {
+            throw new IllegalArgumentException("Could not locate the sdk path, please define ANDROID_HOME or the androidSdkPath in your configuration");
+        }
+
         //create file
         File localPropFile = getLocalPropertiesFile(buildEnvironment);
 
         // creates a FileWriter Object
         FileWriter writer = new FileWriter(localPropFile);
 
-        String out = String.format("sdk.dir=%s", buildEnvironment.getProperty(BUILD_PROP_SDK_PATH));
+        String out = String.format("sdk.dir=%s", sdkPath);
         writer.write(out);
         writer.flush();
         writer.close();
@@ -36,9 +45,7 @@ public class AndroidCreateLocalProperties extends Task {
     }
 
     private File getLocalPropertiesFile(BuildEnvironment buildEnvironment) {
-        String filePath = String.format("%s/local.properties", buildEnvironment.projectPath);
-        File localPropertiesFile = new File(filePath);
-        return localPropertiesFile;
+        return new File(String.format("%s/%s", buildEnvironment.projectPath, fileName));
     }
 
 }
