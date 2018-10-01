@@ -26,7 +26,7 @@ public class ConfigurationLoad extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) {
         File repoConfigurationFile = getRepoConfigurationFile(buildEnvironment);
-        if (null != repoConfigurationFile && repoConfigurationFile.exists()) {
+        if (repoConfigurationFile.exists()) {
             LOGGER.debug(String.format("Loading local repository configuration from %s", TASK_CONFIGURATION_FILE_NAME));
             ReadyCIConfiguration localConfiguration = ReadyCIConfiguration.readConfigurationFile(repoConfigurationFile);
             mergeLocalConfigWithBuildEnvironment(localConfiguration, buildEnvironment);
@@ -36,9 +36,8 @@ public class ConfigurationLoad extends Task {
     }
     
     private File getRepoConfigurationFile(BuildEnvironment buildEnvironment) {
-        String localConfigurationPath = String.format("%s/%s", buildEnvironment.codePath, TASK_CONFIGURATION_FILE_NAME);
-        File repoConfigurationFile = new File(localConfigurationPath);
-        return repoConfigurationFile;
+        String localConfigurationPath = String.format("%s/%s", buildEnvironment.projectPath, TASK_CONFIGURATION_FILE_NAME);
+        return new File(localConfigurationPath);
     }
 
     private void mergeLocalConfigWithBuildEnvironment(ReadyCIConfiguration localConfiguration, BuildEnvironment buildEnvironment) {
