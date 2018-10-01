@@ -14,9 +14,9 @@ import java.util.*;
 
 
 @Component
-public class AndroidFetchBuildDependencies extends Task {
+public class AndroidFetchSigningCredentials extends Task {
 
-    public static final String TASK_FETCH_BUILD_DEPENDENCIES = "android_fetch_build_dependency";
+    public static final String TASK_FETCH_BUILD_DEPENDENCIES = "android_fetch_build_credentials";
     private static final Logger LOGGER = LoggerFactory.getLogger(ReadyCIConfiguration.class);
 
     @Override
