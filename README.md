@@ -245,6 +245,8 @@ ReadyCI includes a collection of task types that currently supports Maven and iO
 | build_path_clean                 | Cleans the build folder. This step is automatically run and you don't need to reference this task ||
 | *Deploy*                         | |
 | deploy_copy                      | A simple copy based deployment task |
+| *Quality*                         | |
+| sonarqube                         | Run the sonar-scanner command on a build to automate code quality analysis |
 
 ## Task Parameters
 Parameters needed by each task. Parameters do not need to be duplicated in the yml file.
@@ -277,6 +279,9 @@ Parameters needed by each task. Parameters do not need to be duplicated in the y
 | build_path_clean                 | - |
 | *Deploy*                         | |
 | deploy_copy                      | deploySrcPath, deployDstPath |
+| *Quality*                         | |
+| sonarqube                        | sonarHostUrl, sonarLoginKey, sonarProjectKey, sonarSourcePath, sonarBinaryPath |
+
 
 ## Release notes
 | Release | Features |
