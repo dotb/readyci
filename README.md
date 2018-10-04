@@ -233,6 +233,7 @@ ReadyCI includes a collection of task types that currently supports Maven and iO
 | ios_upload_itunes_connect        | Upload your build .ipa to iTunes connect |
 | *Android*                        | |
 | android_create_local_properties  | Create local.properties file and writes the sdk path |
+| android_fetch_build_credentials  | Checks out the repository containing the resources required to build and upload the application |
 | android_create_apk_file          | Creates apk file for the scheme specified |
 | android_sign_app                 | Signs the apk file generated.  You should not specify this task if your app gradle file already contains signingConfigs.  If you are ***not*** using the signingConfigs but specifying them in the yml file, please remove them.|
 | android_task_increment           | Increments the build number in version.properties |
@@ -268,6 +269,7 @@ Parameters needed by each task. Parameters do not need to be duplicated in the y
 | ios_upload_itunes_connect        | scheme, iTunesUsername, iTunesPassword |
 | *Android*                        | |
 | android_create_local_properties  | - |
+| android_fetch_build_credentials  | credentialsRepository (git path to the resources required to build / upload the app) |
 | android_create_apk_file          | scheme |
 | android_sign_app                 | javaKeystorePath, keystoreAlias, storepass, scheme |
 | android_upload_hockeyapp         | hockappToken, hockeyappReleaseTags, hockeyappReleaseNotes |
@@ -289,4 +291,5 @@ Parameters needed by each task. Parameters do not need to be duplicated in the y
 | 0.2   |   0.2 Kicks things off with a whole host of features, like allowing you to build iOS app projects and maven projects. Upload iOS binaries to Hockeyapp and iTunes connect. Increment the iOS build number. Automatically commit modified files back to GIT.  |
 | 0.3   |   Added the ability to read configuration from both the ReadyCI host and the repository. Simply add a readyci.yml file to the root of your repository and it'll be included in the build. |
 | 0.4   |   Added timing of tasks, output in the console log. Added 'pod repo update' to the Cocoapod task. | 
+| 0.5   |   Added Sonar cube and implementation of the AndroidFetchSigningCredentials step |
 
