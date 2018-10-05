@@ -27,7 +27,7 @@ public class AndroidCreateLocalProperties extends Task {
             sdkPath = buildEnvironment.getProperty(BUILD_PROP_SDK_PATH);
         }
 
-        if(sdkPath.isEmpty()) {
+        if(sdkPath == null || sdkPath.isEmpty()) {
             throw new IllegalArgumentException("Could not locate the sdk path, please define ANDROID_HOME or the androidSdkPath in your configuration");
         }
 
