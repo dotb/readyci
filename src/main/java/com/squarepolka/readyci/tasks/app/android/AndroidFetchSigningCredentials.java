@@ -38,8 +38,13 @@ public class AndroidFetchSigningCredentials extends Task {
         // download an archive of the repository under master
         executeCommand(new String[]{"/usr/bin/git", "archive", "--remote", credentialsRepository, "master", "-o", credentialsTarLocation});
 
-        // copy the properties + jks files into the project path
-        executeCommand(new String[]{"tar", "-xvf", credentialsTarLocation, "-C", buildEnvironment.projectPath, "*.properties", "*.jks"});
+        try {
+            // copy the properties + jks files into the project path
+            executeCommand(new String[]{"tar", "-xvf", credentialsTarLocation, "-C", buildEnvironment.projectPath, "*.properties", "*.jks"});
+        }
+        catch (Exception e) {
+            // do nothing. its not required if we are using the properties and jks files included in the project
+        }
 
         // copy the rest of the credentials to a special folder
         // TODO - exclude the non properties and jks files
