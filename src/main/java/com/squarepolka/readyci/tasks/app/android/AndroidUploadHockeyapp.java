@@ -4,7 +4,10 @@ package com.squarepolka.readyci.tasks.app.android;
 
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;
+import com.squarepolka.readyci.util.Util;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
 
 @Component
 public class AndroidUploadHockeyapp extends Task {
@@ -23,25 +26,28 @@ public class AndroidUploadHockeyapp extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) {
       
-        String scheme = buildEnvironment.getProperty(AndroidSignApp.BUILD_PROP_SCHEME);
         String hockappToken = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_TOKEN);
         String releaseTags = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_TAGS, "");
         String releaseNotes = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_NOTES, "");
-        String appBinaryPath = String.format("%s/app/build/outputs/apk/%s/app-%s.apk", buildEnvironment.projectPath, scheme.toLowerCase(), scheme.toLowerCase());
 
-        // Upload to HockeyApp
-        executeCommand(new String[] {"/usr/bin/curl",
-                "https://rink.hockeyapp.net/api/2/apps/upload",
-                "-H", "X-HockeyAppToken: " + hockappToken,
-                "-F", "ipa=@" + appBinaryPath,
-                "-F", "notes=" + releaseNotes,
-                "-F", "tags=" + releaseTags,
-                "-F", "notes_type=0",               // Textual release notes
-                "-F", "status=2",                   // Make this version available for download
-                "-F", "notify=1",                   // Notify users who can install the app
-                "-F", "strategy=add",               // Add the build if one with the same build number exists
-                "-F", "mandatory=1"                 // Download is mandatory
-        }, buildEnvironment.projectPath);
+        // upload all the apk builds that it finds
+        for (File apk : Util.findAllByExtension(new File(buildEnvironment.projectPath), "apk")) {
+            if(apk.getAbsolutePath().contains("build")) {
+                // Upload to HockeyApp
+                executeCommand(new String[]{"/usr/bin/curl",
+                        "https://rink.hockeyapp.net/api/2/apps/upload",
+                        "-H", "X-HockeyAppToken: " + hockappToken,
+                        "-F", "ipa=@" + apk.getAbsolutePath(),
+                        "-F", "notes=" + releaseNotes,
+                        "-F", "tags=" + releaseTags,
+                        "-F", "notes_type=0",               // Textual release notes
+                        "-F", "status=2",                   // Make this version available for download
+                        "-F", "notify=1",                   // Notify users who can install the app
+                        "-F", "strategy=add",               // Add the build if one with the same build number exists
+                        "-F", "mandatory=1"                 // Download is mandatory
+                }, buildEnvironment.projectPath);
+            }
+        }
     }
 
 }
