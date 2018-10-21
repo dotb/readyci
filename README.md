@@ -22,7 +22,7 @@ Download ReadyCI From https://readyci.org
 Run a once off build by specifying the path to a **configuration file** and an appropriate **pipeline name**. It's only fitting that ReadyCI be able to build itself! Have a look at the example below which builds ReadyCI and copies the artefact to the /tmp/ folder. 
  
 ```bash
-$ java -jar target/readyci.jar readyci_config_example.yml pipeline=readyci
+$ java -jar readyci.jar readyci_config_example.yml pipeline=readyci
 
 Loaded configuration readyci_config_example.yml with 2 pipelines
 ...
