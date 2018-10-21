@@ -1,4 +1,4 @@
-# ReadyCI
+### ReadyCI
 A no-fuss CI/CD tool for iOS and Android apps
     
 ## Why use ReadyCI?
@@ -10,7 +10,7 @@ ReadyCI comes with build scripts so that you spend less time setting up your aut
 * Maven projects
 * Sonarqube
 
-### :Runs as command-line or web-service
+### Runs as command-line or web-service
 You can run ReadyCI on the command-line within another CI environment like Jenkins, or run ReadyCI as a service on it's own and accept web-hook calls from GIT services like Github and Bitbucket.
 
 ### Supports web-hooks
