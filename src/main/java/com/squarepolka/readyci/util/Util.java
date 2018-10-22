@@ -32,7 +32,7 @@ public class Util {
     }
 
     public static Collection<File> findAllByExtension(File dir, String extension) {
-        Set<File> fileTree = new HashSet<>();
+        Set<File> fileTree = new HashSet<File>();
         if (dir == null || dir.listFiles() == null) {
             return fileTree;
         }

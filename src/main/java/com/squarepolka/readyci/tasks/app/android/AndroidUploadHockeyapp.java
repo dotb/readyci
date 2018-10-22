@@ -2,12 +2,16 @@
 package com.squarepolka.readyci.tasks.app.android;
 
 
+import com.squarepolka.readyci.configuration.ReadyCIConfiguration;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;
 import com.squarepolka.readyci.util.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.util.Collection;
 
 @Component
 public class AndroidUploadHockeyapp extends Task {
@@ -17,6 +21,7 @@ public class AndroidUploadHockeyapp extends Task {
     public static final String BUILD_PROP_HOCKEYAPP_TOKEN = "hockappToken";
     public static final String BUILD_PROP_HOCKEYAPP_RELEASE_TAGS = "hockeyappReleaseTags";
     public static final String BUILD_PROP_HOCKEYAPP_RELEASE_NOTES = "hockeyappReleaseNotes";
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReadyCIConfiguration.class);
 
     @Override
     public String taskIdentifier() {
@@ -31,7 +36,9 @@ public class AndroidUploadHockeyapp extends Task {
         String releaseNotes = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_NOTES, "");
 
         // upload all the apk builds that it finds
-        for (File apk : Util.findAllByExtension(new File(buildEnvironment.projectPath), "apk")) {
+        Collection<File> files = Util.findAllByExtension(new File(buildEnvironment.projectPath), ".apk");
+        for (File apk : files) {
+            LOGGER.warn("uploading "+ apk.getAbsolutePath());
             if(apk.getAbsolutePath().contains("build")) {
                 // Upload to HockeyApp
                 executeCommand(new String[]{"/usr/bin/curl",
