@@ -1,5 +1,6 @@
 package com.squarepolka.readyci.tasks;
 
+import com.squarepolka.readyci.configuration.ReadyCIConfiguration;
 import com.squarepolka.readyci.configuration.TaskConfiguration;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.taskrunner.TaskRunner;
@@ -8,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.URLEncoder;
+import java.util.Map;
 
 public abstract class Task {
 
@@ -40,8 +43,10 @@ public abstract class Task {
         try {
             File workingDirectoryFile = new File(workingDirectory);
             ProcessBuilder processBuilder = new ProcessBuilder(command);
+            ReadyCIConfiguration configuration = ReadyCIConfiguration.instance();
             processBuilder.directory(workingDirectoryFile);
             processBuilder.redirectErrorStream(true);
+            configureProxyServer(processBuilder, configuration);
             Process process = processBuilder.start();
             InputStream processInputStream = process.getInputStream();
             processInputStream.mark(5120);
@@ -121,6 +126,35 @@ public abstract class Task {
             // An exception is expected when really long input streams are reset.
             LOGGER.debug(String.format("Ignoring an exception while attempting to reset an input stream %s", e.toString()));
         }
+    }
+
+    protected void configureProxyServer(ProcessBuilder processBuilder, ReadyCIConfiguration configuration) {
+        String proxyConfString = getProxyConfString(configuration);
+        if (!proxyConfString.isEmpty()) {
+            Map<String, String> environment = processBuilder.environment();
+            environment.put("http_proxy", proxyConfString);
+            environment.put("https_proxy", proxyConfString);
+        }
+    }
+
+    protected String getProxyConfString(ReadyCIConfiguration configuration) {
+        String proxyHost = configuration.proxyHost;
+        String proxyPort = configuration.proxyPort;
+        LOGGER.debug(String.format("Configuring proxy %s %s", proxyHost, proxyPort));
+        try {
+            String proxyUsername = URLEncoder.encode(configuration.proxyUsername, "UTF-8");
+            String proxyPassword = URLEncoder.encode(configuration.proxyPassword, "UTF-8");
+
+            if (!proxyHost.isEmpty() && !proxyPort.isEmpty() && !proxyUsername.isEmpty() && !proxyPassword.isEmpty()) {
+                return String.format("http://%s:%s@%s:%s", proxyUsername, proxyPassword, proxyHost, proxyPort);
+            } else if (!proxyHost.isEmpty() && !proxyPort.isEmpty()) {
+                return String.format("http://%s:%s", proxyHost, proxyPort);
+            }
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.error(String.format("Error while configure the proxy server %s %s", proxyHost, e.toString()));
+        }
+        return "";
+
     }
 
     // Methods that must be implemented by subclasses

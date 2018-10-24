@@ -23,6 +23,10 @@ public class ReadyCIConfiguration {
 
     public String instanceName;
     public boolean isServerMode;
+    public String proxyHost;
+    public String proxyPort;
+    public String proxyUsername;
+    public String proxyPassword;
     public List<PipelineConfiguration> pipelines;
     public PipelineConfiguration pipelineToRun;
 
@@ -34,8 +38,12 @@ public class ReadyCIConfiguration {
     }
 
     private ReadyCIConfiguration() {
-        this.instanceName = "Ready CI";
+        this.instanceName = "ReadyCI";
         this.isServerMode = false;
+        this.proxyHost = "";
+        this.proxyPort = "";
+        this.proxyUsername = "";
+        this.proxyPassword = "";
         this.pipelines = new ArrayList<PipelineConfiguration>();
         this.pipelineToRun = null;
     }
@@ -72,7 +80,7 @@ public class ReadyCIConfiguration {
 
     private void handleInputArgument(String argument) {
         if (argument.contains(".yml")) {
-            loadConfiguration(argument);
+            loadConfigurationFile(argument);
         } else if (argument.equalsIgnoreCase(ARG_SERVER)) {
             isServerMode = true;
         } else if (argument.startsWith(ARG_PIPELINE)) {
@@ -100,10 +108,14 @@ public class ReadyCIConfiguration {
         }
     }
 
-    private void loadConfiguration(String fileName) {
+    private void loadConfigurationFile(String fileName) {
             ReadyCIConfiguration newConfiguration = readConfigurationFile(fileName);
             this.instanceName = newConfiguration.instanceName;
             this.isServerMode = newConfiguration.isServerMode;
+            this.proxyHost = newConfiguration.proxyHost;
+            this.proxyPort = newConfiguration.proxyPort;
+            this.proxyUsername = newConfiguration.proxyUsername;
+            this.proxyPassword = newConfiguration.proxyPassword;
             this.pipelines = newConfiguration.pipelines;
             LOGGER.info(String.format("Loaded configuration %s with %s pipelines", fileName, pipelines.size()));
     }
