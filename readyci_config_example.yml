@@ -1,4 +1,11 @@
-instanceName: Ready CI
+# Give your ReadyCI instance a name
+instanceName: ReadyCI
+
+# Optional proxy configuration if you're behind a firewall/proxy
+proxyHost: <proxy.host.domain.com>
+proxyPort: 80
+proxyUsername: <optional username>
+proxyPassword: <optional password>
 
 # You can specify a number of pipelines. Each needs a unique name
 pipelines:
