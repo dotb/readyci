@@ -2,6 +2,7 @@ package com.squarepolka.readyci.taskrunner;
 
 import com.squarepolka.readyci.configuration.PipelineConfiguration;
 import com.squarepolka.readyci.util.PropertyMissingException;
+import com.squarepolka.readyci.util.PropertyTypeException;
 
 import java.util.*;
 
@@ -127,6 +128,28 @@ public class BuildEnvironment {
     }
 
     /**
+     * Add a boolean switch value to this build environment
+     * @param switchName
+     * @param switchValue
+     */
+    public void addSwitch(String switchName, Boolean switchValue) {
+        buildParameters.put(switchName, switchValue);
+    }
+
+    /**
+     * Return a configured boolean value
+     * @param switchName
+     * @return boolean value of the switch
+     */
+    public boolean getSwitch(String switchName) {
+        Boolean switchValue = (Boolean) buildParameters.get(switchName);
+        if (null == switchValue) {
+            throw new PropertyMissingException(switchName);
+        }
+        return switchValue.booleanValue();
+    }
+
+    /**
      * This method copies the pipeline build parameters loaded from the yml file into the
      * buildParameters object. It needs to do type checking and store strings within List<String>
      * so that we can support both String and List<String> values.
@@ -143,6 +166,11 @@ public class BuildEnvironment {
             } else if (objectValue instanceof List) {
                 List<String> listValue = (List<String>) objectValue;
                 addProperty(propertyName, listValue);
+            } else if (objectValue instanceof Boolean) {
+                Boolean booleanValue = (Boolean) objectValue;
+                addSwitch(propertyName, booleanValue);
+            } else {
+                throw new PropertyTypeException(propertyName);
             }
         }
     }
