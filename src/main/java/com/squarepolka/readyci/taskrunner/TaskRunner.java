@@ -1,7 +1,7 @@
 package com.squarepolka.readyci.taskrunner;
 
 import com.squarepolka.readyci.tasks.Task;
-import com.squarepolka.readyci.tasks.TaskExecuteException;
+import com.squarepolka.readyci.tasks.readyci.TaskExecuteException;
 import com.squarepolka.readyci.util.time.TaskTimer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

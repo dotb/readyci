@@ -1,4 +1,4 @@
-package com.squarepolka.readyci.tasks.realci;
+package com.squarepolka.readyci.tasks.readyci;
 
 import com.squarepolka.readyci.configuration.LoadConfigurationException;
 import com.squarepolka.readyci.configuration.PipelineConfiguration;
