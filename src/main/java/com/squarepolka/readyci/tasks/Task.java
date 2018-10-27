@@ -14,21 +14,21 @@ public abstract class Task {
     private static final Logger LOGGER = LoggerFactory.getLogger(Task.class);
     public TaskRunner taskRunner;
     @Autowired
-    public TaskCommandHandler taskCommandHandler;
+    private TaskCommandHandler taskCommandHandler;
 
-    public InputStream executeCommand(String command) {
+    protected InputStream executeCommand(String command) {
         return executeCommand(new String[] {command});
     }
 
-    public InputStream executeCommand(String command, String workingDirectory) {
+    protected InputStream executeCommand(String command, String workingDirectory) {
         return executeCommand(new String[] {command}, workingDirectory);
     }
 
-    public InputStream executeCommand(String[] command) {
+    protected InputStream executeCommand(String[] command) {
         return executeCommand(command, "/tmp/");
     }
 
-    public InputStream executeCommand(String[] command, String workingDirectory) {
+    protected InputStream executeCommand(String[] command, String workingDirectory) {
         return taskCommandHandler.executeCommand(command, workingDirectory);
     }
 
