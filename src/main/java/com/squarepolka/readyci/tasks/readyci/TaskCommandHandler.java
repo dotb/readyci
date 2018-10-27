@@ -4,26 +4,16 @@ import com.squarepolka.readyci.configuration.ReadyCIConfiguration;
 import com.squarepolka.readyci.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.Map;
 
+@Component
 public class TaskCommandHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskCommandHandler.class);
-
-    public InputStream executeCommand(String command) {
-        return executeCommand(new String[] {command});
-    }
-
-    public InputStream executeCommand(String command, String workingDirectory) {
-        return executeCommand(new String[] {command}, workingDirectory);
-    }
-
-    public InputStream executeCommand(String[] command) {
-        return executeCommand(command, "/tmp/");
-    }
 
     public InputStream executeCommand(String[] command, String workingDirectory) {
         LOGGER.debug(String.format("Executing command: %s", arrayToString(command)));
@@ -42,7 +32,7 @@ public class TaskCommandHandler {
             resetInputStream(processInputStream);
             return processInputStream;
         } catch (Exception e) {
-            TaskExecuteException taskExecuteException = new TaskExecuteException(String.format("Exception while executing task %s: %s. Tried to run %s", taskIdentifier(), e.toString(), arrayToString(command)));
+            TaskExecuteException taskExecuteException = new TaskExecuteException(String.format("Exception %s. Tried to run command %s", e.toString(), arrayToString(command)));
             taskExecuteException.setStackTrace(e.getStackTrace());
             throw taskExecuteException;
         }
