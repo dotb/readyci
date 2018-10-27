@@ -13,7 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class BuildFolderCleanTest {
 
     @InjectMocks
-    private BuildFolderClean subject = new BuildFolderClean();
+    private BuildFolderClean subject;
     @Mock
     private BuildEnvironment buildEnvironment;
     @Mock

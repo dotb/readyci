@@ -88,4 +88,23 @@ public class Util {
             inputStream.read();
         }
     }
+
+    /**
+     * Convert a string array to a flat string.
+     * @param stringArray
+     * @return a flat string.
+     */
+    public static String arrayToString(String[] stringArray) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < stringArray.length; i++) {
+            String string = stringArray[i];
+            stringBuilder.append(string);
+            if (i + 1 < stringArray.length) {
+                stringBuilder.append(" ");
+            }
+        }
+        return stringBuilder.toString();
+    }
+
 }
