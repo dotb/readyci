@@ -21,14 +21,14 @@ public class ReadyCIConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReadyCIConfiguration.class);
     private static ReadyCIConfiguration instance;
 
-    public String instanceName;
-    public boolean isServerMode;
-    public String proxyHost;
-    public String proxyPort;
-    public String proxyUsername;
-    public String proxyPassword;
-    public List<PipelineConfiguration> pipelines;
-    public PipelineConfiguration pipelineToRun;
+    private boolean isServerMode;
+    private String instanceName;
+    private String proxyHost;
+    private String proxyPort;
+    private String proxyUsername;
+    private String proxyPassword;
+    private List<PipelineConfiguration> pipelines;
+    private PipelineConfiguration pipelineToRun;
 
     public static ReadyCIConfiguration instance() {
         if (null == instance) {
@@ -145,4 +145,69 @@ public class ReadyCIConfiguration {
         }
     }
 
+    // Getters
+    public static ReadyCIConfiguration getInstance() {
+        return instance;
+    }
+
+    public boolean isServerMode() {
+        return isServerMode;
+    }
+
+    public String getInstanceName() {
+        return instanceName;
+    }
+
+    public String getProxyHost() {
+        return proxyHost;
+    }
+
+    public String getProxyPort() {
+        return proxyPort;
+    }
+
+    public String getProxyUsername() {
+        return proxyUsername;
+    }
+
+    public String getProxyPassword() {
+        return proxyPassword;
+    }
+
+    public PipelineConfiguration getPipelineToRun() {
+        return pipelineToRun;
+    }
+
+    // Setters
+    public static void setInstance(ReadyCIConfiguration instance) {
+        ReadyCIConfiguration.instance = instance;
+    }
+
+    public void setServerMode(boolean serverMode) {
+        isServerMode = serverMode;
+    }
+
+    public void setInstanceName(String instanceName) {
+        this.instanceName = instanceName;
+    }
+
+    public void setProxyHost(String proxyHost) {
+        this.proxyHost = proxyHost;
+    }
+
+    public void setProxyPort(String proxyPort) {
+        this.proxyPort = proxyPort;
+    }
+
+    public void setProxyUsername(String proxyUsername) {
+        this.proxyUsername = proxyUsername;
+    }
+
+    public void setProxyPassword(String proxyPassword) {
+        this.proxyPassword = proxyPassword;
+    }
+
+    public void setPipelines(List<PipelineConfiguration> pipelines) {
+        this.pipelines = pipelines;
+    }
 }

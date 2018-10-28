@@ -24,11 +24,11 @@ public class TaskProxyConfiguration {
     }
 
     private String getProxyConfString(ReadyCIConfiguration configuration) {
-        String proxyHost = configuration.proxyHost;
-        String proxyPort = configuration.proxyPort;
+        String proxyHost = configuration.getProxyHost();
+        String proxyPort = configuration.getProxyPort();
         try {
-            String proxyUsername = URLEncoder.encode(configuration.proxyUsername, "UTF-8");
-            String proxyPassword = URLEncoder.encode(configuration.proxyPassword, "UTF-8");
+            String proxyUsername = URLEncoder.encode(configuration.getProxyUsername(), "UTF-8");
+            String proxyPassword = URLEncoder.encode(configuration.getProxyPassword(), "UTF-8");
 
             if (!proxyHost.isEmpty() && !proxyPort.isEmpty() && !proxyUsername.isEmpty() && !proxyPassword.isEmpty()) {
                 LOGGER.debug(String.format("Configuring proxy %s %s with username and password", proxyHost, proxyPort));

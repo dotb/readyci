@@ -76,7 +76,7 @@ public class WebHookPresenter {
 
     private boolean validateGitCommit(String repository, String branchName, String gitAuthor, String commitMessage) {
         if (Util.valueExists(repository) && Util.valueExists(branchName) && Util.valueExists(gitAuthor) && Util.valueExists(commitMessage)) {
-            String instanceName = ReadyCIConfiguration.instance().instanceName;
+            String instanceName = ReadyCIConfiguration.instance().getInstanceName();
             if (commitMessage.toLowerCase().contains(instanceName.toLowerCase())) {
                 LOGGER.warn(String.format("Hmmm, I recognise this GIT commit on %s for branch %s by %s, " +
                         "because my name is in the commit message. I'm going to ignore this " +
