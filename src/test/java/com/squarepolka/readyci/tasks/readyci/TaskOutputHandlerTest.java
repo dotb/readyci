@@ -8,8 +8,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
 import org.slf4j.Logger;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -26,6 +29,9 @@ public class TaskOutputHandlerTest {
 
     @Mock
     Logger taskOutputHandlerLogger;
+
+    @Mock
+    TaskConsolePrinter taskConsolePrinter;
 
     @Mock
     Util util;
@@ -68,6 +74,14 @@ public class TaskOutputHandlerTest {
         try {
             Mockito.verify(inputStream, Mockito.times(1)).reset();
         } catch (IOException e) {}
+    }
+
+    @Test
+    public void testPrintProcessOutput() {
+        String testString = "Hello World\n Hello ReadyCI"; // Two lines of console output
+        InputStream fakeInputStream = new ByteArrayInputStream(testString.getBytes(StandardCharsets.UTF_8));
+        subject.printProcessOutput(fakeInputStream);
+        Mockito.verify(taskConsolePrinter, Mockito.times(2)).consolePrintln(Mockito.anyString());
     }
 
 }

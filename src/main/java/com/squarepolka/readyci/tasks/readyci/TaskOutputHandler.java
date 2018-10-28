@@ -15,7 +15,8 @@ public class TaskOutputHandler {
 
     @Autowired
     Logger taskOutputHandlerLogger;
-
+    @Autowired
+    TaskConsolePrinter taskConsolePrinter;
     @Autowired
     Util util;
 
@@ -55,7 +56,7 @@ public class TaskOutputHandler {
             String processOutputLine;
             while (processOutputStream.ready() &&
                     (processOutputLine = processOutputStream.readLine()) != null) {
-                System.out.println(processOutputLine);
+                taskConsolePrinter.consolePrintln(processOutputLine);
             }
         } catch (IOException e) {
             taskOutputHandlerLogger.error(String.format("Error while reading and printing process output %s", e.toString()));
