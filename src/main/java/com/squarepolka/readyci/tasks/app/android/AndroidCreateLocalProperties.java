@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 
 @Component
 public class AndroidCreateLocalProperties extends Task {
@@ -31,17 +32,26 @@ public class AndroidCreateLocalProperties extends Task {
             throw new IllegalArgumentException("Could not locate the sdk path, please define ANDROID_HOME or the androidSdkPath in your configuration");
         }
 
-        //create file
-        File localPropFile = getLocalPropertiesFile(buildEnvironment);
+        FileWriter localPropertyFileWriter = null;
+        IOException thrownException = null;
+        try {
+            File localPropertyFile = getLocalPropertiesFile(buildEnvironment);
+            localPropertyFileWriter = new FileWriter(localPropertyFile);
+            String out = String.format("sdk.dir=%s", sdkPath);
+            localPropertyFileWriter.write(out);
+            localPropertyFileWriter.flush();
+        } catch (IOException e) {
+            thrownException = e;
+        } finally {
+            if (null != localPropertyFileWriter) {
+                localPropertyFileWriter.close();
+            }
+        }
 
-        // creates a FileWriter Object
-        FileWriter writer = new FileWriter(localPropFile);
-
-        String out = String.format("sdk.dir=%s", sdkPath);
-        writer.write(out);
-        writer.flush();
-        writer.close();
-
+        // Throw the exception if one was raised.
+        if (null != thrownException) {
+            throw thrownException;
+        }
     }
 
     private File getLocalPropertiesFile(BuildEnvironment buildEnvironment) {
