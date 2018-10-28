@@ -8,22 +8,28 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TaskProxyConfigurationTest {
 
     @Mock
-    ReadyCIConfiguration readyCIConfiguration;
+    private ReadyCIConfiguration readyCIConfiguration;
 
     @InjectMocks
-    TaskProxyConfiguration subject;
+    private TaskProxyConfiguration subject;
 
-    ProcessBuilder processBuilder;
+    private ProcessBuilder processBuilder;
 
     @Before
     public void Setup() {
         processBuilder = new ProcessBuilder();
+        Map environment = processBuilder.environment();
+        // Ensure we don't pick up existing environment configuration by clearing out proxy settings.
+        environment.remove("http_proxy");
+        environment.remove("https_proxy");
     }
 
     @Test
