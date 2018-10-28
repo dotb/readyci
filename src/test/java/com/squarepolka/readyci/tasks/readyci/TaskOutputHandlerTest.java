@@ -1,7 +1,6 @@
 package com.squarepolka.readyci.tasks.readyci;
 
 import com.squarepolka.readyci.util.Util;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -30,14 +29,6 @@ public class TaskOutputHandlerTest {
 
     @Mock
     Util util;
-
-    @Before
-    public void Setup() {
-        try {
-            Mockito.when(inputStream.read()).thenReturn(65);
-            Mockito.when(inputStream.available()).thenReturn(0);
-        } catch (IOException e) { }
-    }
 
     @Test
     public void handleProcessOutputChecksProcessIsAlive() {
@@ -69,6 +60,14 @@ public class TaskOutputHandlerTest {
             subject.handleProcessOutput(process);
             Mockito.verify(util, Mockito.times(1)).skipHalfOfStream(Mockito.any(InputStream.class));
         } catch (IOException e) { }
+    }
+
+    @Test
+    public void testResetInputStream() {
+        subject.resetInputStream(inputStream);
+        try {
+            Mockito.verify(inputStream, Mockito.times(1)).reset();
+        } catch (IOException e) {}
     }
 
 }
