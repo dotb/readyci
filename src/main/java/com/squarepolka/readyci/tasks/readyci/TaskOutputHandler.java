@@ -2,7 +2,7 @@ package com.squarepolka.readyci.tasks.readyci;
 
 import com.squarepolka.readyci.util.Util;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -13,8 +13,11 @@ import java.io.InputStreamReader;
 @Component
 public class TaskOutputHandler {
 
+    @Autowired
+    Logger taskOutputHandlerLogger;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TaskOutputHandler.class);
+    @Autowired
+    Util util;
 
     /**
      * Handle the process output stream in one of two ways
@@ -29,10 +32,10 @@ public class TaskOutputHandler {
     public void handleProcessOutput(Process process) throws IOException {
         while (process.isAlive()) {
             InputStream processInputStream = process.getInputStream();
-            if (LOGGER.isDebugEnabled()) {
+            if (taskOutputHandlerLogger.isDebugEnabled()) {
                 printProcessOutput(processInputStream);
             } else {
-                Util.skipHalfOfStream(processInputStream);
+                util.skipHalfOfStream(processInputStream);
             }
         }
     }
@@ -42,7 +45,7 @@ public class TaskOutputHandler {
             inputStream.reset();
         } catch(IOException e) {
             // An exception is expected when really long input streams are reset.
-            LOGGER.debug(String.format("Ignoring an exception while attempting to reset an input stream %s", e.toString()));
+            taskOutputHandlerLogger.debug(String.format("Ignoring an exception while attempting to reset an input stream %s", e.toString()));
         }
     }
 
@@ -55,11 +58,11 @@ public class TaskOutputHandler {
                 System.out.println(processOutputLine);
             }
         } catch (IOException e) {
-            LOGGER.error(String.format("Error while reading and printing process output %s", e.toString()));
+            taskOutputHandlerLogger.error(String.format("Error while reading and printing process output %s", e.toString()));
         }
     }
 
-    public BufferedReader getProcessOutputStream(InputStream processInputStream) {
+    private BufferedReader getProcessOutputStream(InputStream processInputStream) {
         InputStreamReader processStreamReader = new InputStreamReader(processInputStream);
         return new BufferedReader(processStreamReader);
     }

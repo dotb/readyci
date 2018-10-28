@@ -1,10 +1,13 @@
 package com.squarepolka.readyci.util;
 
+import org.springframework.stereotype.Component;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+@Component
 public class Util {
 
     public static String getMappedValueAtPath(Map map, String path) {
@@ -81,7 +84,7 @@ public class Util {
      *
      * @param inputStream
      */
-    public static void skipHalfOfStream(InputStream inputStream) throws IOException {
+    public void skipHalfOfStream(InputStream inputStream) throws IOException {
         int availableBytes = inputStream.available();
         long bytesToSkip = availableBytes / 2;
         for (int i = 0; i < bytesToSkip; i++) {
