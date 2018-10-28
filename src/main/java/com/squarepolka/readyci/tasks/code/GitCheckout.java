@@ -45,7 +45,6 @@ public class GitCheckout extends Task {
             String branchName = getCurrentBranchName(buildEnvironment);
             buildEnvironment.addProperty(BUILD_PROP_GIT_BRANCH, branchName);
         }
-
     }
 
     protected String getCurrentBranchName(BuildEnvironment buildEnvironment) {
