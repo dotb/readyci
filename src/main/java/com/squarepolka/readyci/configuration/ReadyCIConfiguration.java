@@ -21,14 +21,14 @@ public class ReadyCIConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReadyCIConfiguration.class);
     private static ReadyCIConfiguration instance;
 
-    public String instanceName;
-    public boolean isServerMode;
-    public String proxyHost;
-    public String proxyPort;
-    public String proxyUsername;
-    public String proxyPassword;
-    public List<PipelineConfiguration> pipelines;
-    public PipelineConfiguration pipelineToRun;
+    private boolean isServerMode;
+    private String instanceName;
+    private String proxyHost;
+    private String proxyPort;
+    private String proxyUsername;
+    private String proxyPassword;
+    private List<PipelineConfiguration> pipelines;
+    private PipelineConfiguration pipelineToRun;
 
     public static ReadyCIConfiguration instance() {
         if (null == instance) {
@@ -44,7 +44,7 @@ public class ReadyCIConfiguration {
         this.proxyPort = "";
         this.proxyUsername = "";
         this.proxyPassword = "";
-        this.pipelines = new ArrayList<PipelineConfiguration>();
+        this.pipelines = new ArrayList<>();
         this.pipelineToRun = null;
     }
 
@@ -63,7 +63,7 @@ public class ReadyCIConfiguration {
     }
 
     public List<PipelineConfiguration> getPipelines(String repositoryName, String branch) {
-        List<PipelineConfiguration> matchedPipelines = new ArrayList<PipelineConfiguration>();
+        List<PipelineConfiguration> matchedPipelines = new ArrayList<>();
         for (PipelineConfiguration pipeline : pipelines) {
             if (pipeline.matchesRepositoryName(repositoryName, branch)) {
                 matchedPipelines.add(pipeline);
@@ -99,8 +99,7 @@ public class ReadyCIConfiguration {
         YAMLFactory yamlFactory = new YAMLFactory();
         ObjectMapper mapper = new ObjectMapper(yamlFactory);
         try {
-            ReadyCIConfiguration parsedConfiguration = mapper.readValue(configurationFile, ReadyCIConfiguration.class);
-            return parsedConfiguration;
+            return mapper.readValue(configurationFile, ReadyCIConfiguration.class);
         } catch (Exception e) {
             LoadConfigurationException configurationException = new LoadConfigurationException(String.format("Could not load configuration from %s: %s", configurationFile.getAbsolutePath(), e.toString()));
             configurationException.setStackTrace(e.getStackTrace());
@@ -117,7 +116,7 @@ public class ReadyCIConfiguration {
             this.proxyUsername = newConfiguration.proxyUsername;
             this.proxyPassword = newConfiguration.proxyPassword;
             this.pipelines = newConfiguration.pipelines;
-            LOGGER.info(String.format("Loaded configuration %s with %s pipelines", fileName, pipelines.size()));
+            LOGGER.info("Loaded configuration {} with {} pipelines", fileName, pipelines.size());
     }
 
     private void customisePipelineToRun(String pipelineNameArgument) {
@@ -145,4 +144,69 @@ public class ReadyCIConfiguration {
         }
     }
 
+    // Getters
+    public static ReadyCIConfiguration getInstance() {
+        return instance;
+    }
+
+    public boolean isServerMode() {
+        return isServerMode;
+    }
+
+    public String getInstanceName() {
+        return instanceName;
+    }
+
+    public String getProxyHost() {
+        return proxyHost;
+    }
+
+    public String getProxyPort() {
+        return proxyPort;
+    }
+
+    public String getProxyUsername() {
+        return proxyUsername;
+    }
+
+    public String getProxyPassword() {
+        return proxyPassword;
+    }
+
+    public PipelineConfiguration getPipelineToRun() {
+        return pipelineToRun;
+    }
+
+    // Setters
+    public static void setInstance(ReadyCIConfiguration instance) {
+        ReadyCIConfiguration.instance = instance;
+    }
+
+    public void setServerMode(boolean serverMode) {
+        isServerMode = serverMode;
+    }
+
+    public void setInstanceName(String instanceName) {
+        this.instanceName = instanceName;
+    }
+
+    public void setProxyHost(String proxyHost) {
+        this.proxyHost = proxyHost;
+    }
+
+    public void setProxyPort(String proxyPort) {
+        this.proxyPort = proxyPort;
+    }
+
+    public void setProxyUsername(String proxyUsername) {
+        this.proxyUsername = proxyUsername;
+    }
+
+    public void setProxyPassword(String proxyPassword) {
+        this.proxyPassword = proxyPassword;
+    }
+
+    public void setPipelines(List<PipelineConfiguration> pipelines) {
+        this.pipelines = pipelines;
+    }
 }

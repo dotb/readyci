@@ -13,8 +13,8 @@ import static org.junit.Assert.assertEquals;
 
 public class BuildEnvironmentTest {
 
-    public BuildEnvironment subject;
-    public PipelineConfiguration pipelineConfiguration;
+    private BuildEnvironment subject;
+    private PipelineConfiguration pipelineConfiguration;
     Map<String, Object> parameters;
 
     @Before

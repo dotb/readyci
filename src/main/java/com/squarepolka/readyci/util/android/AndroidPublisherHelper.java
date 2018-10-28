@@ -34,8 +34,11 @@ import java.util.Collections;
 
 import javax.annotation.Nullable;
 
+import com.squarepolka.readyci.ReadyCI;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Helper class to initialize the publisher APIs client library.
@@ -48,7 +51,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class AndroidPublisherHelper {
 
-    private static final Log log = LogFactory.getLog(AndroidPublisherHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReadyCI.class);
 
     public static final String MIME_TYPE_APK = "application/vnd.android.package-archive";
 
@@ -62,7 +65,7 @@ public class AndroidPublisherHelper {
 
     private static Credential authorizeWithServiceAccount(String serviceAccountEmail, String serviceAgentKeyP12)
             throws GeneralSecurityException, IOException {
-        log.info(String.format("Authorizing using Service Account: %s", serviceAccountEmail));
+        LOGGER.info("Authorizing using Service Account: {}", serviceAccountEmail);
 
         // Build service account credential.
         GoogleCredential credential = new GoogleCredential.Builder()

@@ -1,10 +1,13 @@
 package com.squarepolka.readyci.util;
 
+import org.springframework.stereotype.Component;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+@Component
 public class Util {
 
     public static String getMappedValueAtPath(Map map, String path) {
@@ -45,7 +48,7 @@ public class Util {
 
     public static String getFileExtension(File file) {
         String name = file.getName();
-        int lastIndexOf = name.lastIndexOf(".");
+        int lastIndexOf = name.lastIndexOf('.');
         if (lastIndexOf == -1) {
             return ""; // empty extension
         }
@@ -81,11 +84,30 @@ public class Util {
      *
      * @param inputStream
      */
-    public static void skipHalfOfStream(InputStream inputStream) throws IOException {
+    public void skipHalfOfStream(InputStream inputStream) throws IOException {
         int availableBytes = inputStream.available();
         long bytesToSkip = availableBytes / 2;
         for (int i = 0; i < bytesToSkip; i++) {
             inputStream.read();
         }
     }
+
+    /**
+     * Convert a string array to a flat string.
+     * @param stringArray
+     * @return a flat string.
+     */
+    public static String arrayToString(String[] stringArray) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < stringArray.length; i++) {
+            String string = stringArray[i];
+            stringBuilder.append(string);
+            if (i + 1 < stringArray.length) {
+                stringBuilder.append(" ");
+            }
+        }
+        return stringBuilder.toString();
+    }
+
 }

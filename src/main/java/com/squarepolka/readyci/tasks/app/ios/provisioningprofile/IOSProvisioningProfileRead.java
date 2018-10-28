@@ -36,10 +36,10 @@ public class IOSProvisioningProfileRead extends Task {
             readProfile(relativeProfilePath, buildEnvironment);
         }
 
-        LOGGER.info(String.format("BUILDING\tiOS app\t%s for %s in team %s",
+        LOGGER.info("BUILDING\tiOS app\t{} for {} in team {}",
                 buildEnvironment.getProperty(BUILD_PROP_APP_ID_NAME),
                 buildEnvironment.getProperty(BUILD_PROP_ORGANISATION_NAME),
-                buildEnvironment.getProperty(BUILD_PROP_DEV_TEAM)));
+                buildEnvironment.getProperty(BUILD_PROP_DEV_TEAM));
     }
 
     public void readProfile(String relativeProfilePath, BuildEnvironment buildEnvironment) throws Exception {
@@ -49,7 +49,7 @@ public class IOSProvisioningProfileRead extends Task {
     }
 
     private InputStream decryptProvisioningFile(String profilePath) {
-        LOGGER.debug(String.format("Parsing the provisioning profile %s", profilePath));
+        LOGGER.debug("Parsing the provisioning profile {}", profilePath);
         return executeCommand(new String[] {"/usr/bin/security", "cms", "-D", "-i", profilePath});
     }
 
