@@ -78,7 +78,7 @@ public class AndroidUploadStore extends Task {
             AndroidPublisher.Edits.Insert editRequest = edits.insert(packageName, null);
             AppEdit edit = editRequest.execute();
             final String editId = edit.getId();
-            LOGGER.info(String.format("AndroidUploadStore: Created edit with id: %s", editId));
+            LOGGER.info("AndroidUploadStore: Created edit with id: {}", editId);
 
             final AbstractInputStreamContent apkFile = new FileContent(AndroidPublisherHelper.MIME_TYPE_APK, new File(appBinaryPath));
             AndroidPublisher.Edits.Apks.Upload uploadRequest = edits
@@ -86,7 +86,7 @@ public class AndroidUploadStore extends Task {
                     .upload(packageName, editId, apkFile);
 
             Apk apk = uploadRequest.execute();
-            LOGGER.info(String.format("AndroidUploadStore: Version code %d has been uploaded", apk.getVersionCode()));
+            LOGGER.info("AndroidUploadStore: Version code {} has been uploaded", apk.getVersionCode());
 
 
             // Assign apk to alpha track.
@@ -108,13 +108,13 @@ public class AndroidUploadStore extends Task {
                                                                     .setLanguage("en-AU")
                                                                     .setText("This is an alpha release"))))));
             Track updatedTrack = updateTrackRequest.execute();
-            LOGGER.info(String.format("AndroidUploadStore: Track %s has been updated.", updatedTrack.getTrack()));
+            LOGGER.info("AndroidUploadStore: Track {} has been updated.", updatedTrack.getTrack());
 
 
             // Commit changes for edit.
             AndroidPublisher.Edits.Commit commitRequest = edits.commit(packageName, editId);
             AppEdit appEdit = commitRequest.execute();
-            LOGGER.info(String.format("AndroidUploadStore: App edit with id %s has been committed", appEdit.getId()));
+            LOGGER.info("AndroidUploadStore: App edit with id {} has been committed", appEdit.getId());
 
         } catch (Exception ex) {
             LOGGER.error("AndroidUploadStore: Exception was thrown while uploading apk to alpha track", ex);

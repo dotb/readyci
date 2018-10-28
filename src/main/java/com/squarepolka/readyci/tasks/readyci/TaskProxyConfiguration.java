@@ -31,14 +31,14 @@ public class TaskProxyConfiguration {
             String proxyPassword = URLEncoder.encode(configuration.getProxyPassword(), "UTF-8");
 
             if (!proxyHost.isEmpty() && !proxyPort.isEmpty() && !proxyUsername.isEmpty() && !proxyPassword.isEmpty()) {
-                LOGGER.debug(String.format("Configuring proxy %s %s with username and password", proxyHost, proxyPort));
+                LOGGER.debug("Configuring proxy {} {} with username and password", proxyHost, proxyPort);
                 return String.format("http://%s:%s@%s:%s", proxyUsername, proxyPassword, proxyHost, proxyPort);
             } else if (!proxyHost.isEmpty() && !proxyPort.isEmpty()) {
-                LOGGER.debug(String.format("Configuring proxy %s %s", proxyHost, proxyPort));
+                LOGGER.debug("Configuring proxy {} {}", proxyHost, proxyPort);
                 return String.format("http://%s:%s", proxyHost, proxyPort);
             }
         } catch (UnsupportedEncodingException e) {
-            LOGGER.error(String.format("Error while configure the proxy server %s %s", proxyHost, e.toString()));
+            LOGGER.error("Error while configure the proxy server {} {}", proxyHost, e.toString());
         }
         LOGGER.debug("Not configuring proxy");
         return "";

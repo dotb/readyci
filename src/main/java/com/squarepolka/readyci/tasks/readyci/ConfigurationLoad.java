@@ -28,11 +28,11 @@ public class ConfigurationLoad extends Task {
     public void performTask(BuildEnvironment buildEnvironment) {
         File repoConfigurationFile = getRepoConfigurationFile(buildEnvironment);
         if (repoConfigurationFile.exists()) {
-            LOGGER.debug(String.format("Loading local repository configuration from %s", TASK_CONFIGURATION_FILE_NAME));
+            LOGGER.debug("Loading local repository configuration from {}", TASK_CONFIGURATION_FILE_NAME);
             ReadyCIConfiguration localConfiguration = ReadyCIConfiguration.readConfigurationFile(repoConfigurationFile);
             mergeLocalConfigWithBuildEnvironment(localConfiguration, buildEnvironment);
         } else {
-            LOGGER.debug(String.format("Local repository configuration %s not found. Repository configuration is not being used.", TASK_CONFIGURATION_FILE_NAME));
+            LOGGER.debug("Local repository configuration {} not found. Repository configuration is not being used.", TASK_CONFIGURATION_FILE_NAME);
         }
     }
     
@@ -50,10 +50,10 @@ public class ConfigurationLoad extends Task {
             buildEnvironment.setBuildParameters(repoPipelineConf);
 
             List<Task> configuredTasks = taskRunner.taskRunnerFactory.createTaskListFromConfig(repoPipelineConf.tasks);
-            LOGGER.debug(String.format("Loaded %s tasks from the repository configuration %s", configuredTasks.size(), TASK_CONFIGURATION_FILE_NAME));
+            LOGGER.debug("Loaded {} tasks from the repository configuration {}", configuredTasks.size(), TASK_CONFIGURATION_FILE_NAME);
             taskRunner.setConfiguredTasks(configuredTasks);
         } catch (LoadConfigurationException e) {
-            LOGGER.debug(String.format("We found a local readyci configuration file in the project folder but it didn't contain a definition for the %s pipeline", pipelineName));
+            LOGGER.debug("We found a local readyci configuration file in the project folder but it didn't contain a definition for the {} pipeline", pipelineName);
         }
     }
 

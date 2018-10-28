@@ -19,7 +19,7 @@ public class TaskCommandHandler {
     private TaskOutputHandler taskOutputHandler;
 
     public InputStream executeCommand(String[] command, String workingDirectory) {
-        LOGGER.debug(String.format("Executing command: %s", Util.arrayToString(command)));
+        LOGGER.debug("Executing command: {}", Util.arrayToString(command));
         try {
             File workingDirectoryFile = new File(workingDirectory);
             ProcessBuilder processBuilder = new ProcessBuilder(command);

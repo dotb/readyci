@@ -46,7 +46,7 @@ public class TaskOutputHandler {
             inputStream.reset();
         } catch(IOException e) {
             // An exception is expected when really long input streams are reset.
-            taskOutputHandlerLogger.debug(String.format("Ignoring an exception while attempting to reset an input stream %s", e.toString()));
+            taskOutputHandlerLogger.debug("Ignoring an exception while attempting to reset an input stream {}", e.toString());
         }
     }
 
@@ -59,7 +59,7 @@ public class TaskOutputHandler {
                 taskConsolePrinter.consolePrintln(processOutputLine);
             }
         } catch (IOException e) {
-            taskOutputHandlerLogger.error(String.format("Error while reading and printing process output %s", e.toString()));
+            taskOutputHandlerLogger.error("Error while reading and printing process output {}", e.toString());
         }
     }
 

@@ -117,7 +117,7 @@ public class ReadyCIConfiguration {
             this.proxyUsername = newConfiguration.proxyUsername;
             this.proxyPassword = newConfiguration.proxyPassword;
             this.pipelines = newConfiguration.pipelines;
-            LOGGER.info(String.format("Loaded configuration %s with %s pipelines", fileName, pipelines.size()));
+            LOGGER.info("Loaded configuration {} with {} pipelines", fileName, pipelines.size());
     }
 
     private void customisePipelineToRun(String pipelineNameArgument) {

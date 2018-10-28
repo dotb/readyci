@@ -30,11 +30,11 @@ public class IOSDependenciesPods extends Task {
         try {
             boolean shouldUpdateRepo = buildEnvironment.getSwitch(BUILD_PROP_POD_REPO_UPDATE);
             if (shouldUpdateRepo) {
-                LOGGER.debug(String.format("The %s parameter was specified. Updating the Cocoapods repo", BUILD_PROP_POD_REPO_UPDATE));
+                LOGGER.debug("The {} parameter was specified. Updating the Cocoapods repo", BUILD_PROP_POD_REPO_UPDATE);
                 executeCommand(new String[]{"pod", "repo", "update"}, buildEnvironment.projectPath);
             }
         } catch (PropertyMissingException e) {
-            LOGGER.debug(String.format("The %s parameter was not specified. Not updating the Cocoapods repo", BUILD_PROP_POD_REPO_UPDATE));
+            LOGGER.debug("The {} parameter was not specified. Not updating the Cocoapods repo", BUILD_PROP_POD_REPO_UPDATE);
         }
     }
 
