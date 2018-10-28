@@ -10,9 +10,8 @@ import org.springframework.context.annotation.Configuration;
 public class BeanConfiguration {
 
     @Bean
-    public Logger TaskOutputHandlerLogger() {
-        Logger taskOutputHandlerLogger = LoggerFactory.getLogger(TaskOutputHandler.class);
-        return taskOutputHandlerLogger;
+    public Logger taskOutputHandlerLogger() {
+        return LoggerFactory.getLogger(TaskOutputHandler.class);
     }
 
 }

@@ -32,20 +32,15 @@ public class AndroidCreateLocalProperties extends Task {
             throw new IllegalArgumentException("Could not locate the sdk path, please define ANDROID_HOME or the androidSdkPath in your configuration");
         }
 
-        FileWriter localPropertyFileWriter = null;
+        File localPropertyFile = getLocalPropertiesFile(buildEnvironment);
         IOException thrownException = null;
-        try {
-            File localPropertyFile = getLocalPropertiesFile(buildEnvironment);
-            localPropertyFileWriter = new FileWriter(localPropertyFile);
+        try (FileWriter localPropertyFileWriter = new FileWriter(localPropertyFile)) {
+
             String out = String.format("sdk.dir=%s", sdkPath);
             localPropertyFileWriter.write(out);
             localPropertyFileWriter.flush();
         } catch (IOException e) {
             thrownException = e;
-        } finally {
-            if (null != localPropertyFileWriter) {
-                localPropertyFileWriter.close();
-            }
         }
 
         // Throw the exception if one was raised.

@@ -16,6 +16,8 @@ import static org.junit.Assert.assertEquals;
 @RunWith(MockitoJUnitRunner.class)
 public class TaskProxyConfigurationTest {
 
+    public static final String ENV_HTTP_PROXY = "http_proxy";
+    public static final String ENV_HTTPS_PROXY = "https_proxy";
     @Mock
     private ReadyCIConfiguration readyCIConfiguration;
 
@@ -25,38 +27,38 @@ public class TaskProxyConfigurationTest {
     private ProcessBuilder processBuilder;
 
     @Before
-    public void Setup() {
+    public void setup() {
         processBuilder = new ProcessBuilder();
         Map environment = processBuilder.environment();
         // Ensure we don't pick up existing environment configuration by clearing out proxy settings.
-        environment.remove("http_proxy");
-        environment.remove("https_proxy");
+        environment.remove(ENV_HTTP_PROXY);
+        environment.remove(ENV_HTTPS_PROXY);
     }
 
     @Test
     public void testFullConfigurationWithURLEncoding() {
-        Mockito.when(readyCIConfiguration.getProxyHost()).thenReturn("proxyHost");
-        Mockito.when(readyCIConfiguration.getProxyPort()).thenReturn("proxyPort");
-        Mockito.when(readyCIConfiguration.getProxyUsername()).thenReturn("proxyUsername@!");
-        Mockito.when(readyCIConfiguration.getProxyPassword()).thenReturn("proxyPassword!@");
+        Mockito.when(readyCIConfiguration.getProxyHost()).thenReturn("proxyHost1");
+        Mockito.when(readyCIConfiguration.getProxyPort()).thenReturn("proxyPort1");
+        Mockito.when(readyCIConfiguration.getProxyUsername()).thenReturn("proxyUsername@!1");
+        Mockito.when(readyCIConfiguration.getProxyPassword()).thenReturn("proxyPassword!@1");
         subject.configureProxyServer(processBuilder, readyCIConfiguration);
-        String httpProxyLine = processBuilder.environment().get("http_proxy");
-        String httpsProxyLine = processBuilder.environment().get("https_proxy");
-        assertEquals("http proxy line is correct", "http://proxyUsername%40%21:proxyPassword%21%40@proxyHost:proxyPort", httpProxyLine);
-        assertEquals("https proxy line is correct", "http://proxyUsername%40%21:proxyPassword%21%40@proxyHost:proxyPort", httpsProxyLine);
+        String httpProxyLine = processBuilder.environment().get(ENV_HTTP_PROXY);
+        String httpsProxyLine = processBuilder.environment().get(ENV_HTTPS_PROXY);
+        assertEquals("http proxy line works with username and password", "http://proxyUsername%40%211:proxyPassword%21%401@proxyHost1:proxyPort1", httpProxyLine);
+        assertEquals("https proxy line works with username and password", "http://proxyUsername%40%211:proxyPassword%21%401@proxyHost1:proxyPort1", httpsProxyLine);
     }
 
     @Test
     public void testConfigurationHostAndPortOnly() {
-        Mockito.when(readyCIConfiguration.getProxyHost()).thenReturn("proxyHost");
-        Mockito.when(readyCIConfiguration.getProxyPort()).thenReturn("proxyPort");
+        Mockito.when(readyCIConfiguration.getProxyHost()).thenReturn("proxyHost2");
+        Mockito.when(readyCIConfiguration.getProxyPort()).thenReturn("proxyPort2");
         Mockito.when(readyCIConfiguration.getProxyUsername()).thenReturn("");
         Mockito.when(readyCIConfiguration.getProxyPassword()).thenReturn("");
         subject.configureProxyServer(processBuilder, readyCIConfiguration);
-        String httpProxyLine = processBuilder.environment().get("http_proxy");
-        String httpsProxyLine = processBuilder.environment().get("https_proxy");
-        assertEquals("http proxy line is correct", "http://proxyHost:proxyPort", httpProxyLine);
-        assertEquals("https proxy line is correct", "http://proxyHost:proxyPort", httpsProxyLine);
+        String httpProxyLine = processBuilder.environment().get(ENV_HTTP_PROXY);
+        String httpsProxyLine = processBuilder.environment().get(ENV_HTTPS_PROXY);
+        assertEquals("http proxy line is correct with only host and port", "http://proxyHost2:proxyPort2", httpProxyLine);
+        assertEquals("https proxy line is correct with only host and port", "http://proxyHost2:proxyPort2", httpsProxyLine);
     }
 
     @Test
@@ -66,10 +68,10 @@ public class TaskProxyConfigurationTest {
         Mockito.when(readyCIConfiguration.getProxyUsername()).thenReturn("");
         Mockito.when(readyCIConfiguration.getProxyPassword()).thenReturn("");
         subject.configureProxyServer(processBuilder, readyCIConfiguration);
-        String httpProxyLine = processBuilder.environment().get("http_proxy");
-        String httpsProxyLine = processBuilder.environment().get("https_proxy");
-        assertEquals("http proxy line is correct", null, httpProxyLine);
-        assertEquals("https proxy line is correct", null, httpsProxyLine);
+        String httpProxyLine = processBuilder.environment().get("ENV_HTTP_PROXY");
+        String httpsProxyLine = processBuilder.environment().get("ENV_HTTPS_PROXY");
+        assertEquals("http proxy line is null when configuration is not specified", null, httpProxyLine);
+        assertEquals("https proxy line is null when configuration is not specified", null, httpsProxyLine);
     }
 
 }

@@ -66,9 +66,9 @@ public class TaskRunner {
     private void runTaskList(List<Task> tasks) {
         for (Task task : tasks) {
             try {
-                task.taskRunner = this;
+                task.setTaskRunner(this);
                 runTask(task);
-                task.taskRunner = null;
+                task.setTaskRunner(null);
             } catch (Exception e) {
                 handleTaskFailure(task, e);
             }

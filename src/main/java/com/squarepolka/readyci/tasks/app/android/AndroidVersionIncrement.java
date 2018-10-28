@@ -26,34 +26,25 @@ public class AndroidVersionIncrement extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
-        File versionFile = new File(String.format("%s/"+VERSION_PROP_FILE, buildEnvironment.projectPath));
-
-        Scanner scanner = null;
-        FileWriter fileWriter = null;
+        File versionFile = new File(String.format("%s/%s", buildEnvironment.projectPath, VERSION_PROP_FILE));
         IOException thrownException = null;
-        try {
-            scanner = new Scanner(versionFile);
+        try (Scanner scanner = new Scanner(versionFile);
+             FileWriter fileWriter = new FileWriter(versionFile)) {
+
             String contents = scanner.useDelimiter("\\Z").next();
             String[] pieces = contents.split("=");
             if (pieces.length == 2) {
                 variableName = pieces[0];
                 buildNumber = Integer.parseInt(pieces[1]) + 1;
                 if (!variableName.isEmpty() && buildNumber > 1) {
-                    fileWriter = new FileWriter(versionFile);
                     fileWriter.write(variableName + "=" + buildNumber);
                     fileWriter.flush();
                 }
             }
         } catch (IOException e) {
             thrownException = e;
-        } finally {
-            if (null != scanner) {
-                scanner.close();
-            }
-            if (null != fileWriter) {
-                fileWriter.close();
-            }
         }
+
         if (null != thrownException) {
             throw thrownException;
         }

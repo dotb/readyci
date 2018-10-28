@@ -47,33 +47,27 @@ public class TaskOutputHandlerTest {
     }
 
     @Test
-    public void handleProcessOutputChecksDebugEnabled() {
+    public void handleProcessOutputChecksDebugEnabled() throws IOException {
         Mockito.when(process.isAlive()).thenReturn(true, false);
         Mockito.when(process.getInputStream()).thenReturn(inputStream);
         Mockito.when(taskOutputHandlerLogger.isDebugEnabled()).thenReturn(true);
-        try {
-            subject.handleProcessOutput(process);
-            Mockito.verify(util, Mockito.times(0)).skipHalfOfStream(Mockito.any(InputStream.class));
-        } catch (IOException e) { }
+        subject.handleProcessOutput(process);
+        Mockito.verify(util, Mockito.times(0)).skipHalfOfStream(Mockito.any(InputStream.class));
     }
 
     @Test
-    public void handleProcessOutputChecksDebugDisabled() {
+    public void handleProcessOutputChecksDebugDisabled() throws IOException {
         Mockito.when(process.isAlive()).thenReturn(true, false);
         Mockito.when(process.getInputStream()).thenReturn(inputStream);
         Mockito.when(taskOutputHandlerLogger.isDebugEnabled()).thenReturn(false);
-        try {
-            subject.handleProcessOutput(process);
-            Mockito.verify(util, Mockito.times(1)).skipHalfOfStream(Mockito.any(InputStream.class));
-        } catch (IOException e) { }
+        subject.handleProcessOutput(process);
+        Mockito.verify(util, Mockito.times(1)).skipHalfOfStream(Mockito.any(InputStream.class));
     }
 
     @Test
-    public void testResetInputStream() {
+    public void testResetInputStream() throws IOException {
         subject.resetInputStream(inputStream);
-        try {
-            Mockito.verify(inputStream, Mockito.times(1)).reset();
-        } catch (IOException e) {}
+        Mockito.verify(inputStream, Mockito.times(1)).reset();
     }
 
     @Test

@@ -44,7 +44,7 @@ public class ReadyCIConfiguration {
         this.proxyPort = "";
         this.proxyUsername = "";
         this.proxyPassword = "";
-        this.pipelines = new ArrayList<PipelineConfiguration>();
+        this.pipelines = new ArrayList<>();
         this.pipelineToRun = null;
     }
 
@@ -63,7 +63,7 @@ public class ReadyCIConfiguration {
     }
 
     public List<PipelineConfiguration> getPipelines(String repositoryName, String branch) {
-        List<PipelineConfiguration> matchedPipelines = new ArrayList<PipelineConfiguration>();
+        List<PipelineConfiguration> matchedPipelines = new ArrayList<>();
         for (PipelineConfiguration pipeline : pipelines) {
             if (pipeline.matchesRepositoryName(repositoryName, branch)) {
                 matchedPipelines.add(pipeline);
@@ -99,8 +99,7 @@ public class ReadyCIConfiguration {
         YAMLFactory yamlFactory = new YAMLFactory();
         ObjectMapper mapper = new ObjectMapper(yamlFactory);
         try {
-            ReadyCIConfiguration parsedConfiguration = mapper.readValue(configurationFile, ReadyCIConfiguration.class);
-            return parsedConfiguration;
+            return mapper.readValue(configurationFile, ReadyCIConfiguration.class);
         } catch (Exception e) {
             LoadConfigurationException configurationException = new LoadConfigurationException(String.format("Could not load configuration from %s: %s", configurationFile.getAbsolutePath(), e.toString()));
             configurationException.setStackTrace(e.getStackTrace());
