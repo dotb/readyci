@@ -2,6 +2,7 @@ package com.squarepolka.readyci.tasks.quality;
 
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;
+import com.squarepolka.readyci.tasks.code.GitCheckout;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,13 +28,15 @@ public class SonarqubeRunner extends Task {
         String sonarProjectKey = buildEnvironment.getProperty(BUILD_PROP_SONAR_PROJECT_KEY);
         String sonarSourcePath = buildEnvironment.getProperty(BUILD_PROP_SONAR_SOURCE_PATH);
         String sonarBinaryPath = buildEnvironment.getProperty(BUILD_PROP_SONAR_BINARY_PATH);
+        String sonarBranchName = buildEnvironment.getProperty(GitCheckout.BUILD_PROP_GIT_BRANCH);
 
         executeCommand(new String[] {"sonar-scanner",
                 "-Dsonar.host.url=" + sonarHostUrl,
                 "-Dsonar.login=" + sonarLoginKey,
                 "-Dsonar.projectKey=" + sonarProjectKey,
                 "-Dsonar.sources=" + sonarSourcePath,
-                "-Dsonar.java.binaries=" + sonarBinaryPath}, buildEnvironment.projectPath);
+                "-Dsonar.java.binaries=" + sonarBinaryPath,
+                "-Dsonar.branch.name=" + sonarBranchName}, buildEnvironment.projectPath);
     }
 
 }

@@ -24,7 +24,7 @@ public class GitCommit extends Task {
         String configuredCommitMessage = buildEnvironment.getProperty(BUILD_PROP_GIT_COMMIT_MESSAGE, "");
         List<String> filesToCommit = buildEnvironment.getProperties(BUILD_PROP_GIT_COMMIT_FILE_LIST);
         String projectPath = buildEnvironment.projectPath;
-        String instanceName = ReadyCIConfiguration.instance().instanceName;
+        String instanceName = ReadyCIConfiguration.instance().getInstanceName();
         String commitMessage = String.format("%s: %s", instanceName, configuredCommitMessage);
 
         stageFiles(filesToCommit, projectPath);
