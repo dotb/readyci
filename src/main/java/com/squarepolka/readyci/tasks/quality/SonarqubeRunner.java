@@ -47,6 +47,7 @@ public class SonarqubeRunner extends Task {
                     "-Dsonar.login=" + sonarLoginKey,
                     "-Dsonar.projectKey=" + sonarProjectKey,
                     "-Dsonar.sources=" + sonarSourcePath,
+                    "-Dsonar.cfamily.build-wrapper-output.bypass=true",
                     "-Dsonar.branch.name=" + sonarBranchName}, buildEnvironment.projectPath);
         }
     }
