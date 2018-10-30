@@ -55,7 +55,7 @@ public class IOSProvisioningProfileRead extends Task {
 
     private void readProvisioningInputStream(InputStream processInputSteam, BuildEnvironment buildEnvironment) throws Exception {
         NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(processInputSteam);
-        String appIDName = rootDict.objectForKey("AppIDName").toString();
+        String appIDName = rootDict.objectForKey(BUILD_PROP_APP_ID_NAME).toString();
         String organisationName = rootDict.objectForKey("TeamName").toString();
         NSArray appIdPrefixs = (NSArray) rootDict.objectForKey("ApplicationIdentifierPrefix");
         String devTeam = appIdPrefixs.lastObject().toString();

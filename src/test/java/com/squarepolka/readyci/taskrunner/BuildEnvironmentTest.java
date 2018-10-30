@@ -13,6 +13,9 @@ import static org.junit.Assert.assertEquals;
 
 public class BuildEnvironmentTest {
 
+    private static final String TEST_KEY = "testKey";
+    private static final String TEST_VALUE = "testValue";
+    private static final String TEST_VALUE_DEFAULT = "defaultValue";
     private BuildEnvironment subject;
     private PipelineConfiguration pipelineConfiguration;
     Map<String, Object> parameters;
@@ -28,12 +31,12 @@ public class BuildEnvironmentTest {
 
     @Test
     public void addObject() {
-        List<Object> initialValues = (List<Object>) subject.buildParameters.get("testKey");
+        List<Object> initialValues = (List<Object>) subject.buildParameters.get(TEST_KEY);
         assertEquals("initialValues start as null", null, initialValues);
-        subject.addObject("testKey", "testValue");
-        List<Object> values = (List<Object>) subject.buildParameters.get("testKey");
+        subject.addObject(TEST_KEY, TEST_VALUE);
+        List<Object> values = (List<Object>) subject.buildParameters.get(TEST_KEY);
         String firstValue = (String) values.get(0);
-        assertEquals("buildParameters contains the test value", "testValue", firstValue);
+        assertEquals("buildParameters contains the test value", TEST_VALUE, firstValue);
     }
 
     @Test(expected = PropertyMissingException.class)
@@ -43,82 +46,82 @@ public class BuildEnvironmentTest {
 
     @Test
     public void getObjectPopulated() {
-        subject.addObject("testKey", "testValue");
-        String returnedValue = (String) subject.getObject("testKey");
-        assertEquals("The returned value is populated", "testValue", returnedValue);
+        subject.addObject(TEST_KEY, TEST_VALUE);
+        String returnedValue = (String) subject.getObject(TEST_KEY);
+        assertEquals("The returned value is populated when a single value is requested", TEST_VALUE, returnedValue);
     }
 
     @Test(expected = PropertyMissingException.class)
     public void getObjectsEmpty() {
-        subject.getObjects("testKey");
+        subject.getObjects(TEST_KEY);
     }
 
     @Test
     public void getObjectsPopulated() {
-        subject.addObject("testKey", "testValue");
-        List<Object> returnedList = (List<Object>) subject.getObjects("testKey");
-        String testValue = (String) returnedList.get(0);
-        assertEquals("The returned list is populated", testValue, testValue);
+        subject.addObject(TEST_KEY, TEST_VALUE);
+        List<Object> returnedList = (List<Object>) subject.getObjects(TEST_KEY);
+        String returnedValue = (String) returnedList.get(0);
+        assertEquals("The returned list is populated when a list of values is requested", TEST_VALUE, returnedValue);
     }
 
     @Test(expected = PropertyMissingException.class)
     public void getPropertiesEmpty() {
-        subject.getProperties("testKey");
+        subject.getProperties(TEST_KEY);
     }
 
     @Test
     public void getProperties() {
-        subject.addProperty("testKey", "testValue");
-        List<String> returnedList = subject.getProperties("testKey");
-        String testValue = returnedList.get(0);
-        assertEquals("The returned list is populated", testValue, testValue);
+        subject.addProperty(TEST_KEY, TEST_VALUE);
+        List<String> returnedList = subject.getProperties(TEST_KEY);
+        String returnedValue = returnedList.get(0);
+        assertEquals("The returned list is populated when a list of string properties is requested", TEST_VALUE, returnedValue);
     }
 
     @Test(expected = PropertyMissingException.class)
     public void getPropertyEmpty() {
-        subject.getProperty("testKey");
+        subject.getProperty(TEST_KEY);
     }
 
     @Test
     public void getPropertyPopulated() {
-        subject.addProperty("testKey", "testValue");
-        String returnedValue = (String) subject.getProperty("testKey");
-        assertEquals("The returned value is populated", "testValue", returnedValue);
+        subject.addProperty(TEST_KEY, TEST_VALUE);
+        String returnedValue = (String) subject.getProperty(TEST_KEY);
+        assertEquals("The returned value is populated when a single string is requested", TEST_VALUE, returnedValue);
     }
 
     @Test
     public void getPropertyWithDefaultValueEmpty() {
-        String returnedValue = subject.getProperty("testKey", "defaultValue");
-        assertEquals("The returned value is set to the default", "defaultValue", returnedValue);
+        String returnedValue = subject.getProperty(TEST_KEY, TEST_VALUE_DEFAULT);
+        assertEquals("The returned value is set to the default", TEST_VALUE_DEFAULT, returnedValue);
     }
 
     @Test
     public void getPropertyWithDefaultValuePopulated() {
-        subject.addProperty("testKey", "testValue");
-        String returnedValue = subject.getProperty("testKey", "defaultValue");
-        assertEquals("The returned value is set to the stored value", "testValue", returnedValue);
+        subject.addProperty(TEST_KEY, TEST_VALUE);
+        String returnedValue = subject.getProperty(TEST_KEY, TEST_VALUE_DEFAULT);
+        assertEquals("The returned value is set to the stored value", TEST_VALUE, returnedValue);
     }
 
     @Test
     public void addProperty() {
-        subject.addProperty("testKey", "testValue");
-        String returnedValue = subject.getProperty("testKey");
-        assertEquals("The returned value is set to the stored value", "testValue", returnedValue);
+        subject.addProperty(TEST_KEY, TEST_VALUE);
+        String returnedValue = subject.getProperty(TEST_KEY);
+        assertEquals("The returned value is set to the stored value", TEST_VALUE, returnedValue);
     }
 
     @Test
     public void addPropertyList() {
         List<String> testData = new ArrayList<String>();
-        testData.add("testValue");
-        subject.addProperty("testKey", testData);
-        List<String> returnedList = subject.getProperties("testKey");
-        String testValue = returnedList.get(0);
-        assertEquals("The returned list is populated", testValue, testValue);
+        testData.add(TEST_VALUE);
+        subject.addProperty(TEST_KEY, testData);
+        List<String> returnedList = subject.getProperties(TEST_KEY);
+        String returnedValue = returnedList.get(0);
+        assertEquals("The returned list is populated", TEST_VALUE, returnedValue);
     }
 
     @Test
     public void setBuildParametersWithString() {
-        Map.Entry<String, Object> entry = new AbstractMap.SimpleEntry<String, Object>("testKey", "testValue");
+        Map.Entry<String, Object> entry = new AbstractMap.SimpleEntry<String, Object>(TEST_KEY, TEST_VALUE);
         Set<Map.Entry<String, Object>> set = new HashSet<Map.Entry<String, Object>>();
         set.add(entry);
         Mockito.when(pipelineConfiguration.parameters.entrySet()).thenReturn(set);
@@ -127,8 +130,8 @@ public class BuildEnvironmentTest {
         ArgumentCaptor<String> keyCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
         Mockito.verify(subject).addProperty(keyCaptor.capture(), valueCaptor.capture());
-        assertEquals("Correct key property has been added", "testKey", keyCaptor.getValue());
-        assertEquals("Correct value property has been added", "testValue", valueCaptor.getValue());
+        assertEquals("Correct key property has been added", TEST_KEY, keyCaptor.getValue());
+        assertEquals("Correct value property has been added", TEST_VALUE, valueCaptor.getValue());
     }
 
     @Test
@@ -136,7 +139,7 @@ public class BuildEnvironmentTest {
         List<String> list = new ArrayList<String>();
         list.add("firstString");
         list.add("secondString");
-        Map.Entry<String, Object> entry = new AbstractMap.SimpleEntry<String, Object>("testKey", list);
+        Map.Entry<String, Object> entry = new AbstractMap.SimpleEntry<String, Object>(TEST_KEY, list);
         Set<Map.Entry<String, Object>> set = new HashSet<Map.Entry<String, Object>>();
         set.add(entry);
         Mockito.when(pipelineConfiguration.parameters.entrySet()).thenReturn(set);
@@ -150,7 +153,7 @@ public class BuildEnvironmentTest {
         List resultList = valueCaptor.getValue();
         String firstValue = (String) resultList.get(0);
         String secondValue = (String) resultList.get(1);
-        assertEquals("Correct key property has been added", "testKey", keyCaptor.getValue());
+        assertEquals("Correct key property has been added", TEST_KEY, keyCaptor.getValue());
         assertEquals("Correct first list property has been added", "firstString", firstValue);
         assertEquals("Correct second list property has been added", "secondString", secondValue);
     }
