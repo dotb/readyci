@@ -41,7 +41,7 @@ public class BuildEnvironmentTest {
 
     @Test(expected = PropertyMissingException.class)
     public void getObjectEmpty() {
-        List<String> returnedList = (List<String>) subject.getObject("testKey");
+        List<String> returnedList = (List<String>) subject.getObject(TEST_KEY);
     }
 
     @Test
