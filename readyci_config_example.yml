@@ -94,6 +94,7 @@ pipelines:
     sonarProjectKey: readyci # replace this with the project key you set on your Sonarqube server
     sonarSourcePath: src/ # Use this parameter to set the path to your sourcecode
     sonarBinaryPath: target/ # Set this parameter to the path of your compiled binaries
+    sonarBypassBuildWrapper: false # Bypass the sonar-scanner build wrapper. Default is false
 
   tasks:
   - task: maven_install # Run maven install
