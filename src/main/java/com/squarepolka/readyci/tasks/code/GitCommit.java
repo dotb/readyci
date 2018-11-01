@@ -13,6 +13,7 @@ public class GitCommit extends Task {
     public static final String TASK_COMMIT_GIT = "commit_git";
     public static final String BUILD_PROP_GIT_COMMIT_MESSAGE = "gitCommitMessage";
     public static final String BUILD_PROP_GIT_COMMIT_FILE_LIST = "gitCommitFileList";
+    private static final String COMMAND_GIT = "/usr/bin/git";
 
     @Override
     public String taskIdentifier() {
@@ -33,12 +34,12 @@ public class GitCommit extends Task {
     }
 
     private void pushCommit(String projectPath) {
-        executeCommand(new String[] {"/usr/bin/git",
+        executeCommand(new String[] {COMMAND_GIT,
                 "push"}, projectPath);
     }
 
     private void createCommit(String commitMessage, String projectPath) {
-        executeCommand(new String[] {"/usr/bin/git",
+        executeCommand(new String[] {COMMAND_GIT,
                         "commit",
                         "-m",
                         commitMessage}, projectPath);
@@ -47,7 +48,7 @@ public class GitCommit extends Task {
     private void stageFiles(List<String> filesToCommit, String projectPath) {
         for (String relativePath : filesToCommit) {
             String fullPath = String.format("%s/%s", projectPath, relativePath);
-            executeCommand(new String[]{"/usr/bin/git",
+            executeCommand(new String[]{COMMAND_GIT,
                     "add",
                     fullPath}, projectPath);
         }
