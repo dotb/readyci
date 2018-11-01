@@ -16,6 +16,7 @@ public class SonarqubeRunner extends Task {
     public static final String BUILD_PROP_SONAR_SOURCE_PATH = "sonarSourcePath";
     public static final String BUILD_PROP_SONAR_BINARY_PATH = "sonarBinaryPath";
     public static final String BUILD_PROP_SONAR_BYPASS_BUILD_WRAPPER = "sonarBypassBuildWrapper";
+    public static final String BUILD_PROP_SONAR_SUBMIT_BRANCH = "sonarSubmitBranch";
 
     @Override
     public String taskIdentifier() {
@@ -30,9 +31,9 @@ public class SonarqubeRunner extends Task {
         addStringParameter("-Dsonar.login", BUILD_PROP_SONAR_LOGIN_KEY).
         addStringParameter("-Dsonar.projectKey", BUILD_PROP_SONAR_PROJECT_KEY).
         addStringParameter("-Dsonar.sources", BUILD_PROP_SONAR_SOURCE_PATH).
-        addStringParameter("-Dsonar.branch.name", GitCheckout.BUILD_PROP_GIT_BRANCH).
         addStringParameter("-Dsonar.java.binaries", BUILD_PROP_SONAR_BINARY_PATH).
-        addBooleanParameter("-Dsonar.cfamily.build-wrapper-output.bypass", BUILD_PROP_SONAR_BYPASS_BUILD_WRAPPER);
+        addBooleanParameter("-Dsonar.cfamily.build-wrapper-output.bypass", BUILD_PROP_SONAR_BYPASS_BUILD_WRAPPER).
+        addConditionalEnvironmentValue("-Dsonar.branch.name", BUILD_PROP_SONAR_SUBMIT_BRANCH, GitCheckout.BUILD_PROP_GIT_BRANCH);
         executeCommand(taskCommand, buildEnvironment.projectPath);
     }
 }
