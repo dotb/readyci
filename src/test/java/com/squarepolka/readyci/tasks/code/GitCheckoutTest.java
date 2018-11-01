@@ -23,6 +23,22 @@ import static org.junit.Assert.assertEquals;
 @RunWith(MockitoJUnitRunner.class)
 public class GitCheckoutTest {
 
+    private static final String COMMAND_GIT = "/usr/bin/git";
+    private static final String PARAM_CLONE = "clone";
+    private static final String PARAM_FLAG_BRANCH = "-b";
+    private static final String PARAM_BRANCH = "branch";
+    private static final String PARAM_SINGLE_BRANCH = "--single-branch";
+    private static final String PATH_CODE = "/code/";
+    private static final String PATH_GIT = "git://path";
+    private static final String PATH_TMP = "/tmp/";
+    private static final String PATH_RUN_PATH = "/runpath/";
+    private static final String BRANCH_GIT = "git_branch";
+    private static final String TEST_BRANCH_VALUE = "feature/sonar_branch_awareness";
+    private static final String TEST_BRANCH_OUTPUT = "develop\n" +
+            "* feature/sonar_branch_awareness\n" +
+            "fix/cleanup\n" +
+            "help\n" +
+            "master";
     @InjectMocks
     private GitCheckout subject;
     @Mock
@@ -39,65 +55,61 @@ public class GitCheckoutTest {
     @Test
     public void testGitCheckoutWithConfiguredGitPathAndBranchName() {
         List<String> expectedCommand = new ArrayList<>();
-        expectedCommand.add("/usr/bin/git");
-        expectedCommand.add("clone");
-        expectedCommand.add("-b");
-        expectedCommand.add("git_branch");
-        expectedCommand.add("git://path");
-        expectedCommand.add("/code/");
-        String expectedWorkingDir = "/tmp/";
-        Mockito.when(buildEnvironment.getProperty(BUILD_PROP_GIT_PATH)).thenReturn("git://path");
-        Mockito.when(buildEnvironment.getProperty(BUILD_PROP_GIT_BRANCH)).thenReturn("git_branch");
-        buildEnvironment.codePath = "/code/";
+        expectedCommand.add(COMMAND_GIT);
+        expectedCommand.add(PARAM_CLONE);
+        expectedCommand.add(PARAM_FLAG_BRANCH);
+        expectedCommand.add(BRANCH_GIT);
+        expectedCommand.add(PATH_GIT);
+        expectedCommand.add(PATH_CODE);
+        String expectedWorkingDir = PATH_TMP;
+        Mockito.when(buildEnvironment.getProperty(BUILD_PROP_GIT_PATH)).thenReturn(PATH_GIT);
+        Mockito.when(buildEnvironment.getProperty(BUILD_PROP_GIT_BRANCH)).thenReturn(BRANCH_GIT);
+        buildEnvironment.codePath = PATH_CODE;
         subject.performTask(buildEnvironment);
         Mockito.verify(taskCommandHandler, Mockito.times(1)).executeCommand(expectedCommand, expectedWorkingDir);
-        Mockito.verify(buildEnvironment, Mockito.times(1)).addProperty(BUILD_PROP_GIT_BRANCH, "git_branch");
+        Mockito.verify(buildEnvironment, Mockito.times(1)).addProperty(BUILD_PROP_GIT_BRANCH, BRANCH_GIT);
     }
 
     @Test
     public void testGitCheckoutWithConfiguredGitPathAndNoBranchName() {
         List<String> expectedCommand = new ArrayList<>();
-        expectedCommand.add("/usr/bin/git");
-        expectedCommand.add("clone");
-        expectedCommand.add("--single-branch");
-        expectedCommand.add("git://path");
-        expectedCommand.add("/code/");
-        String expectedWorkingDir = "/tmp/";
-        Mockito.when(buildEnvironment.getProperty(BUILD_PROP_GIT_PATH)).thenReturn("git://path");
+        expectedCommand.add(COMMAND_GIT);
+        expectedCommand.add(PARAM_CLONE);
+        expectedCommand.add(PARAM_SINGLE_BRANCH);
+        expectedCommand.add(PATH_GIT);
+        expectedCommand.add(PATH_CODE);
+        String expectedWorkingDir = PATH_TMP;
+        Mockito.when(buildEnvironment.getProperty(BUILD_PROP_GIT_PATH)).thenReturn(PATH_GIT);
         Mockito.when(buildEnvironment.getProperty(BUILD_PROP_GIT_BRANCH)).thenThrow(new PropertyMissingException(BUILD_PROP_GIT_BRANCH));
-        setupFakeGitCheckout("/code/");
+        setupFakeGitCheckout(PATH_CODE);
         subject.performTask(buildEnvironment);
         Mockito.verify(taskCommandHandler, Mockito.times(1)).executeCommand(expectedCommand, expectedWorkingDir);
-        Mockito.verify(buildEnvironment, Mockito.times(1)).addProperty(BUILD_PROP_GIT_BRANCH, "feature/sonar_branch_awareness");
+        Mockito.verify(buildEnvironment, Mockito.times(1)).addProperty(BUILD_PROP_GIT_BRANCH, TEST_BRANCH_VALUE);
     }
 
     @Test
     public void testGitCheckoutWithNoGitPathAndNoBranchName() {
         List<String> expectedCommand = new ArrayList<>();
-        expectedCommand.add("/usr/bin/git");
-        expectedCommand.add("branch");
-        String expectedWorkingDir = "/runpath/";
+        expectedCommand.add(COMMAND_GIT);
+        expectedCommand.add(PARAM_BRANCH);
+        String expectedWorkingDir = PATH_RUN_PATH;
         Mockito.when(buildEnvironment.getProperty(BUILD_PROP_GIT_PATH)).thenThrow(new PropertyMissingException(BUILD_PROP_GIT_BRANCH));
         Mockito.when(buildEnvironment.getProperty(BUILD_PROP_GIT_BRANCH)).thenThrow(new PropertyMissingException(BUILD_PROP_GIT_BRANCH));
         setupFakeGitCheckout(expectedWorkingDir);
         subject.performTask(buildEnvironment);
         Mockito.verify(taskCommandHandler, Mockito.times(1)).executeCommand(expectedCommand, expectedWorkingDir);
-        Mockito.verify(buildEnvironment, Mockito.times(1)).addProperty(BUILD_PROP_GIT_BRANCH, "feature/sonar_branch_awareness");
+        Mockito.verify(buildEnvironment, Mockito.times(1)).addProperty(BUILD_PROP_GIT_BRANCH, TEST_BRANCH_VALUE);
     }
 
     private void setupFakeGitCheckout(String runPath) {
-        String gitBranchCommandOutput = "develop\n" +
-                "* feature/sonar_branch_awareness\n" +
-                "fix/cleanup\n" +
-                "help\n" +
-                "master";
+        String gitBranchCommandOutput = TEST_BRANCH_OUTPUT;
         List<String> expectedCommand = new ArrayList<>();
-        expectedCommand.add("/usr/bin/git");
-        expectedCommand.add("branch");
+        expectedCommand.add(COMMAND_GIT);
+        expectedCommand.add(PARAM_BRANCH);
         InputStream fakeInputStream = new ByteArrayInputStream(gitBranchCommandOutput.getBytes(StandardCharsets.UTF_8));
         Mockito.when(taskCommandHandler.executeCommand(expectedCommand, runPath)).thenReturn(fakeInputStream);
-        buildEnvironment.codePath = "/code/";
-        buildEnvironment.realCIRunPath = "/runpath/";
+        buildEnvironment.codePath = PATH_CODE;
+        buildEnvironment.realCIRunPath = PATH_RUN_PATH;
     }
 
 }
