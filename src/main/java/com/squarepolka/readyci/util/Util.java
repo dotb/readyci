@@ -97,13 +97,13 @@ public class Util {
      * @param stringArray
      * @return a flat string.
      */
-    public static String arrayToString(String[] stringArray) {
+    public static String arrayToString(List<String> stringArray) {
         StringBuilder stringBuilder = new StringBuilder();
-
-        for (int i = 0; i < stringArray.length; i++) {
-            String string = stringArray[i];
+        Iterator<String> iterator = stringArray.iterator();
+        while (iterator.hasNext()) {
+            String string = iterator.next();
             stringBuilder.append(string);
-            if (i + 1 < stringArray.length) {
+            if (iterator.hasNext()) {
                 stringBuilder.append(" ");
             }
         }

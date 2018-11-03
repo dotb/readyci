@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.util.List;
 
 @Component
 public class TaskCommandHandler {
@@ -18,7 +19,7 @@ public class TaskCommandHandler {
     @Autowired
     private TaskOutputHandler taskOutputHandler;
 
-    public InputStream executeCommand(String[] command, String workingDirectory) {
+    public InputStream executeCommand(List<String> command, String workingDirectory) {
         LOGGER.debug("Executing command: {}", Util.arrayToString(command));
         try {
             File workingDirectoryFile = new File(workingDirectory);
