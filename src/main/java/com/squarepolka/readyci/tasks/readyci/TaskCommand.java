@@ -82,7 +82,7 @@ public class TaskCommand {
      * @param environmentKey - the key used to elicit a value stored in the build environment
      * @return TaskCommand - so that you can add more parameter functions
      */
-    public TaskCommand addConditionalEnvironmentValue(String commandLineKey, String configurationKey, String environmentKey) {
+    public TaskCommand addBooleanEnvironmentParameterIfConfiguredParamIsTrue(String commandLineKey, String configurationKey, String environmentKey) {
         try {
             boolean configuredValue = buildEnvironment.getSwitch(configurationKey);
             if (configuredValue) {

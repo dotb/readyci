@@ -33,7 +33,7 @@ public class SonarqubeRunner extends Task {
         addStringParameter("-Dsonar.sources", BUILD_PROP_SONAR_SOURCE_PATH).
         addStringParameter("-Dsonar.java.binaries", BUILD_PROP_SONAR_BINARY_PATH).
         addBooleanParameter("-Dsonar.cfamily.build-wrapper-output.bypass", BUILD_PROP_SONAR_BYPASS_BUILD_WRAPPER).
-        addConditionalEnvironmentValue("-Dsonar.branch.name", BUILD_PROP_SONAR_SUBMIT_BRANCH, GitCheckout.BUILD_PROP_GIT_BRANCH);
+                addBooleanEnvironmentParameterIfConfiguredParamIsTrue("-Dsonar.branch.name", BUILD_PROP_SONAR_SUBMIT_BRANCH, GitCheckout.BUILD_PROP_GIT_BRANCH);
         executeCommand(taskCommand, buildEnvironment.projectPath);
     }
 }

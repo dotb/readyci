@@ -23,10 +23,12 @@ public class TaskCommandTest {
     private static final String TEST_BUILD_ENV_KEY_STRING = "testBuildEnvKeyString";
     private static final String TEST_BUILD_ENV_KEY_BOOL_TRUE = "testBuildEnvKeyBoolTrue";
     private static final String TEST_BUILD_ENV_KEY_BOOL_FALSE = "testBuildEnvKeyBoolFalse";
-    private static final String TEST_BUILD_ENV_KEY_MISSING = "testBuildEnvKeyMssing";
+    private static final String TEST_BUILD_ENV_KEY_MISSING = "testBuildEnvKeyMissing";
     private static final String TEST_BUILD_ENV_VALUE_STRING = "testBuildEnvValue";
     private static final String TEST_BUILD_ENV_VALUE_BOOL_TRUE = "true";
     private static final String TEST_BUILD_ENV_VALUE_BOOL_FALSE = "false";
+    private static final String TEST_BUILD_ENV_BRANCH = "gitBranch";
+    private static final String TEST_BUILD_ENV_VALUE_BRANCH = "master";
 
     @InjectMocks
     public TaskCommand subject;
@@ -37,10 +39,11 @@ public class TaskCommandTest {
     @Before
     public void setup() {
         Mockito.when(buildEnvironment.getSwitch(TEST_BUILD_ENV_KEY_BOOL_TRUE)).thenReturn(true);
-        Mockito.when(buildEnvironment.getSwitch(TEST_BUILD_ENV_VALUE_BOOL_FALSE)).thenReturn(false);
-        Mockito.when(buildEnvironment.getProperty(TEST_BUILD_ENV_KEY_STRING)).thenReturn(TEST_BUILD_ENV_VALUE_STRING);
-        Mockito.when(buildEnvironment.getProperty(TEST_BUILD_ENV_KEY_MISSING)).thenThrow(PropertyMissingException.class);
+        Mockito.when(buildEnvironment.getSwitch(TEST_BUILD_ENV_KEY_BOOL_FALSE)).thenReturn(false);
         Mockito.when(buildEnvironment.getSwitch(TEST_BUILD_ENV_KEY_MISSING)).thenThrow(PropertyMissingException.class);
+        Mockito.when(buildEnvironment.getProperty(TEST_BUILD_ENV_KEY_STRING)).thenReturn(TEST_BUILD_ENV_VALUE_STRING);
+        Mockito.when(buildEnvironment.getProperty(TEST_BUILD_ENV_BRANCH)).thenReturn(TEST_BUILD_ENV_VALUE_BRANCH);
+        Mockito.when(buildEnvironment.getProperty(TEST_BUILD_ENV_KEY_MISSING)).thenThrow(PropertyMissingException.class);
     }
 
 
@@ -87,6 +90,35 @@ public class TaskCommandTest {
         subject.addBooleanParameter(TEST_COMMAND_KEY, TEST_BUILD_ENV_KEY_MISSING);
         List commandAndParams = subject.getCommandAndParams();
         assertEquals("A missing boolean parameter is not added and the list of commands is empty", 0, commandAndParams.size());
+    }
+
+    @Test
+    public void addBooleanEnvironmentParameterIfConfiguredParamIsTrueWithTrueValueConfigured() {
+        subject.addBooleanEnvironmentParameterIfConfiguredParamIsTrue(TEST_COMMAND_KEY, TEST_BUILD_ENV_KEY_BOOL_TRUE, TEST_BUILD_ENV_BRANCH);
+        List commandAndParams = subject.getCommandAndParams();
+        String expectedCommandString = TEST_COMMAND_KEY + "=" + TEST_BUILD_ENV_VALUE_BOOL_FALSE;
+        assertEquals("A boolean environment parameter set to false is added properly", expectedCommandString, commandAndParams.get(0));
+    }
+
+    @Test
+    public void addBooleanEnvironmentParameterIfConfiguredParamIsTrueWithFalseValueConfigured() {
+        subject.addBooleanEnvironmentParameterIfConfiguredParamIsTrue(TEST_COMMAND_KEY, TEST_BUILD_ENV_KEY_BOOL_FALSE, TEST_BUILD_ENV_BRANCH);
+        List commandAndParams = subject.getCommandAndParams();
+        assertEquals("The command should be empty if the configuration parameter is false.", 0, commandAndParams.size());
+    }
+
+    @Test
+    public void addBooleanEnvironmentParameterIfConfiguredParamIsTrueWithMissingConfigurationKey() {
+        subject.addBooleanEnvironmentParameterIfConfiguredParamIsTrue(TEST_COMMAND_KEY, TEST_BUILD_ENV_KEY_MISSING, TEST_BUILD_ENV_BRANCH);
+        List commandAndParams = subject.getCommandAndParams();
+        assertEquals("A missing parameter means nothing is added and the list of commands, which remains empty", 0, commandAndParams.size());
+    }
+
+    @Test
+    public void addBooleanEnvironmentParameterIfConfiguredParamIsTrueWithMissingEnvironmentKey() {
+        subject.addBooleanEnvironmentParameterIfConfiguredParamIsTrue(TEST_COMMAND_KEY, TEST_BUILD_ENV_KEY_BOOL_TRUE, TEST_BUILD_ENV_KEY_MISSING);
+        List commandAndParams = subject.getCommandAndParams();
+        assertEquals("A missing environment parameter means nothing is added and the list of commands, which remains empty", 0, commandAndParams.size());
     }
 
 }
