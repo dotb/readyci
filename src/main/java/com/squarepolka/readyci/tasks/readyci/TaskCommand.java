@@ -43,33 +43,17 @@ public class TaskCommand {
     }
 
     /**
-     * Add a string parameter to the list of command line parameters e.g. -Duser=jane
+     * Add an environment parameter to the list of command line parameters e.g. -Duser=jane
      * @param commandLineKey - command line key. e.g. -Duser
-     * @param configurationKey - command line value  e.g. jane
-     * @return TaskCommand - so that you can add more parameter functions
+     * @param configurationKey - the environment key used to elicit the value configured in the environment e.g. userName, which might be set to 'jane'
+     * @return TaskCommand - so that you can add more parameter functions, with the command added. E.g -Duser=jane
      */
-    public TaskCommand addStringParameter(String commandLineKey, String configurationKey) {
+    public TaskCommand addEnvironmentParameter(String commandLineKey, String environmentKey) {
         try {
-            String parameterValue = buildEnvironment.getProperty(configurationKey);
+            Object parameterValue = buildEnvironment.getObject(environmentKey);
             commandAndParams.add(commandLineKey + "=" + parameterValue);
         } catch (PropertyMissingException e) {
-            LOGGER.debug("The String parameter {} is not available. Not adding it to the command", configurationKey);
-        }
-        return this;
-    }
-
-    /**
-     * Add a boolean parameter to the list of command line parameters e.g. -Drecursive=true
-     * @param commandLineKey - command line key. e.g. -Drecursive
-     * @param configurationKey - command line value  e.g. usrRecursiveSearch
-     * @return TaskCommand - so that you can add more parameter functions
-     */
-    public TaskCommand addBooleanParameter(String commandLineKey, String configurationKey) {
-        try {
-            boolean parameterValue = buildEnvironment.getSwitch(configurationKey);
-            commandAndParams.add(commandLineKey + "=" + parameterValue);
-        } catch (PropertyMissingException e) {
-            LOGGER.debug("The boolean parameter {} is not available. Not adding it to the command", configurationKey);
+            LOGGER.debug("The String parameter {} is not available. Not adding it to the command", environmentKey);
         }
         return this;
     }
@@ -82,11 +66,11 @@ public class TaskCommand {
      * @param environmentKey - the key used to elicit a value stored in the build environment
      * @return TaskCommand - so that you can add more parameter functions
      */
-    public TaskCommand addBooleanEnvironmentParameterIfConfiguredParamIsTrue(String commandLineKey, String configurationKey, String environmentKey) {
+    public TaskCommand addEnvironmentParameterIfConfiguredParamIsTrue(String commandLineKey, String configurationKey, String environmentKey) {
         try {
             boolean configuredValue = buildEnvironment.getSwitch(configurationKey);
             if (configuredValue) {
-                boolean parameterValue = buildEnvironment.getSwitch(environmentKey);
+                Object parameterValue = buildEnvironment.getObject(environmentKey);
                 commandAndParams.add(commandLineKey + "=" + parameterValue);
             }
         } catch (PropertyMissingException e) {

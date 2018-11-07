@@ -27,13 +27,13 @@ public class SonarqubeRunner extends Task {
     public void performTask(BuildEnvironment buildEnvironment) {
         TaskCommand taskCommand = new TaskCommand(buildEnvironment);
         taskCommand.addStringCommand("sonar-scanner").
-        addStringParameter("-Dsonar.host.url", BUILD_PROP_SONAR_HOST_URL).
-        addStringParameter("-Dsonar.login", BUILD_PROP_SONAR_LOGIN_KEY).
-        addStringParameter("-Dsonar.projectKey", BUILD_PROP_SONAR_PROJECT_KEY).
-        addStringParameter("-Dsonar.sources", BUILD_PROP_SONAR_SOURCE_PATH).
-        addStringParameter("-Dsonar.java.binaries", BUILD_PROP_SONAR_BINARY_PATH).
-        addBooleanParameter("-Dsonar.cfamily.build-wrapper-output.bypass", BUILD_PROP_SONAR_BYPASS_BUILD_WRAPPER).
-                addBooleanEnvironmentParameterIfConfiguredParamIsTrue("-Dsonar.branch.name", BUILD_PROP_SONAR_SUBMIT_BRANCH, GitCheckout.BUILD_PROP_GIT_BRANCH);
+        addEnvironmentParameter("-Dsonar.host.url", BUILD_PROP_SONAR_HOST_URL).
+        addEnvironmentParameter("-Dsonar.login", BUILD_PROP_SONAR_LOGIN_KEY).
+        addEnvironmentParameter("-Dsonar.projectKey", BUILD_PROP_SONAR_PROJECT_KEY).
+        addEnvironmentParameter("-Dsonar.sources", BUILD_PROP_SONAR_SOURCE_PATH).
+        addEnvironmentParameter("-Dsonar.java.binaries", BUILD_PROP_SONAR_BINARY_PATH).
+        addEnvironmentParameter("-Dsonar.cfamily.build-wrapper-output.bypass", BUILD_PROP_SONAR_BYPASS_BUILD_WRAPPER).
+        addEnvironmentParameterIfConfiguredParamIsTrue("-Dsonar.branch.name", BUILD_PROP_SONAR_SUBMIT_BRANCH, GitCheckout.BUILD_PROP_GIT_BRANCH);
         executeCommand(taskCommand, buildEnvironment.projectPath);
     }
 }
