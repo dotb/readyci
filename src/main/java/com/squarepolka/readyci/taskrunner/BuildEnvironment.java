@@ -17,7 +17,7 @@ public class BuildEnvironment {
     public String scratchPath;
     public String realCIRunPath;
     public String username;
-    public Map<String, Object> buildParameters;
+    private Map<String, Object> buildParameters;
 
     public BuildEnvironment(PipelineConfiguration configuration) {
         this.pipelineName = configuration.name;
@@ -121,7 +121,7 @@ public class BuildEnvironment {
     public void addProperty(String propertyName, List<String> propertyValues) {
         List<String> values = (List<String>) buildParameters.get(propertyName);
         if (null == values) {
-            values = new ArrayList<String>();
+            values = new ArrayList<>();
         }
         values.addAll(propertyValues);
         buildParameters.put(propertyName, values);
@@ -133,7 +133,12 @@ public class BuildEnvironment {
      * @param switchValue
      */
     public void addSwitch(String switchName, Boolean switchValue) {
-        buildParameters.put(switchName, switchValue);
+        List<Boolean> values = (List<Boolean>) buildParameters.get(switchName);
+        if (null == values) {
+            values = new ArrayList<>();
+        }
+        values.add(switchValue);
+        buildParameters.put(switchName, values);
     }
 
     /**
@@ -142,11 +147,16 @@ public class BuildEnvironment {
      * @return boolean value of the switch
      */
     public boolean getSwitch(String switchName) {
-        Boolean switchValue = (Boolean) buildParameters.get(switchName);
-        if (null == switchValue) {
+        List<Boolean> values = (List<Boolean>) buildParameters.get(switchName);
+        if (null == values) {
             throw new PropertyMissingException(switchName);
+        } else {
+            Boolean switchValue = values.get(0);
+            if (null == switchValue) {
+                throw new PropertyMissingException(switchName);
+            }
+            return switchValue.booleanValue();
         }
-        return switchValue.booleanValue();
     }
 
     /**
