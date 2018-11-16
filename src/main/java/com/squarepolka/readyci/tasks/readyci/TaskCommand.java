@@ -19,11 +19,6 @@ public class TaskCommand {
         this.commandAndParams = new ArrayList<>();
     }
 
-    public TaskCommand(String command) {
-        this.commandAndParams = new ArrayList<>();
-        this.commandAndParams.add(command);
-    }
-
     public TaskCommand(String[] command) {
         this.commandAndParams = new ArrayList<>();
         for (int i = 0; i < command.length; i++) {
