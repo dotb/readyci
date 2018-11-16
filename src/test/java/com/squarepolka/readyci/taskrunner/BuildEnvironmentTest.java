@@ -4,39 +4,62 @@ import com.squarepolka.readyci.configuration.PipelineConfiguration;
 import com.squarepolka.readyci.util.PropertyMissingException;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(MockitoJUnitRunner.class)
 public class BuildEnvironmentTest {
 
     private static final String TEST_KEY = "testKey";
-    private static final String TEST_VALUE = "testValue";
+    private static final String TEST_KEY_STRING = "testKeyString";
+    private static final String TEST_KEY_STRING_LIST = "testKeyStringList";
+    private static final String TEST_KEY_BOOLEAN = "testKeyBoolean";
+    private static final String TEST_VALUE_STRING = "testValue";
+    private static final Boolean TEST_VALUE_BOOLEAN_TRUE = true;
+    private static final Boolean TEST_VALUE_BOOLEAN_FALSE = false;
     private static final String TEST_VALUE_DEFAULT = "defaultValue";
-    private BuildEnvironment subject;
+
+    @Mock
     private PipelineConfiguration pipelineConfiguration;
-    Map<String, Object> parameters;
+    @Mock
+    public Map<String, Object> pipelineConfigurationParameters;
+
+
+    private BuildEnvironment subject;
 
     @Before
     public void setUp() {
-        pipelineConfiguration = Mockito.mock(PipelineConfiguration.class);
-        parameters = Mockito.mock(HashMap.class);
-        pipelineConfiguration.parameters = parameters;
-        Mockito.when(pipelineConfiguration.parameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH)).thenReturn("\"project/path\"");
-        subject = Mockito.spy(new BuildEnvironment(pipelineConfiguration));
+        pipelineConfiguration.parameters = pipelineConfigurationParameters;
+        Mockito.when(pipelineConfigurationParameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH)).thenReturn("\"project/path\"");
+        subject = new BuildEnvironment(pipelineConfiguration);
+
     }
 
     @Test
-    public void addObject() {
-        List<Object> initialValues = (List<Object>) subject.buildParameters.get(TEST_KEY);
-        assertEquals("initialValues start as null", null, initialValues);
-        subject.addObject(TEST_KEY, TEST_VALUE);
-        List<Object> values = (List<Object>) subject.buildParameters.get(TEST_KEY);
-        String firstValue = (String) values.get(0);
-        assertEquals("buildParameters contains the test value", TEST_VALUE, firstValue);
+    public void addStringObject() {
+        subject.addObject(TEST_KEY, TEST_VALUE_STRING);
+        String value = (String) subject.getObject(TEST_KEY);
+        assertEquals("buildParameters contains the string test value", TEST_VALUE_STRING, value);
+    }
+
+    @Test
+    public void addBoolTrueObject() {
+        subject.addObject(TEST_KEY, TEST_VALUE_BOOLEAN_FALSE);
+        Boolean value = (Boolean) subject.getObject(TEST_KEY);
+        assertEquals("buildParameters contains the true test value", TEST_VALUE_BOOLEAN_FALSE, value);
+    }
+
+    @Test
+    public void addBoolFalseObject() {
+        subject.addObject(TEST_KEY, TEST_VALUE_BOOLEAN_TRUE);
+        Boolean value = (Boolean) subject.getObject(TEST_KEY);
+        assertEquals("buildParameters contains the false test value", TEST_VALUE_BOOLEAN_TRUE, value);
     }
 
     @Test(expected = PropertyMissingException.class)
@@ -46,9 +69,16 @@ public class BuildEnvironmentTest {
 
     @Test
     public void getObjectPopulated() {
-        subject.addObject(TEST_KEY, TEST_VALUE);
+        subject.addObject(TEST_KEY, TEST_VALUE_STRING);
         String returnedValue = (String) subject.getObject(TEST_KEY);
-        assertEquals("The returned value is populated when a single value is requested", TEST_VALUE, returnedValue);
+        assertEquals("The returned value is populated when a single value is requested", TEST_VALUE_STRING, returnedValue);
+    }
+
+    @Test
+    public void getObjectPopulatedWithSingleBoolean() {
+        subject.addObject(TEST_KEY, TEST_VALUE_STRING);
+        String returnedValue = (String) subject.getObject(TEST_KEY);
+        assertEquals("The returned value is populated when a single value is requested", TEST_VALUE_STRING, returnedValue);
     }
 
     @Test(expected = PropertyMissingException.class)
@@ -58,10 +88,10 @@ public class BuildEnvironmentTest {
 
     @Test
     public void getObjectsPopulated() {
-        subject.addObject(TEST_KEY, TEST_VALUE);
+        subject.addObject(TEST_KEY, TEST_VALUE_STRING);
         List<Object> returnedList = (List<Object>) subject.getObjects(TEST_KEY);
         String returnedValue = (String) returnedList.get(0);
-        assertEquals("The returned list is populated when a list of values is requested", TEST_VALUE, returnedValue);
+        assertEquals("The returned list is populated when a list of values is requested", TEST_VALUE_STRING, returnedValue);
     }
 
     @Test(expected = PropertyMissingException.class)
@@ -71,10 +101,10 @@ public class BuildEnvironmentTest {
 
     @Test
     public void getProperties() {
-        subject.addProperty(TEST_KEY, TEST_VALUE);
+        subject.addProperty(TEST_KEY, TEST_VALUE_STRING);
         List<String> returnedList = subject.getProperties(TEST_KEY);
         String returnedValue = returnedList.get(0);
-        assertEquals("The returned list is populated when a list of string properties is requested", TEST_VALUE, returnedValue);
+        assertEquals("The returned list is populated when a list of string properties is requested", TEST_VALUE_STRING, returnedValue);
     }
 
     @Test(expected = PropertyMissingException.class)
@@ -84,9 +114,9 @@ public class BuildEnvironmentTest {
 
     @Test
     public void getPropertyPopulated() {
-        subject.addProperty(TEST_KEY, TEST_VALUE);
+        subject.addProperty(TEST_KEY, TEST_VALUE_STRING);
         String returnedValue = (String) subject.getProperty(TEST_KEY);
-        assertEquals("The returned value is populated when a single string is requested", TEST_VALUE, returnedValue);
+        assertEquals("The returned value is populated when a single string is requested", TEST_VALUE_STRING, returnedValue);
     }
 
     @Test
@@ -97,65 +127,53 @@ public class BuildEnvironmentTest {
 
     @Test
     public void getPropertyWithDefaultValuePopulated() {
-        subject.addProperty(TEST_KEY, TEST_VALUE);
+        subject.addProperty(TEST_KEY, TEST_VALUE_STRING);
         String returnedValue = subject.getProperty(TEST_KEY, TEST_VALUE_DEFAULT);
-        assertEquals("The returned value is set to the stored value", TEST_VALUE, returnedValue);
+        assertEquals("The returned value is set to the stored value", TEST_VALUE_STRING, returnedValue);
     }
 
     @Test
     public void addProperty() {
-        subject.addProperty(TEST_KEY, TEST_VALUE);
+        subject.addProperty(TEST_KEY, TEST_VALUE_STRING);
         String returnedValue = subject.getProperty(TEST_KEY);
-        assertEquals("The returned value is set to the stored value", TEST_VALUE, returnedValue);
+        assertEquals("The returned value is set to the stored value", TEST_VALUE_STRING, returnedValue);
     }
 
     @Test
     public void addPropertyList() {
         List<String> testData = new ArrayList<String>();
-        testData.add(TEST_VALUE);
+        testData.add(TEST_VALUE_STRING);
         subject.addProperty(TEST_KEY, testData);
         List<String> returnedList = subject.getProperties(TEST_KEY);
         String returnedValue = returnedList.get(0);
-        assertEquals("The returned list is populated", TEST_VALUE, returnedValue);
+        assertEquals("The returned list is populated", TEST_VALUE_STRING, returnedValue);
     }
 
     @Test
-    public void setBuildParametersWithString() {
-        Map.Entry<String, Object> entry = new AbstractMap.SimpleEntry<String, Object>(TEST_KEY, TEST_VALUE);
-        Set<Map.Entry<String, Object>> set = new HashSet<Map.Entry<String, Object>>();
-        set.add(entry);
-        Mockito.when(pipelineConfiguration.parameters.entrySet()).thenReturn(set);
+    public void testSetBuildParameters() {
+        List<String> testStringList = new LinkedList<>();
+        testStringList.add("string1");
+        testStringList.add("string2");
+        testStringList.add("string3");
+
+        Map.Entry<String, Object> stringEntry = new AbstractMap.SimpleEntry<>(TEST_KEY_STRING, TEST_VALUE_STRING);
+        Map.Entry<String, Object> stringListEntry = new AbstractMap.SimpleEntry<>(TEST_KEY_STRING_LIST, testStringList);
+        Map.Entry<String, Object> booleanEntry = new AbstractMap.SimpleEntry<>(TEST_KEY_BOOLEAN, TEST_VALUE_BOOLEAN_TRUE);
+
+        Set<Map.Entry<String, Object>> set = new HashSet<>();
+        set.add(stringEntry);
+        set.add(stringListEntry);
+        set.add(booleanEntry);
+        Mockito.when(pipelineConfigurationParameters.entrySet()).thenReturn(set);
 
         subject.setBuildParameters(pipelineConfiguration);
-        ArgumentCaptor<String> keyCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
-        Mockito.verify(subject).addProperty(keyCaptor.capture(), valueCaptor.capture());
-        assertEquals("Correct key property has been added", TEST_KEY, keyCaptor.getValue());
-        assertEquals("Correct value property has been added", TEST_VALUE, valueCaptor.getValue());
-    }
+        String returnedString = subject.getProperty(TEST_KEY_STRING);
+        List<String> returnedStringList = subject.getProperties(TEST_KEY_STRING_LIST);
+        Boolean returnedBoolean = subject.getSwitch(TEST_KEY_BOOLEAN);
 
-    @Test
-    public void setBuildParametersWithList() {
-        List<String> list = new ArrayList<String>();
-        list.add("firstString");
-        list.add("secondString");
-        Map.Entry<String, Object> entry = new AbstractMap.SimpleEntry<String, Object>(TEST_KEY, list);
-        Set<Map.Entry<String, Object>> set = new HashSet<Map.Entry<String, Object>>();
-        set.add(entry);
-        Mockito.when(pipelineConfiguration.parameters.entrySet()).thenReturn(set);
-
-        subject.setBuildParameters(pipelineConfiguration);
-
-        ArgumentCaptor<String> keyCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<List> valueCaptor = ArgumentCaptor.forClass(List.class);
-        Mockito.verify(subject).addProperty(keyCaptor.capture(), valueCaptor.capture());
-
-        List resultList = valueCaptor.getValue();
-        String firstValue = (String) resultList.get(0);
-        String secondValue = (String) resultList.get(1);
-        assertEquals("Correct key property has been added", TEST_KEY, keyCaptor.getValue());
-        assertEquals("Correct first list property has been added", "firstString", firstValue);
-        assertEquals("Correct second list property has been added", "secondString", secondValue);
+        assertEquals("Correct String value has been added and is returned", TEST_VALUE_STRING, returnedString);
+        assertEquals("Correct String list value has been added and is returned", testStringList, returnedStringList);
+        assertEquals("Correct Boolean value has been added and is returned", TEST_VALUE_BOOLEAN_TRUE, returnedBoolean);
     }
 
     @Test
