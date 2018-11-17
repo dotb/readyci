@@ -37,12 +37,12 @@ public class ConfigurationLoad extends Task {
     }
     
     private File getRepoConfigurationFile(BuildEnvironment buildEnvironment) {
-        String localConfigurationPath = String.format("%s/%s", buildEnvironment.projectPath, TASK_CONFIGURATION_FILE_NAME);
+        String localConfigurationPath = String.format("%s/%s", buildEnvironment.getProjectPath(), TASK_CONFIGURATION_FILE_NAME);
         return new File(localConfigurationPath);
     }
 
     private void mergeLocalConfigWithBuildEnvironment(ReadyCIConfiguration localConfiguration, BuildEnvironment buildEnvironment) {
-        String pipelineName = buildEnvironment.pipelineName;
+        String pipelineName = buildEnvironment.getPipelineName();
         try {
             PipelineConfiguration repoPipelineConf = localConfiguration.getPipeline(pipelineName);
             buildEnvironment.getProjectFolderFromConfiguration(repoPipelineConf);

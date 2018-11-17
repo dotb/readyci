@@ -21,6 +21,6 @@ public class DeployCopy extends Task {
         String sourcePath = buildEnvironment.getProperty(TASK_DEPLOY_SOURCE_PATH);
         String destinationPath = buildEnvironment.getProperty(TASK_DEPLOY_DESTINATION_PATH);
 
-        executeCommand(new String[] {"/bin/cp", sourcePath, destinationPath}, buildEnvironment.projectPath);
+        executeCommand(new String[] {"/bin/cp", sourcePath, destinationPath}, buildEnvironment.getProjectPath());
     }
 }

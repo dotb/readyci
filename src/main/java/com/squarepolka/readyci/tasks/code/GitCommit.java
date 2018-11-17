@@ -24,7 +24,7 @@ public class GitCommit extends Task {
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
         String configuredCommitMessage = buildEnvironment.getProperty(BUILD_PROP_GIT_COMMIT_MESSAGE, "");
         List<String> filesToCommit = buildEnvironment.getProperties(BUILD_PROP_GIT_COMMIT_FILE_LIST);
-        String projectPath = buildEnvironment.projectPath;
+        String projectPath = buildEnvironment.getProjectPath();
         String instanceName = ReadyCIConfiguration.instance().getInstanceName();
         String commitMessage = String.format("%s: %s", instanceName, configuredCommitMessage);
 

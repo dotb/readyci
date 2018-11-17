@@ -40,7 +40,7 @@ public class SonarqubeRunner extends Task {
         addEnvironmentParameter("-Dsonar.jacoco.reportPath", BUILD_PROP_SONAR_JACOCO_REPORT_PATH).
         addEnvironmentParameter("-Dsonar.cfamily.build-wrapper-output.bypass", BUILD_PROP_SONAR_BYPASS_BUILD_WRAPPER).
         addEnvironmentParameterIfConfiguredParamIsTrue("-Dsonar.branch.name", BUILD_PROP_SONAR_SUBMIT_BRANCH, GitCheckout.BUILD_PROP_GIT_BRANCH);
-        executeCommand(taskCommand, buildEnvironment.projectPath);
+        executeCommand(taskCommand, buildEnvironment.getProjectPath());
     }
 
 }

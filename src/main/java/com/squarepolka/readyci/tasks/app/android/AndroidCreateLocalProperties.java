@@ -50,7 +50,7 @@ public class AndroidCreateLocalProperties extends Task {
     }
 
     private File getLocalPropertiesFile(BuildEnvironment buildEnvironment) {
-        return new File(String.format("%s/%s", buildEnvironment.projectPath, fileName));
+        return new File(String.format("%s/%s", buildEnvironment.getProjectPath(), fileName));
     }
 
 }

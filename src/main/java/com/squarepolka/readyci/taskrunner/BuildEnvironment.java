@@ -8,15 +8,15 @@ import java.util.*;
 
 public class BuildEnvironment {
 
-    public String pipelineName;
-    public String buildUUID;
-    public String codePath;
-    public String projectFolder;
-    public String projectPath;
-    public String credentialsPath;
-    public String scratchPath;
-    public String realCIRunPath;
-    public String username;
+    private String pipelineName;
+    private String buildUUID;
+    private String codePath;
+    private String projectFolder;
+    private String projectPath;
+    private String credentialsPath;
+    private String scratchPath;
+    private String realCIRunPath;
+    private String username;
     private Map<String, Object> buildParameters;
 
     public BuildEnvironment(PipelineConfiguration configuration) {
@@ -208,5 +208,55 @@ public class BuildEnvironment {
                 ", username='" + username + '\'' +
                 ", buildParameters=" + buildParameters +
                 '}';
+    }
+
+    // Getters
+    public String getPipelineName() {
+        return pipelineName;
+    }
+
+    public String getBuildUUID() {
+        return buildUUID;
+    }
+
+    public String getCodePath() {
+        return codePath;
+    }
+
+    public String getProjectFolder() {
+        return projectFolder;
+    }
+
+    public String getProjectPath() {
+        return projectPath;
+    }
+
+    public String getCredentialsPath() {
+        return credentialsPath;
+    }
+
+    public String getScratchPath() {
+        return scratchPath;
+    }
+
+    public String getRealCIRunPath() {
+        return realCIRunPath;
+    }
+
+    // Setters
+    public void setCodePath(String codePath) {
+        this.codePath = codePath;
+    }
+
+    public void setProjectFolder(String projectFolder) {
+        this.projectFolder = projectFolder;
+    }
+
+    public void setScratchPath(String scratchPath) {
+        this.scratchPath = scratchPath;
+    }
+
+    public void setRealCIRunPath(String realCIRunPath) {
+        this.realCIRunPath = realCIRunPath;
     }
 }

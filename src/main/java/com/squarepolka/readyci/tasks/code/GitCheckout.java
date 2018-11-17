@@ -30,17 +30,17 @@ public class GitCheckout extends Task {
             try {
                 String gitBranch = buildEnvironment.getProperty(BUILD_PROP_GIT_BRANCH);
                 buildEnvironment.addProperty(BUILD_PROP_GIT_BRANCH, gitBranch);
-                executeCommand(new String[]{"/usr/bin/git", "clone", "-b", gitBranch, gitPath, buildEnvironment.codePath});
+                executeCommand(new String[]{"/usr/bin/git", "clone", "-b", gitBranch, gitPath, buildEnvironment.getCodePath()});
             } catch (PropertyMissingException e) {
                 LOGGER.debug("gitBranch not specified. Will clone from HEAD");
-                executeCommand(new String[]{"/usr/bin/git", "clone", "--single-branch", gitPath, buildEnvironment.codePath});
+                executeCommand(new String[]{"/usr/bin/git", "clone", "--single-branch", gitPath, buildEnvironment.getCodePath()});
                 String branchName = getCurrentBranchName(buildEnvironment);
                 buildEnvironment.addProperty(BUILD_PROP_GIT_BRANCH, branchName);
                 return;
             }
         } catch (PropertyMissingException e) {
             LOGGER.debug("The gitPath parameter was not specified, so I'll assume the code is already checked out and set the code path to the current directory and configure the build environment accordingly.");
-            buildEnvironment.codePath = buildEnvironment.realCIRunPath;
+            buildEnvironment.setCodePath(buildEnvironment.getRealCIRunPath());
             buildEnvironment.configureProjectPath();
             String branchName = getCurrentBranchName(buildEnvironment);
             buildEnvironment.addProperty(BUILD_PROP_GIT_BRANCH, branchName);
@@ -48,7 +48,7 @@ public class GitCheckout extends Task {
     }
 
     protected String getCurrentBranchName(BuildEnvironment buildEnvironment) {
-        InputStream inputStream = executeCommand(new String[]{"/usr/bin/git", "branch"}, buildEnvironment.codePath);
+        InputStream inputStream = executeCommand(new String[]{"/usr/bin/git", "branch"}, buildEnvironment.getCodePath());
         java.util.Scanner scanner = new java.util.Scanner(inputStream).useDelimiter("\\A");
         String allBranches = scanner.hasNext() ? scanner.next() : "";
         return filterBranchName(allBranches);

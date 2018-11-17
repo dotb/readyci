@@ -20,7 +20,7 @@ public class IOSProvisioningProfileInstall extends Task {
     public void performTask(BuildEnvironment buildEnvironment) {
         List<String> relativeProfilePaths = buildEnvironment.getProperties(IOSProvisioningProfileRead.BUILD_PROP_PROFILE_PATHS);
         for (String relativeProfilePath : relativeProfilePaths) {
-            installProfile(relativeProfilePath, buildEnvironment.projectPath);
+            installProfile(relativeProfilePath, buildEnvironment.getProjectPath());
         }
     }
 

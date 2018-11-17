@@ -23,6 +23,6 @@ public class AndroidCreateApkFile extends Task {
         executeCommand(new String[] {
                 "./gradlew",
                 arg
-        }, buildEnvironment.projectPath);
+        }, buildEnvironment.getProjectPath());
     }
 }

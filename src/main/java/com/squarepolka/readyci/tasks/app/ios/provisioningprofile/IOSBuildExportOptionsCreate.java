@@ -22,7 +22,7 @@ public class IOSBuildExportOptionsCreate extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
-        String exportOptionsPath = String.format("%s/exportOptions.plist", buildEnvironment.scratchPath);
+        String exportOptionsPath = String.format("%s/exportOptions.plist", buildEnvironment.getScratchPath());
         String devTeam = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_DEV_TEAM);
         String provisioningMethod = buildEnvironment.getProperty(IOSProvisioningProfileRead.BUILD_PROP_PROVISIONING_METHOD);
         List<Object> provisioningProfiles = buildEnvironment.getObjects(IOSProvisioningProfileRead.BUILD_PROP_IOS_PROFILES);
