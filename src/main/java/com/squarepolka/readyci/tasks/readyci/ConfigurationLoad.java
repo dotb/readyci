@@ -1,5 +1,6 @@
-package com.squarepolka.readyci.tasks.realci;
+package com.squarepolka.readyci.tasks.readyci;
 
+import com.squarepolka.readyci.configuration.LoadConfigurationException;
 import com.squarepolka.readyci.configuration.PipelineConfiguration;
 import com.squarepolka.readyci.configuration.ReadyCIConfiguration;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
@@ -26,32 +27,34 @@ public class ConfigurationLoad extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) {
         File repoConfigurationFile = getRepoConfigurationFile(buildEnvironment);
-        if (null != repoConfigurationFile && repoConfigurationFile.exists()) {
-            LOGGER.debug(String.format("Loading local repository configuration from %s", TASK_CONFIGURATION_FILE_NAME));
+        if (repoConfigurationFile.exists()) {
+            LOGGER.debug("Loading local repository configuration from {}", TASK_CONFIGURATION_FILE_NAME);
             ReadyCIConfiguration localConfiguration = ReadyCIConfiguration.readConfigurationFile(repoConfigurationFile);
             mergeLocalConfigWithBuildEnvironment(localConfiguration, buildEnvironment);
         } else {
-            LOGGER.debug(String.format("Local repository configuration %s not found. Repository configuration is not being used.", TASK_CONFIGURATION_FILE_NAME));
+            LOGGER.debug("Local repository configuration {} not found. Repository configuration is not being used.", TASK_CONFIGURATION_FILE_NAME);
         }
     }
     
     private File getRepoConfigurationFile(BuildEnvironment buildEnvironment) {
-        String localConfigurationPath = String.format("%s/%s", buildEnvironment.codePath, TASK_CONFIGURATION_FILE_NAME);
-        File repoConfigurationFile = new File(localConfigurationPath);
-        return repoConfigurationFile;
+        String localConfigurationPath = String.format("%s/%s", buildEnvironment.projectPath, TASK_CONFIGURATION_FILE_NAME);
+        return new File(localConfigurationPath);
     }
 
     private void mergeLocalConfigWithBuildEnvironment(ReadyCIConfiguration localConfiguration, BuildEnvironment buildEnvironment) {
         String pipelineName = buildEnvironment.pipelineName;
-        PipelineConfiguration repoPipelineConf = localConfiguration.getPipeline(pipelineName);
-        buildEnvironment.getProjectFolderFromConfiguration(repoPipelineConf);
-        buildEnvironment.configureProjectPath();
-        buildEnvironment.setBuildParameters(repoPipelineConf);
+        try {
+            PipelineConfiguration repoPipelineConf = localConfiguration.getPipeline(pipelineName);
+            buildEnvironment.getProjectFolderFromConfiguration(repoPipelineConf);
+            buildEnvironment.configureProjectPath();
+            buildEnvironment.setBuildParameters(repoPipelineConf);
 
-        List<Task> configuredTasks = taskRunner.taskRunnerFactory.createTaskListFromConfig(repoPipelineConf.tasks);
-        LOGGER.debug(String.format("Loaded %s tasks from the repository configuration %s", configuredTasks.size(), TASK_CONFIGURATION_FILE_NAME));
-        taskRunner.setConfiguredTasks(configuredTasks);
-
-
+            List<Task> configuredTasks = taskRunner.taskRunnerFactory.createTaskListFromConfig(repoPipelineConf.tasks);
+            LOGGER.debug("Loaded {} tasks from the repository configuration {}", configuredTasks.size(), TASK_CONFIGURATION_FILE_NAME);
+            taskRunner.setConfiguredTasks(configuredTasks);
+        } catch (LoadConfigurationException e) {
+            LOGGER.debug("We found a local readyci configuration file in the project folder but it didn't contain a definition for the {} pipeline", pipelineName);
+        }
     }
+
 }

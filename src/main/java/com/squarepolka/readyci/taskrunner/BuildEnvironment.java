@@ -2,6 +2,7 @@ package com.squarepolka.readyci.taskrunner;
 
 import com.squarepolka.readyci.configuration.PipelineConfiguration;
 import com.squarepolka.readyci.util.PropertyMissingException;
+import com.squarepolka.readyci.util.PropertyTypeException;
 
 import java.util.*;
 
@@ -12,6 +13,7 @@ public class BuildEnvironment {
     public String codePath;
     public String projectFolder;
     public String projectPath;
+    public String credentialsPath;
     public String scratchPath;
     public String realCIRunPath;
     public String username;
@@ -22,6 +24,7 @@ public class BuildEnvironment {
         this.buildUUID = UUID.randomUUID().toString();
         this.scratchPath = String.format("%s/%s", PipelineConfiguration.PIPELINE_PATH_PREFIX_BUILD, buildUUID);
         this.codePath = String.format("%s/%s", scratchPath, PipelineConfiguration.PIPELINE_PATH_PREFIX_CODE);
+        this.credentialsPath = String.format("%s./build_credentials", this.codePath);
         this.realCIRunPath = System.getProperty("user.dir");
         this.username = System.getProperty("user.name");
         this.buildParameters = new HashMap<String, Object>();
@@ -125,6 +128,28 @@ public class BuildEnvironment {
     }
 
     /**
+     * Add a boolean switch value to this build environment
+     * @param switchName
+     * @param switchValue
+     */
+    public void addSwitch(String switchName, Boolean switchValue) {
+        buildParameters.put(switchName, switchValue);
+    }
+
+    /**
+     * Return a configured boolean value
+     * @param switchName
+     * @return boolean value of the switch
+     */
+    public boolean getSwitch(String switchName) {
+        Boolean switchValue = (Boolean) buildParameters.get(switchName);
+        if (null == switchValue) {
+            throw new PropertyMissingException(switchName);
+        }
+        return switchValue.booleanValue();
+    }
+
+    /**
      * This method copies the pipeline build parameters loaded from the yml file into the
      * buildParameters object. It needs to do type checking and store strings within List<String>
      * so that we can support both String and List<String> values.
@@ -141,6 +166,11 @@ public class BuildEnvironment {
             } else if (objectValue instanceof List) {
                 List<String> listValue = (List<String>) objectValue;
                 addProperty(propertyName, listValue);
+            } else if (objectValue instanceof Boolean) {
+                Boolean booleanValue = (Boolean) objectValue;
+                addSwitch(propertyName, booleanValue);
+            } else {
+                throw new PropertyTypeException(propertyName);
             }
         }
     }
@@ -158,4 +188,18 @@ public class BuildEnvironment {
         this.projectPath = String.format("/%s/%s", codePath, projectFolder);
     }
 
+    @Override
+    public String toString() {
+        return "BuildEnvironment{" +
+                "pipelineName='" + pipelineName + '\'' +
+                ", buildUUID='" + buildUUID + '\'' +
+                ", codePath='" + codePath + '\'' +
+                ", projectFolder='" + projectFolder + '\'' +
+                ", projectPath='" + projectPath + '\'' +
+                ", scratchPath='" + scratchPath + '\'' +
+                ", realCIRunPath='" + realCIRunPath + '\'' +
+                ", username='" + username + '\'' +
+                ", buildParameters=" + buildParameters +
+                '}';
+    }
 }

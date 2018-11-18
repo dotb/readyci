@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 
 @Component
 public class AndroidCreateLocalProperties extends Task {
@@ -22,23 +23,34 @@ public class AndroidCreateLocalProperties extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
 
-        //create file
-        File localPropFile = getLocalPropertiesFile(buildEnvironment);
+        String sdkPath = System.getenv("ANDROID_HOME");
+        if(!buildEnvironment.getProperty(BUILD_PROP_SDK_PATH, "").isEmpty()) {
+            sdkPath = buildEnvironment.getProperty(BUILD_PROP_SDK_PATH);
+        }
 
-        // creates a FileWriter Object
-        FileWriter writer = new FileWriter(localPropFile);
+        if(sdkPath == null || sdkPath.isEmpty()) {
+            throw new IllegalArgumentException("Could not locate the sdk path, please define ANDROID_HOME or the androidSdkPath in your configuration");
+        }
 
-        String out = String.format("sdk.dir=%s", buildEnvironment.getProperty(BUILD_PROP_SDK_PATH));
-        writer.write(out);
-        writer.flush();
-        writer.close();
+        File localPropertyFile = getLocalPropertiesFile(buildEnvironment);
+        IOException thrownException = null;
+        try (FileWriter localPropertyFileWriter = new FileWriter(localPropertyFile)) {
 
+            String out = String.format("sdk.dir=%s", sdkPath);
+            localPropertyFileWriter.write(out);
+            localPropertyFileWriter.flush();
+        } catch (IOException e) {
+            thrownException = e;
+        }
+
+        // Throw the exception if one was raised.
+        if (null != thrownException) {
+            throw thrownException;
+        }
     }
 
     private File getLocalPropertiesFile(BuildEnvironment buildEnvironment) {
-        String filePath = String.format("%s/local.properties", buildEnvironment.projectPath);
-        File localPropertiesFile = new File(filePath);
-        return localPropertiesFile;
+        return new File(String.format("%s/%s", buildEnvironment.projectPath, fileName));
     }
 
 }

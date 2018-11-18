@@ -40,7 +40,7 @@ public class ReadyCI implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         ReadyCIConfiguration readyCIConfiguration = ReadyCIConfiguration.instance();
-        if (readyCIConfiguration.isServerMode) {
+        if (readyCIConfiguration.isServerMode()) {
             LOGGER.info("Ready CI is in server mode");
         } else {
             LOGGER.info("Ready CI is in command-line mode");
@@ -51,10 +51,10 @@ public class ReadyCI implements CommandLineRunner {
 
     private void runCommandLinePipeline() {
         ReadyCIConfiguration readyCIConfiguration = ReadyCIConfiguration.instance();
-        PipelineConfiguration pipelineConfiguration = readyCIConfiguration.pipelineToRun;
+        PipelineConfiguration pipelineConfiguration = readyCIConfiguration.getPipelineToRun();
 
         if (null != pipelineConfiguration) {
-            LOGGER.info(String.format("Building pipeline %s", pipelineConfiguration.name));
+            LOGGER.info("Building pipeline {}", pipelineConfiguration.name);
             TaskRunner taskRunner = taskRunnerFactory.createTaskRunner(pipelineConfiguration);
             taskRunner.runAllTasks();
         } else {

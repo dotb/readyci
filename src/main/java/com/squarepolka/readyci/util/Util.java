@@ -1,10 +1,13 @@
 package com.squarepolka.readyci.util;
 
+import org.springframework.stereotype.Component;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+@Component
 public class Util {
 
     public static String getMappedValueAtPath(Map map, String path) {
@@ -31,6 +34,27 @@ public class Util {
         return "";
     }
 
+    public static Collection<File> findAllByExtension(File dir, String extension) {
+        Set<File> fileTree = new HashSet<File>();
+        if (dir == null || dir.listFiles() == null) {
+            return fileTree;
+        }
+        for (File entry : dir.listFiles()) {
+            if (entry.isFile() && getFileExtension(entry).equals(extension)) fileTree.add(entry);
+            else fileTree.addAll(findAllByExtension(entry, extension));
+        }
+        return fileTree;
+    }
+
+    public static String getFileExtension(File file) {
+        String name = file.getName();
+        int lastIndexOf = name.lastIndexOf('.');
+        if (lastIndexOf == -1) {
+            return ""; // empty extension
+        }
+        return name.substring(lastIndexOf);
+    }
+
 
     public static Object parseListObject(List listItems, String key) {
         // Find a map in this list which contains the key we're looking for
@@ -53,18 +77,37 @@ public class Util {
      * Skip half of the available data in an input stream.
      * This method is useful when a full input stream might block a process,
      * while keeping some data might be desired.
-     *
+     * <p>
      * Unfortunately, an IOException is sometimes thrown when using the processInputStream.skip(long n) method.
      * We're using processInputStream.read() instead.
      * We might be suffering from this: https://bugs.java.com/view_bug.do?bug_id=6222822
      *
      * @param inputStream
      */
-    public static void skipHalfOfStream(InputStream inputStream) throws IOException {
+    public void skipHalfOfStream(InputStream inputStream) throws IOException {
         int availableBytes = inputStream.available();
         long bytesToSkip = availableBytes / 2;
         for (int i = 0; i < bytesToSkip; i++) {
             inputStream.read();
         }
     }
+
+    /**
+     * Convert a string array to a flat string.
+     * @param stringArray
+     * @return a flat string.
+     */
+    public static String arrayToString(String[] stringArray) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < stringArray.length; i++) {
+            String string = stringArray[i];
+            stringBuilder.append(string);
+            if (i + 1 < stringArray.length) {
+                stringBuilder.append(" ");
+            }
+        }
+        return stringBuilder.toString();
+    }
+
 }
