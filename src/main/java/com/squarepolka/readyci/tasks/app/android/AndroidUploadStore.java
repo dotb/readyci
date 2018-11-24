@@ -61,11 +61,11 @@ public class AndroidUploadStore extends Task {
                 throw new Exception(sb.toString());
             }
 
-            String playStoreCertLocation = String.format("%s/%s", buildEnvironment.credentialsPath, playStoreCert);
+            String playStoreCertLocation = String.format("%s/%s", buildEnvironment.getCredentialsPath(), playStoreCert);
 
             String scheme = buildEnvironment.getProperty(BUILD_PROP_SCHEME);
             String appBinaryPath = String.format("%s/app/build/outputs/apk/%s/app-%s.apk",
-                    buildEnvironment.projectPath, scheme.toLowerCase(), scheme.toLowerCase());
+                    buildEnvironment.getProjectPath(), scheme.toLowerCase(), scheme.toLowerCase());
 
             LOGGER.warn("AndroidUploadStore: uploading "+appBinaryPath);
 

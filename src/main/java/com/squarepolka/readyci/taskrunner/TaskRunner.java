@@ -45,14 +45,14 @@ public class TaskRunner {
 
     public void runAllTasks() {
         try {
-            LOGGER.info("EXECUTING\tBUILD\t{}\t({})", buildEnvironment.pipelineName, buildEnvironment.buildUUID);
+            LOGGER.info("EXECUTING\tBUILD\t{}\t({})", buildEnvironment.getPipelineName(), buildEnvironment.getBuildUUID());
             runTaskList(defaultPreTasks);
             checkThatTasksExist();
             runTaskList(configuredTasks);
             runTaskList(defaultPostTasks);
-            LOGGER.info("COMPLETED\tBUILD\t{}\t({})", buildEnvironment.pipelineName, buildEnvironment.buildUUID);
+            LOGGER.info("COMPLETED\tBUILD\t{}\t({})", buildEnvironment.getPipelineName(), buildEnvironment.getBuildUUID());
         } catch (RuntimeException e) {
-            LOGGER.info("FAILED\tBUILD\t{}\t({})", buildEnvironment.pipelineName, buildEnvironment.buildUUID);
+            LOGGER.info("FAILED\tBUILD\t{}\t({})", buildEnvironment.getPipelineName(), buildEnvironment.getBuildUUID());
             throw e;
         }
     }

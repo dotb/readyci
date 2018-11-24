@@ -181,22 +181,22 @@ public class BuildEnvironmentTest {
         Mockito.when(pipelineConfiguration.parameters.containsKey(PipelineConfiguration.PIPELINE_PROJECT_PATH)).thenReturn(true);
         Mockito.when(pipelineConfiguration.parameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH)).thenReturn("testPath");
         subject.getProjectFolderFromConfiguration(pipelineConfiguration);
-        assertEquals("The projectFolder should be set", "testPath", subject.projectFolder);
+        assertEquals("The projectFolder should be set", "testPath", subject.getProjectFolder());
     }
 
     @Test
     public void getProjectFolderFromConfigurationNotSpecified() {
         subject.getProjectFolderFromConfiguration(pipelineConfiguration);
-        assertEquals("The projectFolder should be empty", "", subject.projectFolder);
+        assertEquals("The projectFolder should be empty", "", subject.getProjectFolder());
     }
 
 
     @Test
     public void configureProjectPath() {
-        subject.codePath = "codepath";
-        subject.projectFolder = "projectfolder";
+        subject.setCodePath("codepath");
+        subject.setProjectFolder("projectfolder");
         subject.configureProjectPath();
-        assertEquals("The projectPath is configured correctly", "/codepath/projectfolder", subject.projectPath);
+        assertEquals("The projectPath is configured correctly", "/codepath/projectfolder", subject.getProjectPath());
     }
 
 }

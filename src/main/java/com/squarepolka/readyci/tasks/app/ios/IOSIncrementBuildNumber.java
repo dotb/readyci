@@ -24,7 +24,7 @@ public class IOSIncrementBuildNumber extends Task {
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
 
-        String codePath = buildEnvironment.codePath;
+        String codePath = buildEnvironment.getCodePath();
         List<String> relativePListPaths = buildEnvironment.getProperties(BUILD_PROP_INC_BLD_PLIST_FILES);
         for (String relativepListPath : relativePListPaths) {
             incrementBuildNumberAtPath(relativepListPath, codePath);

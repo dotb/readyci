@@ -18,7 +18,7 @@ public class SonarqubeRunner extends Task {
     public static final String BUILD_PROP_SONAR_BYPASS_BUILD_WRAPPER = "sonarBypassBuildWrapper";
     public static final String BUILD_PROP_SONAR_SUBMIT_BRANCH = "sonarSubmitBranch";
     public static final String BUILD_PROP_SONAR_TEST_PATH = "sonarTestsPath";
-    public static final String BUILD_PROP_SONAR_JAVA_OVERAGE_PLUGIN = "sonarJavaCoveragePlugin";
+    public static final String BUILD_PROP_SONAR_JAVA_COVERAGE_PLUGIN = "sonarJavaCoveragePlugin";
     public static final String BUILD_PROP_SONAR_JACOCO_REPORT_PATH = "sonarJacocoReportPath";
 
     @Override
@@ -36,11 +36,11 @@ public class SonarqubeRunner extends Task {
         addEnvironmentParameter("-Dsonar.sources", BUILD_PROP_SONAR_SOURCE_PATH).
         addEnvironmentParameter("-Dsonar.java.binaries", BUILD_PROP_SONAR_BINARY_PATH).
         addEnvironmentParameter("-Dsonar.tests", BUILD_PROP_SONAR_TEST_PATH).
-        addEnvironmentParameter("-Dsonar.java.coveragePlugin", BUILD_PROP_SONAR_JAVA_OVERAGE_PLUGIN).
+        addEnvironmentParameter("-Dsonar.java.coveragePlugin", BUILD_PROP_SONAR_JAVA_COVERAGE_PLUGIN).
         addEnvironmentParameter("-Dsonar.jacoco.reportPath", BUILD_PROP_SONAR_JACOCO_REPORT_PATH).
         addEnvironmentParameter("-Dsonar.cfamily.build-wrapper-output.bypass", BUILD_PROP_SONAR_BYPASS_BUILD_WRAPPER).
         addEnvironmentParameterIfConfiguredParamIsTrue("-Dsonar.branch.name", BUILD_PROP_SONAR_SUBMIT_BRANCH, GitCheckout.BUILD_PROP_GIT_BRANCH);
-        executeCommand(taskCommand, buildEnvironment.projectPath);
+        executeCommand(taskCommand, buildEnvironment.getProjectPath());
     }
 
 }

@@ -43,7 +43,7 @@ public class IOSProvisioningProfileRead extends Task {
     }
 
     public void readProfile(String relativeProfilePath, BuildEnvironment buildEnvironment) throws Exception {
-        String profilePath = String.format("%s/%s", buildEnvironment.projectPath, relativeProfilePath);
+        String profilePath = String.format("%s/%s", buildEnvironment.getProjectPath(), relativeProfilePath);
         InputStream provisioningFileInputStream = decryptProvisioningFile(profilePath);
         readProvisioningInputStream(provisioningFileInputStream, buildEnvironment);
     }

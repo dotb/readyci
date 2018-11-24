@@ -64,7 +64,7 @@ public class GitCheckoutTest {
         String expectedWorkingDir = PATH_TMP;
         Mockito.when(buildEnvironment.getProperty(BUILD_PROP_GIT_PATH)).thenReturn(PATH_GIT);
         Mockito.when(buildEnvironment.getProperty(BUILD_PROP_GIT_BRANCH)).thenReturn(BRANCH_GIT);
-        buildEnvironment.codePath = PATH_CODE;
+        Mockito.when(buildEnvironment.getCodePath()).thenReturn(PATH_CODE);
         subject.performTask(buildEnvironment);
         Mockito.verify(taskCommandHandler, Mockito.times(1)).executeCommand(expectedCommand, expectedWorkingDir);
         Mockito.verify(buildEnvironment, Mockito.times(1)).addProperty(BUILD_PROP_GIT_BRANCH, BRANCH_GIT);
@@ -92,7 +92,7 @@ public class GitCheckoutTest {
         List<String> expectedCommand = new ArrayList<>();
         expectedCommand.add(COMMAND_GIT);
         expectedCommand.add(PARAM_BRANCH);
-        String expectedWorkingDir = PATH_RUN_PATH;
+        String expectedWorkingDir = PATH_CODE;
         Mockito.when(buildEnvironment.getProperty(BUILD_PROP_GIT_PATH)).thenThrow(new PropertyMissingException(BUILD_PROP_GIT_BRANCH));
         Mockito.when(buildEnvironment.getProperty(BUILD_PROP_GIT_BRANCH)).thenThrow(new PropertyMissingException(BUILD_PROP_GIT_BRANCH));
         setupFakeGitCheckout(expectedWorkingDir);
@@ -108,8 +108,9 @@ public class GitCheckoutTest {
         expectedCommand.add(PARAM_BRANCH);
         InputStream fakeInputStream = new ByteArrayInputStream(gitBranchCommandOutput.getBytes(StandardCharsets.UTF_8));
         Mockito.when(taskCommandHandler.executeCommand(expectedCommand, runPath)).thenReturn(fakeInputStream);
-        buildEnvironment.codePath = PATH_CODE;
-        buildEnvironment.realCIRunPath = PATH_RUN_PATH;
+        Mockito.when(taskCommandHandler.executeCommand(expectedCommand, PATH_CODE)).thenReturn(fakeInputStream);
+        Mockito.when(buildEnvironment.getCodePath()).thenReturn(PATH_CODE);
+        Mockito.when(buildEnvironment.getRealCIRunPath()).thenReturn(PATH_RUN_PATH);
     }
 
 }

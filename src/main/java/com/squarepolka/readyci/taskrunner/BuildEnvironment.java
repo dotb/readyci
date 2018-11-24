@@ -8,15 +8,15 @@ import java.util.*;
 
 public class BuildEnvironment {
 
-    public String pipelineName;
-    public String buildUUID;
-    public String codePath;
-    public String projectFolder;
-    public String projectPath;
-    public String credentialsPath;
-    public String scratchPath;
-    public String realCIRunPath;
-    public String username;
+    private String pipelineName;
+    private String buildUUID;
+    private String codePath;
+    private String projectFolder;
+    private String projectPath;
+    private String credentialsPath;
+    private String scratchPath;
+    private String realCIRunPath;
+    private String username;
     private Map<String, Object> buildParameters;
 
     public BuildEnvironment(PipelineConfiguration configuration) {
@@ -27,7 +27,7 @@ public class BuildEnvironment {
         this.credentialsPath = String.format("%s./build_credentials", this.codePath);
         this.realCIRunPath = System.getProperty("user.dir");
         this.username = System.getProperty("user.name");
-        this.buildParameters = new HashMap<String, Object>();
+        this.buildParameters = new HashMap<>();
 
         this.projectFolder = (String) configuration.parameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH);
         getProjectFolderFromConfiguration(configuration);
@@ -38,7 +38,7 @@ public class BuildEnvironment {
     public void addObject(String propertyName, Object propertyValue) {
         List<Object> values = (List<Object>) buildParameters.get(propertyName);
         if (null == values) {
-            values = new ArrayList<Object>();
+            values = new ArrayList<>();
         }
         values.add(propertyValue);
         buildParameters.put(propertyName, values);
@@ -46,13 +46,12 @@ public class BuildEnvironment {
 
     public Object getObject(String propertyName) {
         List<Object> values = getObjects(propertyName);
-        Object value = values.get(0);
-        return value;
+        return values.get(0);
     }
 
     public List<Object> getObjects(String propertyName) {
         List<Object> values = (List<Object>) buildParameters.get(propertyName);
-        if (null == values || values.size() <= 0) {
+        if (null == values || values.isEmpty()) {
             throw new PropertyMissingException(propertyName);
         }
         return values;
@@ -66,7 +65,7 @@ public class BuildEnvironment {
      */
     public List<String> getProperties(String propertyName) {
         List<String> values = (List<String>) buildParameters.get(propertyName);
-        if (null == values || values.size() <= 0) {
+        if (null == values || values.isEmpty()) {
             throw new PropertyMissingException(propertyName);
         }
         return values;
@@ -80,8 +79,7 @@ public class BuildEnvironment {
      */
     public String getProperty(String propertyName) {
         List<String> values = getProperties(propertyName);
-        String value = values.get(0);
-        return value;
+        return values.get(0);
     }
 
     /**
@@ -92,8 +90,7 @@ public class BuildEnvironment {
      */
     public String getProperty(String propertyName, String defaultValue) {
         try {
-            String value = getProperty(propertyName);
-            return value;
+            return getProperty(propertyName);
         } catch (PropertyMissingException e) {
             return defaultValue;
         }
@@ -107,7 +104,7 @@ public class BuildEnvironment {
     public void addProperty(String propertyName, String propertyValue) {
         List<String> values = (List<String>) buildParameters.get(propertyName);
         if (null == values) {
-            values = new ArrayList<String>();
+            values = new ArrayList<>();
         }
         values.add(propertyValue);
         buildParameters.put(propertyName, values);
@@ -187,8 +184,8 @@ public class BuildEnvironment {
 
     public void getProjectFolderFromConfiguration(PipelineConfiguration configuration) {
         if (configuration.parameters.containsKey(PipelineConfiguration.PIPELINE_PROJECT_PATH)) {
-            String projectFolder = (String) configuration.parameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH);
-            this.projectFolder = projectFolder;
+            String configuredProjectFolder = (String) configuration.parameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH);
+            this.projectFolder = configuredProjectFolder;
         } else {
             this.projectFolder = "";
         }
@@ -211,5 +208,55 @@ public class BuildEnvironment {
                 ", username='" + username + '\'' +
                 ", buildParameters=" + buildParameters +
                 '}';
+    }
+
+    // Getters
+    public String getPipelineName() {
+        return pipelineName;
+    }
+
+    public String getBuildUUID() {
+        return buildUUID;
+    }
+
+    public String getCodePath() {
+        return codePath;
+    }
+
+    public String getProjectFolder() {
+        return projectFolder;
+    }
+
+    public String getProjectPath() {
+        return projectPath;
+    }
+
+    public String getCredentialsPath() {
+        return credentialsPath;
+    }
+
+    public String getScratchPath() {
+        return scratchPath;
+    }
+
+    public String getRealCIRunPath() {
+        return realCIRunPath;
+    }
+
+    // Setters
+    public void setCodePath(String codePath) {
+        this.codePath = codePath;
+    }
+
+    public void setProjectFolder(String projectFolder) {
+        this.projectFolder = projectFolder;
+    }
+
+    public void setScratchPath(String scratchPath) {
+        this.scratchPath = scratchPath;
+    }
+
+    public void setRealCIRunPath(String realCIRunPath) {
+        this.realCIRunPath = realCIRunPath;
     }
 }

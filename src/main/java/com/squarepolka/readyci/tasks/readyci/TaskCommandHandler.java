@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.util.List;
 
+/**
+ * Handles the execution of commands
+ */
 @Component
 public class TaskCommandHandler {
 

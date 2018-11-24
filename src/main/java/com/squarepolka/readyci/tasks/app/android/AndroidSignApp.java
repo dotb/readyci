@@ -4,9 +4,6 @@ import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;
 import org.springframework.stereotype.Component;
 
-import java.util.Scanner;
-import java.io.Console;
-
 @Component
 public class AndroidSignApp extends Task {
 
@@ -31,8 +28,8 @@ public class AndroidSignApp extends Task {
         String scheme = buildEnvironment.getProperty(BUILD_PROP_SCHEME);
         String keystorePath = buildEnvironment.getProperty(BUILD_PROP_JAVA_KEYSTORE_PATH);
         String storePass = buildEnvironment.getProperty(BUILD_PROP_STOREPASS);
-        String unsignedApkPath = String.format("%s/app/build/outputs/apk/%s/app-%s-unsigned.apk", buildEnvironment.projectPath, scheme.toLowerCase(), scheme.toLowerCase());
-        String signedApkPath = String.format("%s/app/build/outputs/apk/%s/app-%s.apk", buildEnvironment.projectPath, scheme.toLowerCase(), scheme.toLowerCase());
+        String unsignedApkPath = String.format("%s/app/build/outputs/apk/%s/app-%s-unsigned.apk", buildEnvironment.getProjectPath(), scheme.toLowerCase(), scheme.toLowerCase());
+        String signedApkPath = String.format("%s/app/build/outputs/apk/%s/app-%s.apk", buildEnvironment.getProjectPath(), scheme.toLowerCase(), scheme.toLowerCase());
 
         executeCommand(new String[] {"jarsigner",
                 "-verbose",
@@ -40,14 +37,14 @@ public class AndroidSignApp extends Task {
                 unsignedApkPath,
                 keystoreAlias,
                 "-storepass", String.valueOf(storePass)
-        }, buildEnvironment.realCIRunPath);
+        }, buildEnvironment.getRealCIRunPath());
 
         //rename the file after it has been signed
         executeCommand(new String[] {
                 "mv",
                 unsignedApkPath,
                 signedApkPath
-        }, buildEnvironment.realCIRunPath);
+        }, buildEnvironment.getRealCIRunPath());
 
     }
 }

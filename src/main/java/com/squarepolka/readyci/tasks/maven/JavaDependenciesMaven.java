@@ -16,6 +16,6 @@ public class JavaDependenciesMaven extends Task {
 
     @Override
     public void performTask(BuildEnvironment buildEnvironment) throws Exception {
-        executeCommand(new String[] {"mvn", "install"}, buildEnvironment.projectPath);
+        executeCommand(new String[] {"mvn", "install"}, buildEnvironment.getProjectPath());
     }
 }
