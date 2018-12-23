@@ -13,7 +13,7 @@ public class TaskRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskRunner.class);
 
-    public TaskRunnerFactory taskRunnerFactory;
+    protected TaskRunnerFactory taskRunnerFactory;
     protected List<Task> defaultPreTasks;
     protected List<Task> defaultPostTasks;
     protected List<Task> configuredTasks;
@@ -91,6 +91,10 @@ public class TaskRunner {
             taskExecuteException.setStackTrace(e.getStackTrace());
             throw taskExecuteException;
         }
+    }
+
+    public TaskRunnerFactory getTaskRunnerFactory() {
+        return taskRunnerFactory;
     }
 
 }

@@ -1,9 +1,9 @@
 package com.squarepolka.readyci.util.time;
 
 public class TimeUnit {
-    public long totalTime;
-    public long remainingTime;
-    public long calculatedTime;
+    private long totalTime;
+    private long remainingTime;
+    private long calculatedTime;
 
     public TimeUnit(long totalTime, long remainingTime, long calculatedTime) {
         this.totalTime = totalTime;
@@ -15,5 +15,13 @@ public class TimeUnit {
     public String toString() {
         String timeString = Long.toString(calculatedTime);
         return timeString;
+    }
+
+    public long getRemainingTime() {
+        return remainingTime;
+    }
+
+    public long getCalculatedTime() {
+        return calculatedTime;
     }
 }

@@ -121,7 +121,7 @@ public class ReadyCIConfiguration {
 
     private void customisePipelineToRun(String pipelineNameArgument) {
         ParsedParameter parsedParameter = new ParsedParameter(pipelineNameArgument);
-        String pipelineToRunName = parsedParameter.parameterValue;
+        String pipelineToRunName = parsedParameter.getParameterValue();
         PipelineConfiguration pipelineConfigurationToRun;
         try {
             pipelineConfigurationToRun = getPipeline(pipelineToRunName);
@@ -137,7 +137,7 @@ public class ReadyCIConfiguration {
         try {
             ParsedParameter parsedParameter = new ParsedParameter(parameterArgument);
             for (PipelineConfiguration pipelineConfiguration : pipelines) {
-                pipelineConfiguration.setParameter(parsedParameter.parameterKey, parsedParameter.parameterValue);
+                pipelineConfiguration.setParameter(parsedParameter.getParameterKey(), parsedParameter.getParameterValue());
             }
         } catch (ParameterParseException e){
             LOGGER.warn(e.toString());

@@ -42,7 +42,7 @@ public class IOSBuildExportOptionsCreate extends Task {
         NSDictionary provisioningProfilesDict = new NSDictionary();
         for (Object profileObject : provisioningProfiles) {
             ProvisioningProfile profile = (ProvisioningProfile) profileObject;
-            provisioningProfilesDict.put(profile.bundleId, profile.name);
+            provisioningProfilesDict.put(profile.getBundleId(), profile.getName());
         }
         rootDict.put("provisioningProfiles", provisioningProfilesDict);
 

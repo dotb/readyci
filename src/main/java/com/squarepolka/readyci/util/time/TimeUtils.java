@@ -11,10 +11,10 @@ public class TimeUtils {
     public String getFormattedTaskTime(long timeDifference) {
 
         TimeUnit days = convertMillisecondsToReadableTime(timeDifference, timeDifference, TIME_DAY_ONE);
-        TimeUnit hours = convertMillisecondsToReadableTime(timeDifference, days.remainingTime, TIME_HOUR_ONE);
-        TimeUnit minutes = convertMillisecondsToReadableTime(timeDifference, hours.remainingTime, TIME_MINUTE_ONE);
-        TimeUnit seconds = convertMillisecondsToReadableTime(timeDifference, minutes.remainingTime, TIME_SECOND_ONE);
-        TimeUnit milliseconds = convertMillisecondsToReadableTime(timeDifference, seconds.remainingTime, TIME_MILLISECOND_ONE);
+        TimeUnit hours = convertMillisecondsToReadableTime(timeDifference, days.getRemainingTime(), TIME_HOUR_ONE);
+        TimeUnit minutes = convertMillisecondsToReadableTime(timeDifference, hours.getRemainingTime(), TIME_MINUTE_ONE);
+        TimeUnit seconds = convertMillisecondsToReadableTime(timeDifference, minutes.getRemainingTime(), TIME_SECOND_ONE);
+        TimeUnit milliseconds = convertMillisecondsToReadableTime(timeDifference, seconds.getRemainingTime(), TIME_MILLISECOND_ONE);
 
         return String.format("%s days %s hours %s minutes %s seconds %s milliseconds", days, hours, minutes, seconds, milliseconds);
     }
