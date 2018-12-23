@@ -22,7 +22,7 @@ public class TimeUtils {
     public TimeUnit convertMillisecondsToReadableTime(long totalTime, long timeRemaining, long timeUnit) {
         long calculatedTime = timeRemaining / timeUnit;
         long newRemainingTime = totalTime - (calculatedTime * timeUnit);
-        TimeUnit readableTime = new TimeUnit(totalTime, newRemainingTime, calculatedTime);
+        TimeUnit readableTime = new TimeUnit(newRemainingTime, calculatedTime);
         return readableTime;
     }
 
