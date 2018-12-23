@@ -75,7 +75,7 @@ public class TaskRunner {
         }
     }
 
-    private void runTask(Task task) throws Exception {
+    private void runTask(Task task) throws TaskFailedException {
         LOGGER.info("RUNNING\tTASK\t{}", task.taskIdentifier());
         TaskTimer taskTimer = TaskTimer.newStartedTimer();
         task.performTask(buildEnvironment);

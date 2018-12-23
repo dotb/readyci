@@ -1,6 +1,7 @@
 package com.squarepolka.readyci.tasks.app.android;
 
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
+import com.squarepolka.readyci.taskrunner.TaskFailedException;
 import com.squarepolka.readyci.tasks.Task;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,7 @@ public class AndroidSignApp extends Task {
     }
 
     @Override
-    public void performTask(BuildEnvironment buildEnvironment) throws Exception {
+    public void performTask(BuildEnvironment buildEnvironment) throws TaskFailedException {
         String keystoreAlias = buildEnvironment.getProperty(BUILD_PROP_KEYSTORE_ALIAS);
         String scheme = buildEnvironment.getProperty(BUILD_PROP_SCHEME);
         String keystorePath = buildEnvironment.getProperty(BUILD_PROP_JAVA_KEYSTORE_PATH);
