@@ -33,7 +33,7 @@ public class TaskRunnerFactory {
     public List<Task> createTaskListFromConfig(List<TaskConfiguration> taskConfigurations) {
         List<Task> taskList = new ArrayList<Task>();
         for (TaskConfiguration taskConfiguration : taskConfigurations) {
-            Task task = findTaskForIdentifier(taskConfiguration.task);
+            Task task = findTaskForIdentifier(taskConfiguration.getTask());
             taskList.add(task);
         }
         return taskList;
