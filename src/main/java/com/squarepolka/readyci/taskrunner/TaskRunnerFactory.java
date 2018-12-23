@@ -25,7 +25,7 @@ public class TaskRunnerFactory {
         BuildEnvironment buildEnvironment = new BuildEnvironment(pipelineConf);
         TaskRunner taskRunner = new TaskRunner(buildEnvironment, this);
         addDefaultTasks(taskRunner);
-        List<Task> configuredTasks = createTaskListFromConfig(pipelineConf.tasks);
+        List<Task> configuredTasks = createTaskListFromConfig(pipelineConf.getTasks());
         taskRunner.setConfiguredTasks(configuredTasks);
         return taskRunner;
     }

@@ -2,10 +2,7 @@ package com.squarepolka.readyci.configuration;
 
 import com.squarepolka.readyci.tasks.code.GitCheckout;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Represents a single pipeline configuration.
@@ -18,9 +15,9 @@ public class PipelineConfiguration {
     public static final String PIPELINE_PATH_PREFIX_CODE = "/code/";
     public static final String PIPELINE_NAME_DEFAULT = "unknown";
 
-    public String name;
-    public Map<String, Object> parameters;
-    public List<TaskConfiguration> tasks;
+    private String name;
+    private Map<String, Object> parameters;
+    private List<TaskConfiguration> tasks;
 
     public PipelineConfiguration() {
         this.name = PIPELINE_NAME_DEFAULT;
@@ -37,4 +34,31 @@ public class PipelineConfiguration {
                 branch.length() > 0;
     }
 
+    public Object getParameter(String key) {
+        return parameters.get(key);
+    }
+
+    public boolean hasParameter(String key) {
+        return parameters.containsKey(key);
+    }
+
+    public void setParameter(String key, Object value) {
+        parameters.put(key, value);
+    }
+
+    public Set<Map.Entry<String, Object>> getParameters() {
+        return parameters.entrySet();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<TaskConfiguration> getTasks() {
+        return tasks;
+    }
 }

@@ -20,7 +20,7 @@ public class BuildEnvironment {
     private Map<String, Object> buildParameters;
 
     public BuildEnvironment(PipelineConfiguration configuration) {
-        this.pipelineName = configuration.name;
+        this.pipelineName = configuration.getName();
         this.buildUUID = UUID.randomUUID().toString();
         this.scratchPath = String.format("%s/%s", PipelineConfiguration.PIPELINE_PATH_PREFIX_BUILD, buildUUID);
         this.codePath = String.format("%s/%s", scratchPath, PipelineConfiguration.PIPELINE_PATH_PREFIX_CODE);
@@ -29,7 +29,7 @@ public class BuildEnvironment {
         this.username = System.getProperty("user.name");
         this.buildParameters = new HashMap<>();
 
-        this.projectFolder = (String) configuration.parameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH);
+        this.projectFolder = (String) configuration.getParameter(PipelineConfiguration.PIPELINE_PROJECT_PATH);
         getProjectFolderFromConfiguration(configuration);
         configureProjectPath();
         setBuildParameters(configuration);
@@ -164,7 +164,7 @@ public class BuildEnvironment {
      * @param configuration
      */
     public void setBuildParameters(PipelineConfiguration configuration) {
-        for (Map.Entry<String, Object> configParameter : configuration.parameters.entrySet()) {
+        for (Map.Entry<String, Object> configParameter : configuration.getParameters()) {
             String propertyName = configParameter.getKey();
             Object objectValue = configParameter.getValue();
             if (objectValue instanceof String) {
@@ -183,8 +183,8 @@ public class BuildEnvironment {
     }
 
     public void getProjectFolderFromConfiguration(PipelineConfiguration configuration) {
-        if (configuration.parameters.containsKey(PipelineConfiguration.PIPELINE_PROJECT_PATH)) {
-            String configuredProjectFolder = (String) configuration.parameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH);
+        if (configuration.hasParameter(PipelineConfiguration.PIPELINE_PROJECT_PATH)) {
+            String configuredProjectFolder = (String) configuration.getParameter(PipelineConfiguration.PIPELINE_PROJECT_PATH);
             this.projectFolder = configuredProjectFolder;
         } else {
             this.projectFolder = "";

@@ -27,18 +27,12 @@ public class BuildEnvironmentTest {
 
     @Mock
     private PipelineConfiguration pipelineConfiguration;
-    @Mock
-    public Map<String, Object> pipelineConfigurationParameters;
-
 
     private BuildEnvironment subject;
 
     @Before
     public void setUp() {
-        pipelineConfiguration.parameters = pipelineConfigurationParameters;
-        Mockito.when(pipelineConfigurationParameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH)).thenReturn("\"project/path\"");
         subject = new BuildEnvironment(pipelineConfiguration);
-
     }
 
     @Test
@@ -164,7 +158,7 @@ public class BuildEnvironmentTest {
         set.add(stringEntry);
         set.add(stringListEntry);
         set.add(booleanEntry);
-        Mockito.when(pipelineConfigurationParameters.entrySet()).thenReturn(set);
+        Mockito.when(pipelineConfiguration.getParameters()).thenReturn(set);
 
         subject.setBuildParameters(pipelineConfiguration);
         String returnedString = subject.getProperty(TEST_KEY_STRING);
@@ -178,8 +172,8 @@ public class BuildEnvironmentTest {
 
     @Test
     public void getProjectFolderFromConfigurationSpecified() {
-        Mockito.when(pipelineConfiguration.parameters.containsKey(PipelineConfiguration.PIPELINE_PROJECT_PATH)).thenReturn(true);
-        Mockito.when(pipelineConfiguration.parameters.get(PipelineConfiguration.PIPELINE_PROJECT_PATH)).thenReturn("testPath");
+        Mockito.when(pipelineConfiguration.hasParameter(PipelineConfiguration.PIPELINE_PROJECT_PATH)).thenReturn(true);
+        Mockito.when(pipelineConfiguration.getParameter(PipelineConfiguration.PIPELINE_PROJECT_PATH)).thenReturn("testPath");
         subject.getProjectFolderFromConfiguration(pipelineConfiguration);
         assertEquals("The projectFolder should be set", "testPath", subject.getProjectFolder());
     }
