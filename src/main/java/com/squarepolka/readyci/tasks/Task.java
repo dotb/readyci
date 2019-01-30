@@ -49,7 +49,8 @@ public abstract class Task {
             configureProxyServer(processBuilder, configuration);
             Process process = processBuilder.start();
             InputStream processInputStream = process.getInputStream();
-            processInputStream.mark(5120);
+            int sizeOfFiveMeg = 5000000;
+            processInputStream.mark(sizeOfFiveMeg);
             handleProcessOutput(process);
             checkProcessSuccess(process);
             resetInputStream(processInputStream);
