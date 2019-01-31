@@ -199,4 +199,34 @@ public class BuildEnvironmentTest {
         assertEquals("The projectPath is configured correctly", "/codepath/projectfolder", subject.getProjectPath());
     }
 
+    @Test
+    public void resolveEnvironmentVariableWithMissingEnvironmentVariable() {
+        String result = subject.resolveEnvironmentVariable("envName", "propertyName");
+        assertEquals("The provided value is returned", "envName", result);
+    }
+
+    @Test
+    public void resolveEnvironmentVariableWithPresentEnvironmentVariable() {
+        String result = subject.resolveEnvironmentVariable("${SHELL}", "propertyName");
+        assertEquals("The configured environment variable value is returned", "/bin/bash", result);
+    }
+
+    @Test
+    public void isValueAVaribleFalse() {
+        boolean result = subject.isValueAVarible("notAVar");
+        assertEquals("The parameter is classed as not a variable", false, result);
+    }
+
+    @Test
+    public void isValueAVaribleTrue() {
+        boolean result = subject.isValueAVarible("${isAVar}");
+        assertEquals("The parameter is classed as a variable", true, result);
+    }
+
+    @Test
+    public void getNameFromEnvironmentVariable() {
+        String result = subject.getNameFromEnvironmentVariable("${variableName}");
+        assertEquals("The correct variable name is parsed", "variableName", result);
+    }
+
 }

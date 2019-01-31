@@ -3,10 +3,14 @@ package com.squarepolka.readyci.taskrunner;
 import com.squarepolka.readyci.configuration.PipelineConfiguration;
 import com.squarepolka.readyci.util.PropertyMissingException;
 import com.squarepolka.readyci.util.PropertyTypeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class BuildEnvironment {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BuildEnvironment.class);
 
     private String pipelineName;
     private String buildUUID;
@@ -168,8 +172,10 @@ public class BuildEnvironment {
             String propertyName = configParameter.getKey();
             Object objectValue = configParameter.getValue();
             if (objectValue instanceof String) {
+                // Attempt to resolve an environment variable or capture the configured value
                 String stringValue = (String) objectValue;
-                addProperty(propertyName, stringValue);
+                String resolvedVariable = resolveEnvironmentVariable(stringValue, propertyName);
+                addProperty(propertyName, resolvedVariable);
             } else if (objectValue instanceof List) {
                 List<String> listValue = (List<String>) objectValue;
                 addProperty(propertyName, listValue);
@@ -208,6 +214,39 @@ public class BuildEnvironment {
                 ", username='" + username + '\'' +
                 ", buildParameters=" + buildParameters +
                 '}';
+    }
+
+    public String resolveEnvironmentVariable(String propertyValue, String propertyName) {
+        if (isValueAVarible(propertyValue)) {
+            try {
+                String environmentVariableName = getNameFromEnvironmentVariable(propertyValue);
+                String environmentValue = System.getenv(environmentVariableName);
+                if (null != environmentValue) {
+                    return environmentValue;
+                } else {
+                    LOGGER.error("I couldn't resolve the environment variable {} defined in the {} parameter", propertyValue, propertyName);
+                }
+            } catch (NullPointerException | SecurityException e) {
+                LOGGER.error("An exception was thrown while trying to resolve the environment variable {} defined in the {} parameter", propertyValue, propertyName, e);
+            }
+        }
+        return propertyValue;
+    }
+
+    /**
+     * Check if a configured parameter value is an environment variable
+     * in the format ${variableName}
+     * @param propertyValue - a string value or environment variable placeholder
+     * @return the environment variable value, or the configured value if the environment variable doesn't exist.
+    */
+    public boolean isValueAVarible(String propertyValue) {
+        return propertyValue.matches("^\\$\\{[a-zA-Z]+}");
+    }
+
+    public String getNameFromEnvironmentVariable(String propertyValue) {
+        String propertyName = propertyValue.replace("${", "");
+        propertyName = propertyName.replace("}", "");
+        return propertyName;
     }
 
     // Getters
