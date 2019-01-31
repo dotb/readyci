@@ -55,7 +55,7 @@ public class ReadyCIConfiguration {
      */
     public PipelineConfiguration getPipeline(String pipelineName) {
         for (PipelineConfiguration pipeline : pipelines) {
-            if (pipeline.name.equalsIgnoreCase(pipelineName)) {
+            if (pipeline.getName().equalsIgnoreCase(pipelineName)) {
                 return pipeline;
             }
         }
@@ -121,13 +121,13 @@ public class ReadyCIConfiguration {
 
     private void customisePipelineToRun(String pipelineNameArgument) {
         ParsedParameter parsedParameter = new ParsedParameter(pipelineNameArgument);
-        String pipelineToRunName = parsedParameter.parameterValue;
+        String pipelineToRunName = parsedParameter.getParameterValue();
         PipelineConfiguration pipelineConfigurationToRun;
         try {
             pipelineConfigurationToRun = getPipeline(pipelineToRunName);
         } catch (LoadConfigurationException e) {
             pipelineConfigurationToRun = new PipelineConfiguration();
-            pipelineConfigurationToRun.name = pipelineToRunName;
+            pipelineConfigurationToRun.setName(pipelineToRunName);
             pipelines.add(pipelineConfigurationToRun);
         }
         pipelineToRun = pipelineConfigurationToRun;
@@ -137,7 +137,7 @@ public class ReadyCIConfiguration {
         try {
             ParsedParameter parsedParameter = new ParsedParameter(parameterArgument);
             for (PipelineConfiguration pipelineConfiguration : pipelines) {
-                pipelineConfiguration.parameters.put(parsedParameter.parameterKey, parsedParameter.parameterValue);
+                pipelineConfiguration.setParameter(parsedParameter.getParameterKey(), parsedParameter.getParameterValue());
             }
         } catch (ParameterParseException e){
             LOGGER.warn(e.toString());

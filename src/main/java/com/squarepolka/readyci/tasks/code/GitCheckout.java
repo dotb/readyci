@@ -18,6 +18,7 @@ public class GitCheckout extends Task {
     public static final String BUILD_PROP_GIT_PATH = "gitPath";
     public static final String BUILD_PROP_GIT_BRANCH = "gitBranch";
     public static final String CONST_UNKNOWN_GIT_BRANCH = "readyci_unknown_branch";
+    private static final String COMMAND_GIT = "/usr/bin/git";
 
     public String taskIdentifier() {
         return TASK_CHECKOUT_GIT;
@@ -30,10 +31,10 @@ public class GitCheckout extends Task {
             try {
                 String gitBranch = buildEnvironment.getProperty(BUILD_PROP_GIT_BRANCH);
                 buildEnvironment.addProperty(BUILD_PROP_GIT_BRANCH, gitBranch);
-                executeCommand(new String[]{"/usr/bin/git", "clone", "-b", gitBranch, gitPath, buildEnvironment.getCodePath()});
+                executeCommand(new String[]{COMMAND_GIT, "clone", "-b", gitBranch, gitPath, buildEnvironment.getCodePath()});
             } catch (PropertyMissingException e) {
                 LOGGER.debug("gitBranch not specified. Will clone from HEAD");
-                executeCommand(new String[]{"/usr/bin/git", "clone", "--single-branch", gitPath, buildEnvironment.getCodePath()});
+                executeCommand(new String[]{COMMAND_GIT, "clone", "--single-branch", gitPath, buildEnvironment.getCodePath()});
                 String branchName = getCurrentBranchName(buildEnvironment);
                 buildEnvironment.addProperty(BUILD_PROP_GIT_BRANCH, branchName);
                 return;
@@ -48,7 +49,7 @@ public class GitCheckout extends Task {
     }
 
     protected String getCurrentBranchName(BuildEnvironment buildEnvironment) {
-        InputStream inputStream = executeCommand(new String[]{"/usr/bin/git", "branch"}, buildEnvironment.getCodePath());
+        InputStream inputStream = executeCommand(new String[]{COMMAND_GIT, "branch"}, buildEnvironment.getCodePath());
         java.util.Scanner scanner = new java.util.Scanner(inputStream).useDelimiter("\\A");
         String allBranches = scanner.hasNext() ? scanner.next() : "";
         return filterBranchName(allBranches);

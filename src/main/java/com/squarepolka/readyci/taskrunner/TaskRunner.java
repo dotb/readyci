@@ -13,7 +13,7 @@ public class TaskRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskRunner.class);
 
-    public TaskRunnerFactory taskRunnerFactory;
+    protected TaskRunnerFactory taskRunnerFactory;
     protected List<Task> defaultPreTasks;
     protected List<Task> defaultPostTasks;
     protected List<Task> configuredTasks;
@@ -75,7 +75,7 @@ public class TaskRunner {
         }
     }
 
-    private void runTask(Task task) throws Exception {
+    private void runTask(Task task) throws TaskFailedException {
         LOGGER.info("RUNNING\tTASK\t{}", task.taskIdentifier());
         TaskTimer taskTimer = TaskTimer.newStartedTimer();
         task.performTask(buildEnvironment);
@@ -91,6 +91,10 @@ public class TaskRunner {
             taskExecuteException.setStackTrace(e.getStackTrace());
             throw taskExecuteException;
         }
+    }
+
+    public TaskRunnerFactory getTaskRunnerFactory() {
+        return taskRunnerFactory;
     }
 
 }

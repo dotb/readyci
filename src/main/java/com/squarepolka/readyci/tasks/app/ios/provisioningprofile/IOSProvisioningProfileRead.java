@@ -1,10 +1,8 @@
 package com.squarepolka.readyci.tasks.app.ios.provisioningprofile;
 
-import com.dd.plist.NSArray;
-import com.dd.plist.NSDictionary;
-import com.dd.plist.NSObject;
-import com.dd.plist.PropertyListParser;
+import com.dd.plist.*;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
+import com.squarepolka.readyci.taskrunner.TaskFailedException;
 import com.squarepolka.readyci.tasks.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +28,7 @@ public class IOSProvisioningProfileRead extends Task {
         return TASK_IOS_PROFILE_READ;
     }
 
-    public void performTask(BuildEnvironment buildEnvironment) throws Exception {
+    public void performTask(BuildEnvironment buildEnvironment) throws TaskFailedException {
         List<String> relativeProfilePaths = buildEnvironment.getProperties(BUILD_PROP_PROFILE_PATHS);
         for (String relativeProfilePath : relativeProfilePaths) {
             readProfile(relativeProfilePath, buildEnvironment);
@@ -42,10 +40,14 @@ public class IOSProvisioningProfileRead extends Task {
                 buildEnvironment.getProperty(BUILD_PROP_DEV_TEAM));
     }
 
-    public void readProfile(String relativeProfilePath, BuildEnvironment buildEnvironment) throws Exception {
+    public void readProfile(String relativeProfilePath, BuildEnvironment buildEnvironment) throws TaskFailedException {
         String profilePath = String.format("%s/%s", buildEnvironment.getProjectPath(), relativeProfilePath);
         InputStream provisioningFileInputStream = decryptProvisioningFile(profilePath);
-        readProvisioningInputStream(provisioningFileInputStream, buildEnvironment);
+        try {
+            readProvisioningInputStream(provisioningFileInputStream, buildEnvironment);
+        } catch (Exception e) {
+            throw new TaskFailedException(e.getMessage());
+        }
     }
 
     private InputStream decryptProvisioningFile(String profilePath) {

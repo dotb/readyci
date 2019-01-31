@@ -1,9 +1,9 @@
 package com.squarepolka.readyci.tasks.app.ios.provisioningprofile;
 
 public class ProvisioningProfile {
-    public String name;
-    public String bundleId;
-    public boolean hasProvisionedDevices;
+    private String name;
+    private String bundleId;
+    private boolean hasProvisionedDevices;
 
     public ProvisioningProfile(String name, String bundleId, boolean hasProvisionedDevices) {
         this.name = name;
@@ -18,4 +18,13 @@ public class ProvisioningProfile {
             return "app-store";
         }
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getBundleId() {
+        return bundleId;
+    }
+
 }

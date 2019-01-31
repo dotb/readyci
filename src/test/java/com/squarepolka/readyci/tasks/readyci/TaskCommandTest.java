@@ -2,13 +2,9 @@ package com.squarepolka.readyci.tasks.readyci;
 
 import com.squarepolka.readyci.configuration.PipelineConfiguration;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
-import com.squarepolka.readyci.util.PropertyMissingException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.*;
@@ -30,11 +26,7 @@ public class TaskCommandTest {
     private static final Boolean TEST_VALUE_BOOLEAN_TRUE = true;
     private static final Boolean TEST_VALUE_BOOLEAN_FALSE = false;
 
-    @Mock
-    private PipelineConfiguration pipelineConfiguration;
-
-    @Mock
-    public Map<String, Object> pipelineConfigurationParameters;
+    public PipelineConfiguration pipelineConfiguration;
 
     private BuildEnvironment buildEnvironment;
 
@@ -42,24 +34,17 @@ public class TaskCommandTest {
 
     @Before
     public void setup() {
+        pipelineConfiguration = new PipelineConfiguration();
         List<String> testStringList = new LinkedList<>();
         testStringList.add("string1");
         testStringList.add("string2");
         testStringList.add("string3");
 
-        Map.Entry<String, Object> stringEntry = new AbstractMap.SimpleEntry<>(TEST_KEY_STRING, TEST_VALUE_STRING);
-        Map.Entry<String, Object> stringListEntry = new AbstractMap.SimpleEntry<>(TEST_KEY_STRING_LIST, testStringList);
-        Map.Entry<String, Object> booleanEntryTrue = new AbstractMap.SimpleEntry<>(TEST_KEY_BOOLEAN_TRUE, TEST_VALUE_BOOLEAN_TRUE);
-        Map.Entry<String, Object> booleanEntryFalse = new AbstractMap.SimpleEntry<>(TEST_KEY_BOOLEAN_FALSE, TEST_VALUE_BOOLEAN_FALSE);
+        pipelineConfiguration.setParameter(TEST_KEY_STRING, TEST_VALUE_STRING);
+        pipelineConfiguration.setParameter(TEST_KEY_STRING_LIST, testStringList);
+        pipelineConfiguration.setParameter(TEST_KEY_BOOLEAN_TRUE, TEST_VALUE_BOOLEAN_TRUE);
+        pipelineConfiguration.setParameter(TEST_KEY_BOOLEAN_FALSE, TEST_VALUE_BOOLEAN_FALSE);
 
-        Set<Map.Entry<String, Object>> set = new HashSet<>();
-        set.add(stringEntry);
-        set.add(stringListEntry);
-        set.add(booleanEntryTrue);
-        set.add(booleanEntryFalse);
-
-        Mockito.when(pipelineConfigurationParameters.entrySet()).thenReturn(set);
-        pipelineConfiguration.parameters = pipelineConfigurationParameters;
         buildEnvironment = new BuildEnvironment(pipelineConfiguration);
         subject = new TaskCommand(buildEnvironment);
     }
