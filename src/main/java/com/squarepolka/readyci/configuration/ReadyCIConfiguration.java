@@ -109,16 +109,24 @@ public class ReadyCIConfiguration {
 
     private void loadConfigurationFile(String fileName) {
             ReadyCIConfiguration newConfiguration = readConfigurationFile(fileName);
-            this.instanceName = newConfiguration.instanceName;
+            this.instanceName = mergeStringProperty(this.instanceName, newConfiguration.instanceName);
             this.isServerMode = newConfiguration.isServerMode;
-            this.proxyHost = newConfiguration.proxyHost;
-            this.proxyPort = newConfiguration.proxyPort;
-            this.proxyUsername = newConfiguration.proxyUsername;
-            this.proxyPassword = newConfiguration.proxyPassword;
+            this.proxyHost = mergeStringProperty(this.proxyHost, newConfiguration.proxyHost);
+            this.proxyPort = mergeStringProperty(this.proxyPort, newConfiguration.proxyPort);
+            this.proxyUsername = mergeStringProperty(this.proxyUsername, newConfiguration.proxyUsername);
+            this.proxyPassword = mergeStringProperty(this.proxyPassword, newConfiguration.proxyPassword);
             this.pipelines = newConfiguration.pipelines;
             LOGGER.info("Loaded configuration {} with {} pipelines", fileName, pipelines.size());
     }
 
+    private String mergeStringProperty(String oldValue, String newValue) {
+        if (null != newValue && newValue.length() > 0) {
+            return newValue;
+        } else {
+            return oldValue;
+        }
+    }
+    
     private void customisePipelineToRun(String pipelineNameArgument) {
         ParsedParameter parsedParameter = new ParsedParameter(pipelineNameArgument);
         String pipelineToRunName = parsedParameter.getParameterValue();
