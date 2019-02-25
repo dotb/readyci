@@ -21,6 +21,9 @@ public class AndroidUploadHockeyapp extends Task {
     public static final String BUILD_PROP_HOCKEYAPP_TOKEN = "hockappToken";
     public static final String BUILD_PROP_HOCKEYAPP_RELEASE_TAGS = "hockeyappReleaseTags";
     public static final String BUILD_PROP_HOCKEYAPP_RELEASE_NOTES = "hockeyappReleaseNotes";
+
+    private static final String COMMAND_GIT = "/usr/bin/git";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ReadyCIConfiguration.class);
 
     @Override
@@ -34,6 +37,15 @@ public class AndroidUploadHockeyapp extends Task {
         String hockappToken = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_TOKEN);
         String releaseTags = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_TAGS, "");
         String releaseNotes = buildEnvironment.getProperty(BUILD_PROP_HOCKEYAPP_RELEASE_NOTES, "");
+
+        if(releaseNotes.isEmpty()) {
+            InputStream inputStream = executeCommand(new String[]{COMMAND_GIT, "log", "-1", "--pretty=%B"}, buildEnvironment.getProjectPath());
+            try {
+                releaseNotes = Util.readInputStream(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         // upload all the apk builds that it finds
         Collection<File> files = Util.findAllByExtension(new File(buildEnvironment.getProjectPath()), ".apk");
