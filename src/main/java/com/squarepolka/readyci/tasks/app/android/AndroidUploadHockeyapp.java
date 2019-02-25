@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
+import java.io.*;
 import java.util.Collection;
 
 @Component
@@ -38,8 +38,8 @@ public class AndroidUploadHockeyapp extends Task {
         // upload all the apk builds that it finds
         Collection<File> files = Util.findAllByExtension(new File(buildEnvironment.getProjectPath()), ".apk");
         for (File apk : files) {
-            LOGGER.warn("uploading "+ apk.getAbsolutePath());
             if(apk.getAbsolutePath().contains("build")) {
+                LOGGER.warn("uploading "+ apk.getAbsolutePath());
                 // Upload to HockeyApp
                 executeCommand(new String[]{"/usr/bin/curl",
                         "https://rink.hockeyapp.net/api/2/apps/upload",
