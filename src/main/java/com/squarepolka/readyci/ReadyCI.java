@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -20,6 +21,7 @@ import static java.lang.System.exit;
 @SpringBootApplication
 @EnableScheduling
 @EnableAsync
+@ComponentScan({"com.squarepolka.readyci", "tasks"})
 public class ReadyCI implements CommandLineRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReadyCI.class);
