@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -34,7 +35,12 @@ public class ReadyCI implements CommandLineRunner {
         ReadyCIConfiguration readyCIConfiguration = ReadyCIConfiguration.instance();
         readyCIConfiguration.handleInputArguments(arguments);
 
-        SpringApplication.run(ReadyCI.class, arguments);
+        SpringApplication springApplication =
+                new SpringApplicationBuilder()
+                        .sources(ReadyCI.class)
+                        .web(readyCIConfiguration.isServerMode())
+                        .build();
+        springApplication.run(arguments);
     }
 
     @Override
