@@ -3,12 +3,16 @@ package com.squarepolka.readyci.tasks.code;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;
 import com.squarepolka.readyci.util.PropertyMissingException;
+import com.squarepolka.readyci.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.StringTokenizer;
+
+import static com.squarepolka.readyci.tasks.code.GitCommit.SKIPCI_TAG;
 
 @Component
 public class GitCheckout extends Task {
@@ -45,6 +49,19 @@ public class GitCheckout extends Task {
             buildEnvironment.configureProjectPath();
             String branchName = getCurrentBranchName(buildEnvironment);
             buildEnvironment.addProperty(BUILD_PROP_GIT_BRANCH, branchName);
+        }
+
+        InputStream inputStream = executeCommand(new String[]{COMMAND_GIT, "log", "-1", "--pretty=%B"}, buildEnvironment.getProjectPath());
+        try {
+            String commitMessage = Util.readInputStream(inputStream);
+            if(commitMessage.contains(SKIPCI_TAG))
+            {
+                // TODO - skip all subsequent tasks
+
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
