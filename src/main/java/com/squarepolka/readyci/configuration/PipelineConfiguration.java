@@ -11,6 +11,8 @@ import java.util.*;
 public class PipelineConfiguration {
 
     public static final String PIPELINE_PROJECT_PATH = "projectPath";
+    public static final String PIPELINE_CREDENTIALS_PATH = "credentialsPath";
+
     public static final String PIPELINE_PATH_PREFIX_BUILD = "/tmp/readyci/";
     public static final String PIPELINE_PATH_PREFIX_CODE = "/code/";
     public static final String PIPELINE_NAME_DEFAULT = "unknown";
