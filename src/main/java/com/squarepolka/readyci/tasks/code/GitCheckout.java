@@ -1,5 +1,6 @@
 package com.squarepolka.readyci.tasks.code;
 
+import com.squarepolka.readyci.exceptions.TaskExitException;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;
 import com.squarepolka.readyci.util.PropertyMissingException;
@@ -28,7 +29,8 @@ public class GitCheckout extends Task {
         return TASK_CHECKOUT_GIT;
     }
 
-    public void performTask(BuildEnvironment buildEnvironment) {
+    public void performTask(BuildEnvironment buildEnvironment) throws TaskExitException {
+
         try {
             String gitPath = buildEnvironment.getProperty(BUILD_PROP_GIT_PATH);
             LOGGER.debug("The gitPath parameter is specified, so I'll check out the code.");
@@ -56,9 +58,7 @@ public class GitCheckout extends Task {
             String commitMessage = Util.readInputStream(inputStream);
             if(commitMessage.contains(SKIPCI_TAG))
             {
-                // TODO - skip all subsequent tasks
-
-
+                throw new TaskExitException("Detected build skip parameter, skipping the build");
             }
         } catch (IOException e) {
             e.printStackTrace();
