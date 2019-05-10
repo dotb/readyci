@@ -11,6 +11,7 @@ import java.util.*;
 public class PipelineConfiguration {
 
     public static final String PIPELINE_PROJECT_PATH = "projectPath";
+    public static final String GIT_NUMBER_REVISIONS = "gitLogHistory";
     public static final String PIPELINE_CREDENTIALS_PATH = "credentialsPath";
 
     public static final String PIPELINE_PATH_PREFIX_BUILD = "/tmp/readyci/";
