@@ -299,6 +299,7 @@ public class BuildEnvironment {
     // Setters
     public void setCodePath(String codePath) {
         this.codePath = codePath;
+        this.credentialsPath = String.format("%s./build_credentials", codePath);
     }
 
     public void setProjectFolder(String projectFolder) {
