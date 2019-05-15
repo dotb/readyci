@@ -46,7 +46,7 @@ public class GitCheckout extends Task {
             }
         } catch (PropertyMissingException e) {
             LOGGER.debug("The gitPath parameter was not specified, so I'll assume the code is already checked out and set the code path to the current directory and configure the build environment accordingly.");
-            executeCommand(new String[] { "ln", "-s", buildEnvironment.getRealCIRunPath(), buildEnvironment.getCodePath() });
+            executeCommand(new String[] { "/bin/ln", "-s", buildEnvironment.getRealCIRunPath(), buildEnvironment.getCodePath() });
             String branchName = getCurrentBranchName(buildEnvironment);
             buildEnvironment.addProperty(BUILD_PROP_GIT_BRANCH, branchName);
         }
