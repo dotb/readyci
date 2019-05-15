@@ -1,5 +1,6 @@
 package com.squarepolka.readyci.taskrunner;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.squarepolka.readyci.configuration.PipelineConfiguration;
 import com.squarepolka.readyci.util.PropertyMissingException;
 import com.squarepolka.readyci.util.PropertyTypeException;
@@ -297,9 +298,15 @@ public class BuildEnvironment {
     }
 
     // Setters
+
+    /**
+     * @deprecated
+     * Changing this will break credentials path
+     */
+    @Deprecated
+    @VisibleForTesting
     public void setCodePath(String codePath) {
         this.codePath = codePath;
-        this.credentialsPath = String.format("%s./build_credentials", codePath);
     }
 
     public void setProjectFolder(String projectFolder) {
