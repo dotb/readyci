@@ -51,7 +51,7 @@ public class GitCheckout extends Task {
             buildEnvironment.addProperty(BUILD_PROP_GIT_BRANCH, branchName);
         }
 
-        InputStream inputStream = executeCommand(new String[]{COMMAND_GIT, "log", "-1", "--pretty=%B"}, buildEnvironment.getProjectPath());
+        InputStream inputStream = executeCommand(new String[]{COMMAND_GIT, "log", "-1", "--pretty=%B"}, buildEnvironment.getCodePath());
         try {
             String commitMessage = Util.readInputStream(inputStream);
             if(commitMessage.contains(SKIPCI_TAG))
