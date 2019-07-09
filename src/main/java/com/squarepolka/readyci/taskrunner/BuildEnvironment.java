@@ -34,8 +34,8 @@ public class BuildEnvironment {
         this.username = System.getProperty("user.name");
         this.buildParameters = new HashMap<>();
 
-        this.projectFolder = (String) configuration.getParameter(PipelineConfiguration.PIPELINE_PROJECT_PATH);
         getProjectFolderFromConfiguration(configuration);
+        getCredentialsPathFromConfiguration(configuration);
         configureProjectPath();
         setBuildParameters(configuration);
     }
@@ -186,6 +186,7 @@ public class BuildEnvironment {
         for (Map.Entry<String, Object> configParameter : configuration.getParameters()) {
             String propertyName = configParameter.getKey();
             Object objectValue = configParameter.getValue();
+
             if (objectValue instanceof String) {
                 // Attempt to resolve an environment variable or capture the configured value
                 String stringValue = (String) objectValue;
@@ -205,11 +206,16 @@ public class BuildEnvironment {
 
     public void getProjectFolderFromConfiguration(PipelineConfiguration configuration) {
         if (configuration.hasParameter(PipelineConfiguration.PIPELINE_PROJECT_PATH)) {
-            String configuredProjectFolder = (String) configuration.getParameter(PipelineConfiguration.PIPELINE_PROJECT_PATH);
-            this.projectFolder = configuredProjectFolder;
+            this.projectFolder = (String) configuration.getParameter(PipelineConfiguration.PIPELINE_PROJECT_PATH);
         } else {
             this.projectFolder = "";
         }
+    }
+
+    public void getCredentialsPathFromConfiguration(PipelineConfiguration configuration) {
+        this.credentialsPath = (configuration.hasParameter(PipelineConfiguration.PIPELINE_CREDENTIALS_PATH)) ? 
+            (String) configuration.getParameter(PipelineConfiguration.PIPELINE_CREDENTIALS_PATH) : 
+            String.format("%s./build_credentials", this.codePath);
     }
 
     public void configureProjectPath() {
@@ -225,6 +231,7 @@ public class BuildEnvironment {
                 ", projectFolder='" + projectFolder + '\'' +
                 ", projectPath='" + projectPath + '\'' +
                 ", scratchPath='" + scratchPath + '\'' +
+                ", credentialsPath='" + credentialsPath + '\'' +
                 ", realCIRunPath='" + realCIRunPath + '\'' +
                 ", username='" + username + '\'' +
                 ", buildParameters=" + buildParameters +

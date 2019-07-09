@@ -70,6 +70,7 @@ pipelines:
     gitCommitMessage: Bumped the build number using Real CI
     gitCommitFileList:
     - <list of updated files to commit back to the repo>
+    credentialsPath: <path to credentials folder on local machine>
     androidSdkPath: <path to android sdk on local machine>
     javaKeystorePath: <path to jks file>
     storepass: <password for jks file>
