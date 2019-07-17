@@ -13,6 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class IOSProvisioningProfileRead extends Task {
                 buildEnvironment.getProperty(BUILD_PROP_DEV_TEAM));
     }
 
-    public void readProfile(LinkedHashMap<String, String> relativeProfilePath, BuildEnvironment buildEnvironment) throws TaskFailedException {
+    public void readProfile(HashMap<String, String> relativeProfilePath, BuildEnvironment buildEnvironment) throws TaskFailedException {
         String profilePath = String.format("%s/%s", buildEnvironment.getProjectPath(), relativeProfilePath.get("profilePath"));
         InputStream provisioningFileInputStream = decryptProvisioningFile(profilePath);
         try {
