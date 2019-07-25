@@ -22,7 +22,7 @@ public class AndroidUploadAppCenter extends Task {
 
     //https://docs.microsoft.com/en-us/appcenter/distribution/uploading
 
-    public static final String TASK_UPLOAD_APPCENTER = "android_upload_appcenter";
+    public static final String TASK_ANDROID_UPLOAD_APPCENTER = "android_upload_appcenter";
     public static final String BUILD_PROP_APPCENTER_TOKEN = "appcenterToken";
     public static final String BUILD_PROP_APPCENTER_OWNER = "appcenterOwner";
     public static final String BUILD_PROP_APPCENTER_APPNAME = "appcenterAppName";
@@ -35,7 +35,7 @@ public class AndroidUploadAppCenter extends Task {
 
     @Override
     public String taskIdentifier() {
-        return TASK_UPLOAD_APPCENTER;
+        return TASK_ANDROID_UPLOAD_APPCENTER;
     }
 
     @Override
