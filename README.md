@@ -1,3 +1,9 @@
+# [DEPRECATED]
+While ReadyCI has served a valuable purpose in it's time, it will be deprecated as many more mature cloud-based solutions have since been created.
+
+If you are looking to use ReadyCI, consider using one of the many cloud-based DevOps solutions that have much better support for Mobile App builds.
+___
+
 ### ReadyCI
 A no-fuss CI/CD tool for iOS and Android apps
     
