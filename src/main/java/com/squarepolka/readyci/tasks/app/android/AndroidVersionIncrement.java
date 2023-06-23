@@ -1,6 +1,7 @@
 package com.squarepolka.readyci.tasks.app.android;
 
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
+import com.squarepolka.readyci.taskrunner.TaskFailedException;
 import com.squarepolka.readyci.tasks.Task;
 import org.springframework.stereotype.Component;
 
@@ -25,8 +26,8 @@ public class AndroidVersionIncrement extends Task {
     }
 
     @Override
-    public void performTask(BuildEnvironment buildEnvironment) throws Exception {
-        File versionFile = new File(String.format("%s/%s", buildEnvironment.projectPath, VERSION_PROP_FILE));
+    public void performTask(BuildEnvironment buildEnvironment) throws TaskFailedException {
+        File versionFile = new File(String.format("%s/%s", buildEnvironment.getProjectPath(), VERSION_PROP_FILE));
         IOException thrownException = null;
         try (Scanner scanner = new Scanner(versionFile);
              FileWriter fileWriter = new FileWriter(versionFile)) {
@@ -46,7 +47,7 @@ public class AndroidVersionIncrement extends Task {
         }
 
         if (null != thrownException) {
-            throw thrownException;
+            throw new TaskFailedException(thrownException.getMessage());
         }
     }
 }

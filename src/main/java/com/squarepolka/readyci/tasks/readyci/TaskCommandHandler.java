@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.util.List;
 
+/**
+ * Handles the execution of commands
+ */
 @Component
 public class TaskCommandHandler {
 
@@ -18,7 +22,7 @@ public class TaskCommandHandler {
     @Autowired
     private TaskOutputHandler taskOutputHandler;
 
-    public InputStream executeCommand(String[] command, String workingDirectory) {
+    public InputStream executeCommand(List<String> command, String workingDirectory) {
         LOGGER.debug("Executing command: {}", Util.arrayToString(command));
         try {
             File workingDirectoryFile = new File(workingDirectory);
@@ -29,7 +33,8 @@ public class TaskCommandHandler {
             taskProxyConfiguration.configureProxyServer(processBuilder, configuration);
             Process process = processBuilder.start();
             InputStream processInputStream = process.getInputStream();
-            processInputStream.mark(5120);
+            int sizeOfFiveMeg = 5000000;
+            processInputStream.mark(sizeOfFiveMeg);
             taskOutputHandler.handleProcessOutput(process);
             checkProcessSuccess(process);
             taskOutputHandler.resetInputStream(processInputStream);

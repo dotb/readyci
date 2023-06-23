@@ -2,9 +2,7 @@ package com.squarepolka.readyci.util;
 
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
 
 @Component
@@ -33,6 +31,8 @@ public class Util {
         // If all else, return an empty string
         return "";
     }
+
+
 
     public static Collection<File> findAllByExtension(File dir, String extension) {
         Set<File> fileTree = new HashSet<File>();
@@ -73,6 +73,17 @@ public class Util {
         return string.length() > 0;
     }
 
+    public static String readInputStream(InputStream inputStream) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        InputStreamReader processStreamReader = new InputStreamReader(inputStream);
+        BufferedReader processOutputStream = new BufferedReader(processStreamReader);
+        String processOutputLine;
+        while (processOutputStream.ready() && (processOutputLine = processOutputStream.readLine()) != null) {
+            sb.append(processOutputLine + "\n");
+        }
+        return sb.toString();
+    }
+
     /**
      * Skip half of the available data in an input stream.
      * This method is useful when a full input stream might block a process,
@@ -97,13 +108,13 @@ public class Util {
      * @param stringArray
      * @return a flat string.
      */
-    public static String arrayToString(String[] stringArray) {
+    public static String arrayToString(List<String> stringArray) {
         StringBuilder stringBuilder = new StringBuilder();
-
-        for (int i = 0; i < stringArray.length; i++) {
-            String string = stringArray[i];
+        Iterator<String> iterator = stringArray.iterator();
+        while (iterator.hasNext()) {
+            String string = iterator.next();
             stringBuilder.append(string);
-            if (i + 1 < stringArray.length) {
+            if (iterator.hasNext()) {
                 stringBuilder.append(" ");
             }
         }

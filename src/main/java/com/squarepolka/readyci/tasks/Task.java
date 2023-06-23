@@ -1,7 +1,10 @@
 package com.squarepolka.readyci.tasks;
 
+import com.squarepolka.readyci.exceptions.TaskExitException;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
+import com.squarepolka.readyci.taskrunner.TaskFailedException;
 import com.squarepolka.readyci.taskrunner.TaskRunner;
+import com.squarepolka.readyci.tasks.readyci.TaskCommand;
 import com.squarepolka.readyci.tasks.readyci.TaskCommandHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,7 +29,12 @@ public abstract class Task {
     }
 
     protected InputStream executeCommand(String[] command, String workingDirectory) {
-        return taskCommandHandler.executeCommand(command, workingDirectory);
+        TaskCommand taskCommand = new TaskCommand(command);
+        return executeCommand(taskCommand, workingDirectory);
+    }
+
+    protected InputStream executeCommand(TaskCommand taskCommand, String workingDirectory) {
+        return taskCommandHandler.executeCommand(taskCommand.getCommandAndParams(), workingDirectory);
     }
 
     // Methods than can be implemented by subclasses
@@ -36,15 +44,11 @@ public abstract class Task {
 
     // Methods that must be implemented by subclasses
     public abstract String taskIdentifier();
-    public abstract void performTask(BuildEnvironment buildEnvironment) throws Exception;
-
+    public abstract void performTask(BuildEnvironment buildEnvironment) throws TaskFailedException, TaskExitException;
 
     // Getters and Setters
-    public TaskRunner getTaskRunner() {
-        return taskRunner;
-    }
-
     public void setTaskRunner(TaskRunner taskRunner) {
         this.taskRunner = taskRunner;
     }
+
 }

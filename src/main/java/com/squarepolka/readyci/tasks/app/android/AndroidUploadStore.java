@@ -6,6 +6,7 @@ import com.google.api.services.androidpublisher.AndroidPublisher;
 import com.google.api.services.androidpublisher.model.*;
 import com.squarepolka.readyci.configuration.ReadyCIConfiguration;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
+import com.squarepolka.readyci.taskrunner.TaskFailedException;
 import com.squarepolka.readyci.tasks.Task;
 import com.squarepolka.readyci.util.android.AndroidPublisherHelper;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ public class AndroidUploadStore extends Task {
     }
 
     @Override
-    public void performTask(BuildEnvironment buildEnvironment) throws Exception {
+    public void performTask(BuildEnvironment buildEnvironment) throws TaskFailedException {
 
         try {
 
@@ -61,11 +62,11 @@ public class AndroidUploadStore extends Task {
                 throw new Exception(sb.toString());
             }
 
-            String playStoreCertLocation = String.format("%s/%s", buildEnvironment.credentialsPath, playStoreCert);
+            String playStoreCertLocation = String.format("%s/%s", buildEnvironment.getCredentialsPath(), playStoreCert);
 
             String scheme = buildEnvironment.getProperty(BUILD_PROP_SCHEME);
             String appBinaryPath = String.format("%s/app/build/outputs/apk/%s/app-%s.apk",
-                    buildEnvironment.projectPath, scheme.toLowerCase(), scheme.toLowerCase());
+                    buildEnvironment.getProjectPath(), scheme.toLowerCase(), scheme.toLowerCase());
 
             LOGGER.warn("AndroidUploadStore: uploading "+appBinaryPath);
 

@@ -9,6 +9,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RunWith(MockitoJUnitRunner.class)
 public class BuildFolderCleanTest {
 
@@ -21,25 +24,28 @@ public class BuildFolderCleanTest {
 
     @Test
     public void taskRemovesSpecifiedFolder() {
-        String[] expectedCommand = {"rm", "-fR", "/tmp/readyci/random-uuid"};
+        List<String> expectedCommand = new ArrayList<>();
+        expectedCommand.add("rm");
+        expectedCommand.add("-fR");
+        expectedCommand.add("/tmp/readyci/random-uuid");
         String expectedWorkingDir = "/tmp/";
-        buildEnvironment.scratchPath = "/tmp/readyci/random-uuid";
+        Mockito.when(buildEnvironment.getScratchPath()).thenReturn("/tmp/readyci/random-uuid");
         subject.performTask(buildEnvironment);
         Mockito.verify(taskCommandHandler, Mockito.times(1)).executeCommand(expectedCommand, expectedWorkingDir);
     }
 
     @Test
     public void deleteMustBeWithinScratchFolder() {
-        buildEnvironment.scratchPath = "/tmp/";
+        Mockito.when(buildEnvironment.getScratchPath()).thenReturn("/tmp/");
         subject.performTask(buildEnvironment);
-        Mockito.verify(taskCommandHandler, Mockito.times(0)).executeCommand(Mockito.any(String[].class), Mockito.anyString());
+        Mockito.verify(taskCommandHandler, Mockito.times(0)).executeCommand(Mockito.any(List.class), Mockito.anyString());
     }
 
     @Test
     public void scratchPathMustNotBeEmpty() {
-        buildEnvironment.scratchPath = "";
+        Mockito.when(buildEnvironment.getScratchPath()).thenReturn("");
         subject.performTask(buildEnvironment);
-        Mockito.verify(taskCommandHandler, Mockito.times(0)).executeCommand(Mockito.any(String[].class), Mockito.anyString());
+        Mockito.verify(taskCommandHandler, Mockito.times(0)).executeCommand(Mockito.any(List.class), Mockito.anyString());
     }
 
 }

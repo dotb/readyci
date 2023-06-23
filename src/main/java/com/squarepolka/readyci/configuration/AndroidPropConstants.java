@@ -2,6 +2,10 @@ package com.squarepolka.readyci.configuration;
 
 public class AndroidPropConstants {
 
+    private AndroidPropConstants() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static final String BUILD_PROP_SCHEME = "scheme";
     public static final String BUILD_PROP_DEPLOY_TRACK = "deployTrack";
     public static final String BUILD_PROP_PACKAGE_NAME = "packageName";

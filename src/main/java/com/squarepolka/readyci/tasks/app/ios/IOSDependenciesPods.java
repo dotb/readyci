@@ -1,6 +1,5 @@
 package com.squarepolka.readyci.tasks.app.ios;
 
-import com.squarepolka.readyci.configuration.PipelineConfiguration;
 import com.squarepolka.readyci.taskrunner.BuildEnvironment;
 import com.squarepolka.readyci.tasks.Task;
 import com.squarepolka.readyci.util.PropertyMissingException;
@@ -31,7 +30,7 @@ public class IOSDependenciesPods extends Task {
             boolean shouldUpdateRepo = buildEnvironment.getSwitch(BUILD_PROP_POD_REPO_UPDATE);
             if (shouldUpdateRepo) {
                 LOGGER.debug("The {} parameter was specified. Updating the Cocoapods repo", BUILD_PROP_POD_REPO_UPDATE);
-                executeCommand(new String[]{"pod", "repo", "update"}, buildEnvironment.projectPath);
+                executeCommand(new String[]{"pod", "repo", "update"}, buildEnvironment.getProjectPath());
             }
         } catch (PropertyMissingException e) {
             LOGGER.debug("The {} parameter was not specified. Not updating the Cocoapods repo", BUILD_PROP_POD_REPO_UPDATE);
@@ -39,6 +38,6 @@ public class IOSDependenciesPods extends Task {
     }
 
     private void installPods(BuildEnvironment buildEnvironment) {
-        executeCommand(new String[]{"pod", "install"}, buildEnvironment.projectPath);
+        executeCommand(new String[]{"pod", "install"}, buildEnvironment.getProjectPath());
     }
 }

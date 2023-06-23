@@ -55,7 +55,7 @@ public class ReadyCIConfiguration {
      */
     public PipelineConfiguration getPipeline(String pipelineName) {
         for (PipelineConfiguration pipeline : pipelines) {
-            if (pipeline.name.equalsIgnoreCase(pipelineName)) {
+            if (pipeline.getName().equalsIgnoreCase(pipelineName)) {
                 return pipeline;
             }
         }
@@ -109,25 +109,33 @@ public class ReadyCIConfiguration {
 
     private void loadConfigurationFile(String fileName) {
             ReadyCIConfiguration newConfiguration = readConfigurationFile(fileName);
-            this.instanceName = newConfiguration.instanceName;
+            this.instanceName = mergeStringProperty(this.instanceName, newConfiguration.instanceName);
             this.isServerMode = newConfiguration.isServerMode;
-            this.proxyHost = newConfiguration.proxyHost;
-            this.proxyPort = newConfiguration.proxyPort;
-            this.proxyUsername = newConfiguration.proxyUsername;
-            this.proxyPassword = newConfiguration.proxyPassword;
+            this.proxyHost = mergeStringProperty(this.proxyHost, newConfiguration.proxyHost);
+            this.proxyPort = mergeStringProperty(this.proxyPort, newConfiguration.proxyPort);
+            this.proxyUsername = mergeStringProperty(this.proxyUsername, newConfiguration.proxyUsername);
+            this.proxyPassword = mergeStringProperty(this.proxyPassword, newConfiguration.proxyPassword);
             this.pipelines = newConfiguration.pipelines;
             LOGGER.info("Loaded configuration {} with {} pipelines", fileName, pipelines.size());
     }
 
+    private String mergeStringProperty(String oldValue, String newValue) {
+        if (null != newValue && newValue.length() > 0) {
+            return newValue;
+        } else {
+            return oldValue;
+        }
+    }
+    
     private void customisePipelineToRun(String pipelineNameArgument) {
         ParsedParameter parsedParameter = new ParsedParameter(pipelineNameArgument);
-        String pipelineToRunName = parsedParameter.parameterValue;
+        String pipelineToRunName = parsedParameter.getParameterValue();
         PipelineConfiguration pipelineConfigurationToRun;
         try {
             pipelineConfigurationToRun = getPipeline(pipelineToRunName);
         } catch (LoadConfigurationException e) {
             pipelineConfigurationToRun = new PipelineConfiguration();
-            pipelineConfigurationToRun.name = pipelineToRunName;
+            pipelineConfigurationToRun.setName(pipelineToRunName);
             pipelines.add(pipelineConfigurationToRun);
         }
         pipelineToRun = pipelineConfigurationToRun;
@@ -137,7 +145,7 @@ public class ReadyCIConfiguration {
         try {
             ParsedParameter parsedParameter = new ParsedParameter(parameterArgument);
             for (PipelineConfiguration pipelineConfiguration : pipelines) {
-                pipelineConfiguration.parameters.put(parsedParameter.parameterKey, parsedParameter.parameterValue);
+                pipelineConfiguration.setParameter(parsedParameter.getParameterKey(), parsedParameter.getParameterValue());
             }
         } catch (ParameterParseException e){
             LOGGER.warn(e.toString());
